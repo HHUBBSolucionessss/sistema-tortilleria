@@ -82,6 +82,8 @@ class ProductoSearch extends Producto
             ->andFilterWhere(['like', 'descripcion1', $this->descripcion1])
             ->andFilterWhere(['like', 'imagen', $this->imagen]);
 
+        $query->andFilterWhere(['eliminado' => 0 ]);
+
         return $dataProvider;
     }
 }

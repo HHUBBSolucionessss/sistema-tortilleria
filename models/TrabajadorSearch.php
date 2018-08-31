@@ -88,6 +88,8 @@ class TrabajadorSearch extends Trabajador
             ->andFilterWhere(['like', 'imagen', $this->imagen])
             ->andFilterWhere(['like', 'huella', $this->huella]);
 
+        $query->andFilterWhere(['eliminado' => 0 ]);
+
         return $dataProvider;
     }
 }

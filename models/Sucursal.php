@@ -8,7 +8,6 @@ use Yii;
  * This is the model class for table "sucursal".
  *
  * @property int $id
- * @property int $id_domicilio
  * @property string $nombre
  * @property string $calle
  * @property int $numero_ext
@@ -47,8 +46,8 @@ class Sucursal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_domicilio', 'colonia'], 'required'],
-            [['id_domicilio', 'numero_ext', 'numero_int', 'cp', 'asignada', 'eliminado', 'create_user', 'update_user'], 'integer'],
+            [['colonia'], 'required'],
+            [['numero_ext', 'numero_int', 'cp', 'asignada', 'eliminado', 'create_user', 'update_user'], 'integer'],
             [['logotipo'], 'string'],
             [['create_time', 'update_time'], 'safe'],
             [['nombre', 'calle', 'estado', 'ciudad', 'telefono1', 'telefono2', 'fax', 'email', 'web', 'rfc'], 'string', 'max' => 45],
@@ -63,7 +62,6 @@ class Sucursal extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_domicilio' => 'Id Domicilio',
             'nombre' => 'Nombre',
             'calle' => 'Calle',
             'numero_ext' => 'Número Exterior',
@@ -78,7 +76,7 @@ class Sucursal extends \yii\db\ActiveRecord
             'email' => 'Email',
             'logotipo' => 'Logotipo',
             'web' => 'Web',
-            'rfc' => 'Rfc',
+            'rfc' => 'RFC',
             'asignada' => 'Asignada',
             'eliminado' => 'Eliminado',
             'create_user' => 'Registró',

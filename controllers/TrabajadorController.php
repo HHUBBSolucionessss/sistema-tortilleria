@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Trabajador;
 use app\models\TrabajadorSearch;
+use app\models\RegistroSistema;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -52,9 +53,40 @@ class TrabajadorController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+      $model = $this->findModel($id);
+      $registroSistema= new RegistroSistema();
+      if ($model->load(Yii::$app->request->post()))
+      {
+          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha actualizado datos del trabajador ". $model->nombre;
+          $registroSistema->id_sucursal = 1;
+          $model->update_user=Yii::$app->user->identity->id;
+          $model->update_time=date('Y-m-d H:i:s');
+
+          $id_current_user = Yii::$app->user->identity->id;
+          $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+
+          if($privilegio[0]['apertura_caja'] == 1){
+            if ($model->save() && $registroSistema->save())
+            {
+                Yii::$app->session->setFlash('kv-detail-success', 'La información se actualizó correctamente');
+                return $this->redirect(['view', 'id'=>$model->id]);
+            }
+            else
+            {
+                Yii::$app->session->setFlash('kv-detail-warning', 'Ha ocurrido un error al guardar la información');
+                return $this->redirect(['view', 'id'=>$model->id]);
+            }
+          }
+          else{
+            Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
+            return $this->redirect(['view', 'id'=>$model->id]);
+          }
+      }
+      else
+      {
+          return $this->render('view', ['model'=>$model]);
+
+      }
     }
 
     /**
@@ -64,15 +96,34 @@ class TrabajadorController extends Controller
      */
     public function actionCreate()
     {
+      $id_current_user = Yii::$app->user->identity->id;
+      $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+
+      if($privilegio[0]['apertura_caja'] == 1){
         $model = new Trabajador();
+        $registroSistema = new RegistroSistema();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+          $model->create_user=Yii::$app->user->identity->id;
+          $model->create_time=date('Y-m-d H:i:s');
+          $model->sucursal_id = 1;
+          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado al trabajador ". $model->nombre;
+          $registroSistema->id_sucursal = 1;
+
+          if($model->save() && $registroSistema->save())
+          {
             return $this->redirect(['view', 'id' => $model->id]);
+          }
         }
+      }
+      else{
+        return $this->redirect(['index']);
+      }
 
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+      return $this->renderAjax('create', [
+          'model' => $model,
+      ]);
     }
 
     /**
@@ -104,9 +155,26 @@ class TrabajadorController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+      $model = $this->findModel($id);
+      $id_current_user = Yii::$app->user->identity->id;
+      $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-        return $this->redirect(['index']);
+      if($privilegio[0]['apertura_caja'] == 1){
+        $registroSistema= new RegistroSistema();
+
+        $model->eliminado = 1;
+        $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha eliminado al trabajador ". $model->nombre;
+        $registroSistema->id_sucursal = 1;
+
+        if($model->save() && $registroSistema->save()){
+          Yii::$app->session->setFlash('kv-detail-success', 'El trabajador se ha eliminado correctamente');
+          return $this->redirect(['index']);
+        }
+      }
+      else{
+        Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
+        return $this->redirect(['view', 'id'=>$model->id]);
+      }
     }
 
     /**

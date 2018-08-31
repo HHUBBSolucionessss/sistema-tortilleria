@@ -57,7 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
               ],
               [
                   'attribute' => 'numero_ext',
-                  'label' => 'Teléfono',
                   'vAlign'=>'middle',
                   'headerOptions'=>['class'=>'kv-sticky-column'],
                   'contentOptions'=>['class'=>'kv-sticky-column'],

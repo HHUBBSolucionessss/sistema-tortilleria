@@ -18,7 +18,7 @@ class SucursalSearch extends Sucursal
     public function rules()
     {
         return [
-            [['id', 'id_domicilio', 'numero_ext', 'numero_int', 'cp', 'asignada', 'eliminado', 'create_user', 'update_user'], 'integer'],
+            [['id', 'numero_ext', 'numero_int', 'cp', 'asignada', 'eliminado', 'create_user', 'update_user'], 'integer'],
             [['nombre', 'calle', 'colonia', 'estado', 'ciudad', 'telefono1', 'telefono2', 'fax', 'email', 'logotipo', 'web', 'rfc', 'create_time', 'update_time'], 'safe'],
         ];
     }
@@ -60,7 +60,6 @@ class SucursalSearch extends Sucursal
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'id_domicilio' => $this->id_domicilio,
             'numero_ext' => $this->numero_ext,
             'numero_int' => $this->numero_int,
             'cp' => $this->cp,
@@ -84,6 +83,8 @@ class SucursalSearch extends Sucursal
             ->andFilterWhere(['like', 'logotipo', $this->logotipo])
             ->andFilterWhere(['like', 'web', $this->web])
             ->andFilterWhere(['like', 'rfc', $this->rfc]);
+
+        $query->andFilterWhere(['eliminado' => 0 ]);
 
         return $dataProvider;
     }
