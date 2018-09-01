@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
       <?php
-      //if($privilegio[0]['crear_usuario'] == 1)
+      if($privilegio[0]['crear_usuario'] == 1)
       echo Html::button('Crear usuario', ['value'=>Url::to('../registrar-usuario/create'), 'class' => 'btn btn-success', 'id' => 'modalButton']) ?>
     </p>
 

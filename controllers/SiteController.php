@@ -9,7 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
-
+use app\models\Sucursal;
 use app\models\Reservacion;
 use app\models\ReservacionSearch;
 use app\models\RegistroSistema;
@@ -73,9 +73,13 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		return $this->render('index');
-	}
+		$id_current_user = Yii::$app->user->identity->id;
+		$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
+		return $this->render('index', [
+				'privilegio'=>$privilegio,
+		]);
+	}
 
 	/**
 	* Login action.
@@ -90,7 +94,17 @@ class SiteController extends Controller
 
 		$model = new LoginForm();
 		if ($model->load(Yii::$app->request->post()) && $model->login()) {
-			return $this->goBack();
+
+			$id_current_user = Yii::$app->user->identity->id;
+			$tipo_usuario = Yii::$app->db->createCommand('SELECT id_sucursal FROM usuario WHERE id= '.$id_current_user)->queryOne();
+			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+
+				return $this->render('multiusuario', [
+				            'model' => $model,
+										'privilegio'=>$privilegio,
+				        ]);
+
+
 		}
 		return $this->render('login', [
 		            'model' => $model,

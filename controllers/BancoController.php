@@ -6,7 +6,6 @@ use Yii;
 use app\models\Banco;
 use app\models\RegistroSistema;
 use app\models\BancoSearch;
-use app\models\EstadoCaja;
 use app\models\Privilegio;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -44,13 +43,10 @@ class BancoController extends Controller
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
         $totalBanco = Yii::$app->db->createCommand('SELECT Sum(tarjeta), Sum(deposito) FROM banco AS Banco')->queryAll();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $estado_caja = new EstadoCaja();
-        $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'estado_caja' => $estado_caja,
             'totalBanco'=>$totalBanco,
             'privilegio'=>$privilegio,
         ]);
@@ -79,7 +75,7 @@ class BancoController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['movimientos_caja'] == 1){
+      if($privilegio[0]['movimientos_deposito'] == 1){
 
         $model = new Banco();
         $registroSistema= new RegistroSistema();

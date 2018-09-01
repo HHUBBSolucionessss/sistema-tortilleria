@@ -6,7 +6,8 @@ namespace app\controllers;
 use Yii;
 
 use app\models\User;
-//use app\models\Privilegio;
+use app\models\Privilegio;
+use app\models\PrivilegioSearch;
 use app\models\UsuarioSearch;
 use app\models\RegistroSistema;
 use yii\web\Controller;
@@ -54,13 +55,13 @@ class RegistrarUsuarioController extends Controller
 
 		$searchModel = new UsuarioSearch();
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		//$id_current_user = Yii::$app->user->identity->id;
-		//$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+		$id_current_user = Yii::$app->user->identity->id;
+		$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
 		return $this->render('index', [
 		'searchModel' => $searchModel,
 		'dataProvider' => $dataProvider,
-		//'privilegio'=>$privilegio,
+		'privilegio'=>$privilegio,
 		]);
 
 	}
@@ -86,7 +87,7 @@ class RegistrarUsuarioController extends Controller
 			$id_current_user = Yii::$app->user->identity->id;
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-			if($privilegio[0]['apertura_caja'] == 1){
+			if($privilegio[0]['modificar_usuario'] == 1){
 				if ($model->save() && $registroSistema->save())
 				{
 					Yii::$app->session->setFlash('kv-detail-success', 'La información se actualizó correctamente');
@@ -123,51 +124,43 @@ class RegistrarUsuarioController extends Controller
 
 	public function actionCreate()
 	{
-			/*$id_current_user = Yii::$app->user->identity->id;
+			$id_current_user = Yii::$app->user->identity->id;
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-			if($privilegio[0]['crear_usuario'] == 1){*/
+			if($privilegio[0]['crear_usuario'] == 1){
 				$model = new SignupForm();
 				$usuario = new User();
-				/*$privilegio= new Privilegio();
-				$registroSistema= new RegistroSistema();*/
+				$privilegio= new Privilegio();
+				$registroSistema= new RegistroSistema();
 
 				if ($model->load(Yii::$app->request->post()))
 				{
 
-					//$registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado al usuario ". $model->nombre;
+					$registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado al usuario ". $model->nombre;
+					$registroSistema->id_sucursal=1;
 
 					if ($model->signup())
 					{
 
-						/*$sql = User::findOne(['email' => $model->email]);
+						$sql = User::findOne(['email' => $model->email]);
 
 						$id = $sql->id;
 						$privilegio->id_usuario = $id;
-						$privilegio->crear_habitacion=1;
-						$privilegio->modificar_habitacion=1;
-						$privilegio->eliminar_habitacion=1;
-						$privilegio->crear_tipo_habitacion=1;
-						$privilegio->modificar_tipo_habitacion=1;
-						$privilegio->eliminar_tipo_habitacion=1;
 						$privilegio->movimientos_caja=1;
 						$privilegio->apertura_caja=1;
 						$privilegio->cierre_caja=1;
-						$privilegio->crear_reservacion=1;
-						$privilegio->modificar_reservacion=1;
-						$privilegio->eliminar_reservacion=1;*/
 
-						/*if($privilegio->save() && $registroSistema->save()){*/
+						if($privilegio->save() && $registroSistema->save()){
 							return $this->redirect(['index']);
-						//}
+						}
 
 					}
 
 				}
-			/*}
+			}
 			else{
 				return $this->redirect(['index']);
-			}*/
+			}
 
 				return $this->renderAjax('create', [
 				'model' => $model,
@@ -176,39 +169,7 @@ class RegistrarUsuarioController extends Controller
 
 
 	}
-
-
-
-
-	/**
-     * Updates an existing User model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-
-	public function actionUpdate($id)
-	{
-
-		$model = $this->findModel($id);
-
-		//$model->create_user=Yii::$app->user->identity->id;
-
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
-			return $this->redirect(['index', 'id' => $model->id]);
-
-		}
-
-
-		return $this->render('update', [
-		'model' => $model,
-		]);
-
-	}
-
-
-
+	
 	/**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -220,24 +181,25 @@ class RegistrarUsuarioController extends Controller
 	 	{
 
 	 		$model = $this->findModel($id);
-			/*$id_current_user = Yii::$app->user->identity->id;
+			$id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
       if($privilegio[0]['eliminar_usuario'] == 1){
 		 		$registroSistema= new RegistroSistema();
 
 		 		$model->eliminado = 1;
-		 		$registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha eliminado al usuario ". $model->nombre;*/
+		 		$registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha eliminado al usuario ". $model->nombre;
+				$registroSistema->id_sucursal=1;
 
-      if($model->save() /*&& $registroSistema->save()*/){
-					//Yii::$app->session->setFlash('kv-detail-success', 'El usuario se ha eliminado correctamente');
+      if($model->save() && $registroSistema->save()){
+					Yii::$app->session->setFlash('kv-detail-success', 'El usuario se ha eliminado correctamente');
    				return $this->redirect(['index']);
    			}
-      /*}
+      }
       else{
-        Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');*/
+        Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
         return $this->redirect(['view', 'id'=>$model->id]);
-      //}
+      }
 	 	}
 
 

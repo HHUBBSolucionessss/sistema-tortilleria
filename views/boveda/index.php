@@ -22,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
   <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
   <p>
-      <?= Html::button('Movimientos de bóveda', ['value'=>Url::to('../boveda/create'), 'class' => 'btn btn-success', 'id' => '_modalButtonApertura'])?>
+      <?php
+      if($privilegio[0]['movimientos_boveda'] == 1)
+       echo Html::button('Movimientos de bóveda', ['value'=>Url::to('../boveda/create'), 'class' => 'btn btn-success', 'id' => '_modalButtonApertura'])?>
   </p>
   <p>Total en bóveda</p>
     <p>Efectivo: $ <?=$totalBoveda[0]['Sum(efectivo)']?></p>

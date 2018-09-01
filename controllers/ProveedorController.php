@@ -37,11 +37,17 @@ class ProveedorController extends Controller
     public function actionIndex()
     {
         $searchModel = new ProveedorSearch();
+        $id_current_user = Yii::$app->user->identity->id;
+
+        $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+        $totalBoveda = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM boveda AS Boveda')->queryAll();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'privilegio'=>$privilegio,
+            'totalBoveda'=>$totalBoveda,
         ]);
     }
 
@@ -66,7 +72,7 @@ class ProveedorController extends Controller
           $id_current_user = Yii::$app->user->identity->id;
           $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-          if($privilegio[0]['apertura_caja'] == 1){
+          if($privilegio[0]['modificar_proveedor'] == 1){
             if ($model->save() && $registroSistema->save())
             {
                 Yii::$app->session->setFlash('kv-detail-success', 'La información se actualizó correctamente');
@@ -100,7 +106,7 @@ class ProveedorController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['apertura_caja'] == 1){
+      if($privilegio[0]['crear_proveedor'] == 1){
         $model = new Proveedor();
         $registroSistema = new RegistroSistema();
 
@@ -162,7 +168,7 @@ class ProveedorController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['apertura_caja'] == 1){
+      if($privilegio[0]['eliminar_proveedor'] == 1){
         $registroSistema= new RegistroSistema();
 
         $model->eliminado = 1;

@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
       <?php
-  //    if($privilegio[0]['apertura_caja'] == 1)
+      if($privilegio[0]['crear_producto'] == 1)
         echo Html::button('Crear producto', ['value'=>Url::to('../producto/create'), 'class' => 'btn btn-success', 'id' => 'modalButton']) ?>
     </p>
 

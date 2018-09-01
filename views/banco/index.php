@@ -22,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::button('Movimientos depósitos', ['value'=>Url::to('../banco/create'), 'class' => 'btn btn-success', 'id' => '_modalButtonApertura'])?>
+        <?php
+        if($privilegio[0]['movimientos_deposito'] == 1)
+         echo Html::button('Movimientos depósitos', ['value'=>Url::to('../banco/create'), 'class' => 'btn btn-success', 'id' => '_modalButtonApertura'])?>
           <p>Total en banco</p>
           <br>
             <p>Tarjetas: $ <?=$totalBanco[0]['Sum(tarjeta)']?></p>

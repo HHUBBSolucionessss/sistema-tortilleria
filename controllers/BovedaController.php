@@ -5,7 +5,6 @@ namespace app\controllers;
 use Yii;
 use app\models\Boveda;
 use app\models\BovedaSearch;
-use app\models\EstadoCaja;
 use app\models\RegistroSistema;
 use app\models\Privilegio;
 use yii\web\Controller;
@@ -44,13 +43,10 @@ class BovedaController extends Controller
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
       $totalBoveda = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM boveda AS Boveda')->queryAll();
       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-      $estado_caja = new EstadoCaja();
-      $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
 
       return $this->render('index', [
           'searchModel' => $searchModel,
           'dataProvider' => $dataProvider,
-          'estado_caja' => $estado_caja,
           'privilegio'=>$privilegio,
           'totalBoveda'=>$totalBoveda,
       ]);
@@ -79,7 +75,7 @@ class BovedaController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['movimientos_caja'] == 1){
+      if($privilegio[0]['movimientos_boveda'] == 1){
 
         $model = new Boveda();
         $registroSistema= new RegistroSistema();

@@ -74,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
           <p>
             <?php
-            if($privilegio[0]['apertura_caja'] == 1)
+            if($privilegio[0]['definir_privilegios'] == 1)
             echo Html::a(Yii::t('app', 'Definir privilegios'), ['../web/privilegio/update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
           </p>
 
