@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use kartik\grid\GridView;
 use app\models\User;
-
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use app\models\EstadoCaja;
