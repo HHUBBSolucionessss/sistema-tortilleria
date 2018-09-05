@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Producto;
+use app\models\Inventario;
 use app\models\ProductoSearch;
 use app\models\RegistroSistema;
 use yii\web\Controller;
@@ -108,6 +109,7 @@ class ProductoController extends Controller
       if($privilegio[0]['crear_producto'] == 1){
         $model = new Producto();
         $registroSistema = new RegistroSistema();
+        $inventario = new Inventario();
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -115,6 +117,8 @@ class ProductoController extends Controller
           $model->create_time=date('Y-m-d H:i:s');
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado el producto ". $model->nombre;
           $registroSistema->id_sucursal = 1;
+          $inventario->id_producto = $model->id;
+          $inventario->id_sucursal = 1;
 
           if($model->save() && $registroSistema->save())
           {

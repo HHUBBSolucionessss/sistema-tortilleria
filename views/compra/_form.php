@@ -14,8 +14,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id_proveedor')->textInput() ?>
 
-    <?= $form->field($model, 'id_sucursal')->textInput() ?>
-
     <?= $form->field($model, 'id_comprador')->textInput() ?>
 
     <?= $form->field($model, 'id_ctdestino')->textInput() ?>
@@ -56,24 +54,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'abonado')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'cancelada')->textInput() ?>
-
     <?= $form->field($model, 'estado')->textInput() ?>
 
-    <?= $form->field($model, 'create_user')->textInput() ?>
-
-    <?= $form->field($model, 'create_time')->textInput() ?>
-
-    <?= $form->field($model, 'update_user')->textInput() ?>
-
-    <?= $form->field($model, 'update_time')->textInput() ?>
-
-    <?= $form->field($model, 'cancel_user')->textInput() ?>
-
-    <?= $form->field($model, 'cancel_time')->textInput() ?>
-
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

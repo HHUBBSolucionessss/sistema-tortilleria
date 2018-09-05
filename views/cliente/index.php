@@ -50,12 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
                   'contentOptions'=>['class'=>'kv-sticky-column'],
               ],
               [
-                  'attribute' => 'email',
-                  'vAlign'=>'middle',
-                  'headerOptions'=>['class'=>'kv-sticky-column'],
-                  'contentOptions'=>['class'=>'kv-sticky-column'],
-              ],
-              [
                   'attribute' => 'telefono1',
                   'label' => 'Teléfono',
                   'vAlign'=>'middle',

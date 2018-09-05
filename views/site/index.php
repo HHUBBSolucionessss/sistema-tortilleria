@@ -7,15 +7,14 @@ $this->title = 'Tortillería Los Cuates';
 
 <div class="site-index">
     <div class="jumbotron">
-        <?= Html::a('Banco', ['/banco/index'], ['class'=>'btn']) ?>
-        <?= Html::a('Bóveda', ['/boveda/index'], ['class'=>'btn']) ?>
         <?= Html::a('Caja', ['/caja/index'], ['class'=>'btn']) ?>
         <?= Html::a('Clientes', ['/cliente/index'], ['class'=>'btn']) ?>
         <?= Html::a('Inventario', ['/inventario/index'], ['class'=>'btn']) ?>
+        <?= Html::a('Registro Inventario', ['/registro-inventario/index'], ['class'=>'btn']) ?>
         <?= Html::a('Venta', ['/venta/index'], ['class'=>'btn']) ?>
-        <?= Html::a('Compra', ['/compra/index'], ['class'=>'btn']) ?>
+        <?= Html::a('Cuentas X Cobrar', ['/cuentas/index'], ['class'=>'btn']) ?>
+        <?= Html::a('Nóminas', ['/nominas/index'], ['class'=>'btn']) ?>
         <?= Html::a('Productos', ['/producto/index'], ['class'=>'btn']) ?>
-        <?= Html::a('Proveedor', ['/proveedor/index'], ['class'=>'btn']) ?>
         <?= Html::a('Sucursal', ['/sucursal/index'], ['class'=>'btn']) ?>
         <?= Html::a('Trabajadores', ['/trabajador/index'], ['class'=>'btn']) ?>
         <?php

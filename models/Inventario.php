@@ -49,9 +49,9 @@ class Inventario extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_producto' => 'Id Producto',
-            'id_sucursal' => 'Id Sucursal',
-            'cant' => 'Cant',
+            'id_producto' => 'Producto',
+            'id_sucursal' => 'Sucursal',
+            'cant' => 'Cantidad',
             'precio_medio_mayoreo' => 'Precio Medio Mayoreo',
             'precio_mayoreo' => 'Precio Mayoreo',
             'precio_especial' => 'Precio Especial',

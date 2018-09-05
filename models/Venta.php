@@ -51,13 +51,10 @@ class Venta extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_cliente', 'id_sucursal', 'terminacion_tarjeta', 'terminal_tarjeta'], 'required'],
-            [['id_cliente', 'id_sucursal', 'id_vendedor', 'cancelada', 'abierta', 'remision', 'factura', 'tipo_pago', 'a_pagos', 'create_user', 'update_user', 'cancel_user'], 'integer'],
-            [['subtotal', 'impuesto', 'descuento', 'total', 'saldo', 'cargo_tarjeta', 'abonado'], 'number'],
+            [['id_cliente', 'id_sucursal'], 'required'],
+            [['id_cliente', 'id_sucursal', 'id_vendedor', 'cancelada', 'a_pagos', 'create_user', 'update_user', 'cancel_user'], 'integer'],
+            [['subtotal', 'impuesto', 'descuento', 'total', 'saldo'], 'number'],
             [['create_time', 'update_time', 'cancel_time'], 'safe'],
-            [['folio_factura'], 'string', 'max' => 30],
-            [['terminacion_tarjeta', 'terminal_tarjeta'], 'string', 'max' => 50],
-            [['folio_deposito'], 'string', 'max' => 100],
         ];
     }
 
@@ -71,20 +68,10 @@ class Venta extends \yii\db\ActiveRecord
             'id_cliente' => 'Cliente',
             'id_vendedor' => 'Vendedor',
             'subtotal' => 'Subtotal',
-            'impuesto' => 'Impuesto',
             'descuento' => 'Descuento',
             'total' => 'Total',
             'saldo' => 'Saldo',
-            'remision' => 'Remisión',
-            'factura' => 'Factura',
-            'folio_factura' => 'Folio Factura',
-            'tipo_pago' => 'Tipo Pago',
-            'terminacion_tarjeta' => 'Terminación Tarjeta',
-            'terminal_tarjeta' => 'Terminal Tarjeta',
-            'cargo_tarjeta' => 'Cargo Tarjeta',
-            'folio_deposito' => 'Folio Depósito',
             'a_pagos' => 'A Pagos',
-            'abonado' => 'Abonado',
             'create_user' => 'Registró',
             'create_time' => 'Registrado a las',
             'update_user' => 'Actualizó',

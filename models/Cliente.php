@@ -11,7 +11,6 @@ use Yii;
  * @property int $sucursal_id
  * @property int $cuenta_id
  * @property string $nombre
- * @property string $razon_social
  * @property string $rfc
  * @property string $calle
  * @property string $num_ext
@@ -21,8 +20,6 @@ use Yii;
  * @property string $estado
  * @property string $cp
  * @property string $telefono1
- * @property string $telefono2
- * @property string $email
  * @property string $lada1
  * @property string $lada2
  * @property int $tipo Tipos de clientes-Cliente con crédit
@@ -55,8 +52,7 @@ class Cliente extends \yii\db\ActiveRecord
             [['sucursal_id', 'cuenta_id', 'tipo', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['limite_credito'], 'number'],
             [['create_time', 'update_time', 'delete_time'], 'safe'],
-            [['nombre', 'razon_social', 'rfc', 'calle', 'colonia', 'ciudad', 'estado', 'telefono1', 'telefono2', 'email', 'lada1', 'lada2'], 'string', 'max' => 45],
-            [['num_ext', 'num_int'], 'string', 'max' => 15],
+            [['nombre','calle', 'colonia', 'ciudad', 'estado', 'telefono1',], 'string', 'max' => 45],
             [['cp'], 'string', 'max' => 11],
         ];
     }
@@ -71,20 +67,12 @@ class Cliente extends \yii\db\ActiveRecord
             'sucursal_id' => 'Sucursal ID',
             'cuenta_id' => 'Cuenta ID',
             'nombre' => 'Nombre',
-            'razon_social' => 'Razón Social',
-            'rfc' => 'RFC',
             'calle' => 'Calle',
-            'num_ext' => 'Número Exterior',
-            'num_int' => 'Número Interior',
             'colonia' => 'Colonia',
             'ciudad' => 'Ciudad',
             'estado' => 'Estado',
             'cp' => 'Código Postal',
             'telefono1' => 'Teléfono 1',
-            'telefono2' => 'Teléfono 2',
-            'email' => 'Email',
-            'lada1' => 'Lada 1',
-            'lada2' => 'Lada 2',
             'tipo' => 'Tipo de Cliente',
             'limite_credito' => 'Límite de Crédito',
             'eliminado' => 'Eliminado',

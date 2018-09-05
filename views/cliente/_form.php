@@ -14,15 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'razon_social')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'rfc')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'calle')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'num_ext')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'num_int')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'colonia')->textInput(['maxlength' => true]) ?>
 
@@ -33,14 +25,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'cp')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'telefono1')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'telefono2')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'lada1')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'lada2')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'tipo')->textInput() ?>
 

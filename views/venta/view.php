@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
               ],
               'panel'=>[
-                  'heading'=>'Registrar Usuario </br>' . $model->id,
+                  'heading'=>'Registrar venta </br>' . $model->id,
                   'type'=>DetailView::TYPE_INFO,
               ],
               'attributes'=>

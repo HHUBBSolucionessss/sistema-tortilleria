@@ -19,7 +19,7 @@ class ClienteSearch extends Cliente
     {
         return [
             [['id', 'sucursal_id', 'cuenta_id', 'tipo', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
-            [['nombre', 'razon_social', 'rfc', 'calle', 'num_ext', 'num_int', 'colonia', 'ciudad', 'estado', 'cp', 'telefono1', 'telefono2', 'email', 'lada1', 'lada2', 'create_time', 'update_time', 'delete_time'], 'safe'],
+            [['nombre', 'rfc', 'calle', 'num_ext', 'num_int', 'colonia', 'ciudad', 'estado', 'cp', 'telefono1', 'create_time', 'update_time', 'delete_time'], 'safe'],
             [['limite_credito'], 'number'],
         ];
     }
@@ -75,20 +75,12 @@ class ClienteSearch extends Cliente
         ]);
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
-            ->andFilterWhere(['like', 'razon_social', $this->razon_social])
-            ->andFilterWhere(['like', 'rfc', $this->rfc])
             ->andFilterWhere(['like', 'calle', $this->calle])
-            ->andFilterWhere(['like', 'num_ext', $this->num_ext])
-            ->andFilterWhere(['like', 'num_int', $this->num_int])
             ->andFilterWhere(['like', 'colonia', $this->colonia])
             ->andFilterWhere(['like', 'ciudad', $this->ciudad])
             ->andFilterWhere(['like', 'estado', $this->estado])
             ->andFilterWhere(['like', 'cp', $this->cp])
-            ->andFilterWhere(['like', 'telefono1', $this->telefono1])
-            ->andFilterWhere(['like', 'telefono2', $this->telefono2])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'lada1', $this->lada1])
-            ->andFilterWhere(['like', 'lada2', $this->lada2]);
+            ->andFilterWhere(['like', 'telefono1', $this->telefono1]);
 
         $query->andFilterWhere(['eliminado' => 0 ]);
 

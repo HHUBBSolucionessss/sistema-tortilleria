@@ -23,8 +23,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nombre') ?>
 
-    <?= $form->field($model, 'razon_social') ?>
-
     <?php // echo $form->field($model, 'rfc') ?>
 
     <?php // echo $form->field($model, 'calle') ?>
@@ -44,8 +42,6 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'telefono1') ?>
 
     <?php // echo $form->field($model, 'telefono2') ?>
-
-    <?php // echo $form->field($model, 'email') ?>
 
     <?php // echo $form->field($model, 'lada1') ?>
 

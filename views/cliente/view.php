@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use app\models\User;
+use app\models\VentaSearch;
+use kartik\grid\GridView;
 use kartik\editable\Editable;
 use yii\helpers\Url;
 
@@ -15,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cliente-view">
 
-  <h1><?= Html::encode($this->title) ?></h1>
-
+<h1><?= Html::encode($this->title) ?></h1>
+<div class="col-md-12">
   <div class="col-md-4">
     <?php
     $user= new User();
@@ -45,20 +47,12 @@ $this->params['breadcrumbs'][] = $this->title;
                   'displayOnly'=>true,
               ],
               'nombre',
-              'razon_social',
-              'rfc',
               'calle',
-              'num_ext',
-              'num_int',
               'colonia',
               'ciudad',
               'estado',
               'cp',
               'telefono1',
-              'telefono2',
-              'email:email',
-              'lada1',
-              'lada2',
               'tipo',
               'limite_credito',
                 [
@@ -88,5 +82,88 @@ $this->params['breadcrumbs'][] = $this->title;
 
     ?>
     </div>
+    <div class="col-md-6 col-md-offset-2">
+         <?php
+            $gridColumns = [
+                ['class' => 'kartik\grid\SerialColumn'],
+                [
+                    'attribute' => 'total',
+                    'vAlign'=>'middle',
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
+                ],
+                [
+                    'attribute'=>'saldo',
+                    'vAlign'=>'middle',
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
+                    'format'=>'raw'
+                  ],
 
+            ];
+
+            echo GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => $gridColumns,
+                'containerOptions' => ['style'=>'overflow: false'], // only set when $responsive = false
+                'export' => false,
+                'pjax' => true,
+                'bordered' => true,
+                'striped' => false,
+                'condensed' => false,
+                'responsive' => true,
+                'hover' => true,
+                'floatHeader' => false,
+                'showPageSummary' => true,
+                'panel' => [
+                    'heading'=>'Cuentas X Cobrar',
+                    'type' => GridView::TYPE_WARNING
+                ],
+            ]);
+
+        ?>
+    </div>
+    <div class="col-md-6 col-md-offset-2">
+         <?php
+            $gridColumns = [
+                ['class' => 'kartik\grid\SerialColumn'],
+                [
+                    'attribute' => 'total',
+                    'vAlign'=>'middle',
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
+                ],
+                [
+                    'attribute'=>'saldo',
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
+                    'format'=>'raw'
+                  ],
+
+            ];
+
+            echo GridView::widget([
+                'dataProvider' => $dataProvider2,
+                'filterModel' => $searchModel2,
+                'columns' => $gridColumns,
+                'containerOptions' => ['style'=>'overflow: false'], // only set when $responsive = false
+                'export' => false,
+                'pjax' => true,
+                'bordered' => true,
+                'striped' => false,
+                'condensed' => false,
+                'responsive' => true,
+                'hover' => true,
+                'floatHeader' => false,
+                'showPageSummary' => true,
+                'panel' => [
+                    'heading'=>'Ventas pagadas',
+                    'type' => GridView::TYPE_SUCCESS
+                ],
+            ]);
+
+        ?>
+    </div>
+  </div>
 </div>

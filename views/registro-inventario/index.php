@@ -4,38 +4,41 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use kartik\grid\GridView;
 use app\models\User;
+
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use app\models\EstadoCaja;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\CompraSearch */
+/* @var $searchModel app\models\BovedaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Compras';
+$this->title = 'Registro de Inventario';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="compra-index">
+<div class="boveda-index">
 
   <h1><?= Html::encode($this->title) ?></h1>
+
   <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
   <p>
-      <?php
-      if($estado_caja[0]['estado_caja'] == 1)
-       echo Html::button('Nueva compra', ['value'=>Url::to('../compra/create'), 'class' => 'btn btn-success', 'id' => '_modalButtonApertura'])?>
+    <?php
+    if($privilegio[0]['crear_usuario'] == 1)
+    echo Html::a('Realizar inventario', ['create'], ['class' => 'btn btn-success']) ?>
   </p>
 
   <?php
     Modal::begin([
-      'header' => '<h4 style="color:#337AB7";>Nueva compra</h4>',
-      'id' => '_modalApertura',
-      'size' => 'modal-md',
+      'header' => '<h4 style="color:#337AB7";>Registro Inventario</h4>',
+      'id' => 'modal',
+      'size' => 'modal-lg',
     ]);
 
-    echo "<div id='_aperturaCaja'></div>";
+    echo "<div id='modalContent'></div>";
 
     Modal::end();
+
   ?>
 
 <?php Pjax::begin(); ?>
@@ -43,27 +46,28 @@ $this->params['breadcrumbs'][] = $this->title;
           $gridColumns = [
               ['class' => 'kartik\grid\SerialColumn'],
               [
-                  'attribute' => 'id_proveedor',
+                  'attribute' => 'id',
                   'vAlign'=>'middle',
                   'headerOptions'=>['class'=>'kv-sticky-column'],
                   'contentOptions'=>['class'=>'kv-sticky-column'],
               ],
               [
-                  'attribute' => 'id_comprador',
+                  'attribute' => 'id_sucursal',
                   'vAlign'=>'middle',
                   'headerOptions'=>['class'=>'kv-sticky-column'],
                   'contentOptions'=>['class'=>'kv-sticky-column'],
               ],
               [
-                  'attribute' => 'total',
-                  'vAlign'=>'middle',
-                  'headerOptions'=>['class'=>'kv-sticky-column'],
-                  'contentOptions'=>['class'=>'kv-sticky-column'],
+                'attribute'=>'estado',
+                'vAlign'=>'middle',
+                'headerOptions'=>['class'=>'kv-sticky-column'],
+                'contentOptions'=>['class'=>'kv-sticky-column'],
               ],
               [
-                  'class' => 'kartik\grid\ActionColumn',
-                  'template'=>'{view}{delete}',
-                  'vAlign'=>'middle',
+                'attribute'=>'nota',
+                'vAlign'=>'middle',
+                'headerOptions'=>['class'=>'kv-sticky-column'],
+                'contentOptions'=>['class'=>'kv-sticky-column'],
               ],
           ];
 

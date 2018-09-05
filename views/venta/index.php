@@ -23,20 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php
         if($estado_caja[0]['estado_caja'] == 1)
-         echo Html::button('Nueva venta', ['value'=>Url::to('../venta/create'), 'class' => 'btn btn-success', 'id' => '_modalButtonApertura'])?>
+         echo Html::a('Nueva venta', ['create'], ['class' => 'btn btn-success']);
+        else{
+         ?>
+         <a href='../caja/index'>Click aquí para abrir caja</a>
+       <?php } ?>
     </p>
-
-    <?php
-      Modal::begin([
-        'header' => '<h4 style="color:#337AB7";>Movimientos Depósitos</h4>',
-        'id' => '_modalApertura',
-        'size' => 'modal-md',
-      ]);
-
-      echo "<div id='_aperturaCaja'></div>";
-
-      Modal::end();
-    ?>
 
 <?php Pjax::begin(); ?>
         <?php

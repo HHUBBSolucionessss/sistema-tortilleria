@@ -6,6 +6,8 @@ use Yii;
 use app\models\Cliente;
 use app\models\ClienteSearch;
 use app\models\RegistroSistema;
+use app\models\VentaSearch;
+use app\models\Venta;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -62,6 +64,13 @@ class ClienteController extends Controller
     {
       $model = $this->findModel($id);
       $registroSistema= new RegistroSistema();
+      $searchModel = new VentaSearch();
+      $searchModel2 = new VentaSearch();
+
+      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+      $dataProvider2 = $searchModel2->search2(Yii::$app->request->queryParams);
+      $sumTotal=Yii::$app->db->createCommand('SELECT sum(total) FROM venta WHERE id_cliente ='.$model->id)->queryAll();
+
       if ($model->load(Yii::$app->request->post()))
       {
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha actualizado datos del cliente ". $model->nombre;
@@ -91,7 +100,14 @@ class ClienteController extends Controller
       }
       else
       {
-          return $this->render('view', ['model'=>$model]);
+          return $this->render('view', [
+            'searchModel2' => $searchModel2,
+            'dataProvider2' => $dataProvider2,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'sumTotal'=>$sumTotal,
+            'model'=>$model,
+          ]);
 
       }
     }

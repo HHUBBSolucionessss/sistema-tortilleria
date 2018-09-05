@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Venta;
+use app\models\VentaDetallada;
 use app\models\VentaSearch;
 use app\models\RegistroSistema;
 use app\models\Privilegio;
@@ -63,6 +64,7 @@ class VentaController extends Controller
     public function actionView($id)
     {
       $searchModel = new VentaSearch();
+
       $id_current_user = Yii::$app->user->identity->id;
 
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
@@ -92,6 +94,7 @@ class VentaController extends Controller
       if($privilegio[0]['apertura_caja'] == 1){
         $model = new Venta();
         $registroSistema = new RegistroSistema();
+        $modelsVentaDetallada = [new VentaDetallada];
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -101,9 +104,48 @@ class VentaController extends Controller
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una venta";
           $registroSistema->id_sucursal = 1;
 
-          if($model->save() && $registroSistema->save())
+          $modelVentaDetallada = Model::createMultiple(VentaDetallada::classname());
+          Model::loadMultiple($modelVentaDetallada, Yii::$app->request->post());
+          // ajax validation
+          if (Yii::$app->request->isAjax)
+            {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ArrayHelper::merge(
+                    ActiveForm::validateMultiple($modelVentaDetallada),
+                    ActiveForm::validate($model)
+                );
+            }
+
+          // validate all models
+          $valid = $model->validate();
+          $validacion=Model::validateMultiple($modelVentaDetallada);
+
+          //$valid =  $validacion && $valid;
+          if ($valid)
           {
-            return $this->redirect(['view', 'id' => $model->id]);
+              $transaction = \Yii::$app->db->beginTransaction();
+              try
+              {
+                  if ($flag = $model->save(false))
+                  {
+                      foreach ($modelVentaDetallada as $modelVentaDetallada)
+                      {
+                          $modelVentaDetallada->id_venta = $model->id;
+                          if (! ($flag = $modelVentaDetallada->save(false)))
+                          {
+                              $transaction->rollBack();
+                              break;
+                          }
+                      }
+                  }
+                  if ($flag)
+                  {
+                      $transaction->commit();
+                      return $this->redirect(['view', 'id' => $model->id]);
+                  }
+              } catch (Exception $e) {
+                  $transaction->rollBack();
+              }
           }
         }
       }
@@ -111,8 +153,9 @@ class VentaController extends Controller
         return $this->redirect(['index']);
       }
 
-      return $this->renderAjax('create', [
+      return $this->render('_form', [
           'model' => $model,
+          'modelVentaDetallada' => (empty($modelVentaDetallada)) ? [new VentaDetallada] : $modelsVentaDetallada
       ]);
     }
 
