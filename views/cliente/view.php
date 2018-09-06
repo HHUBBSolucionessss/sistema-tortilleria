@@ -11,7 +11,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Cliente */
 
-$this->title = $model->id;
+$this->title = 'Cliente '. $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Clientes', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -99,6 +99,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                     'format'=>'raw'
                   ],
+                  [
+                      'class' => 'kartik\grid\ActionColumn',
+                      'template'=>'{view}',
+                      'vAlign'=>'middle',
+                  ],
 
             ];
 
@@ -139,6 +144,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                     'format'=>'raw'
+                  ],
+                  [
+                      'class' => 'kartik\grid\ActionColumn',
+                      'template'=>'{view}',
+                      'vAlign'=>'middle',
                   ],
 
             ];

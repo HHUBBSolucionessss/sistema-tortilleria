@@ -12,7 +12,6 @@ use Yii;
  * @property int $id_sucursal
  * @property int $id_vendedor Utilizar trabajador_id
  * @property int $cancelada
- * @property int $abierta
  * @property string $subtotal
  * @property string $impuesto
  * @property string $descuento

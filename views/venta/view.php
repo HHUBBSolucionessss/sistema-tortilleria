@@ -3,13 +3,14 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use app\models\User;
+use yii\bootstrap\Modal;
 use kartik\editable\Editable;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Venta */
 
-$this->title = $model->id;
+$this->title = 'Venta '. $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Ventas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -48,22 +49,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'id_sucursal',
                 'id_vendedor',
                 'cancelada',
-                'abierta',
                 'subtotal',
-                'impuesto',
                 'descuento',
                 'total',
                 'saldo',
-                'remision',
-                'factura',
-                'folio_factura',
-                'tipo_pago',
-                'terminacion_tarjeta',
-                'terminal_tarjeta',
-                'cargo_tarjeta',
-                'folio_deposito',
                 'a_pagos',
-                'abonado',
                   [
                       'attribute'=>'create_user',
                       'format'=>'raw',
@@ -91,6 +81,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
       ?>
       </div>
+
+      <p>
+        <?php
+        if($privilegio[0]['apertura_caja'] == 1)
+          echo Html::button('Realizar pago', ['value'=>Url::to(['pago-venta', 'id' => $model->id]), 'class' => 'btn btn-warning', 'id' => 'modalButton']) ?>
+      </p>
+
+      <?php
+        Modal::begin([
+          'header' => '<h4 style="color:#337AB7";>Realizar pago</h4>',
+          'id' => 'modal',
+          'size' => 'modal-lg',
+        ]);
+        echo "<div id='modalContent'></div>";
+        Modal::end();
+      ?>
 
       <p>
         <?php

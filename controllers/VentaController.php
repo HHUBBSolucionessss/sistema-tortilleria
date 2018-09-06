@@ -8,7 +8,10 @@ use app\models\VentaDetallada;
 use app\models\VentaSearch;
 use app\models\RegistroSistema;
 use app\models\Privilegio;
+use app\models\PagoVenta;
 use app\models\EstadoCaja;
+use app\models\Caja;
+use app\models\cliente;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -178,6 +181,57 @@ class VentaController extends Controller
             'model' => $model,
         ]);
     }
+
+  public function actionPagoVenta($id)
+	{
+    $model = new PagoVenta();
+		$id_current_user = Yii::$app->user->identity->id;
+		$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+		$caja= new Caja();
+    $pagoVenta = new Venta();
+    $searchModel = new VentaSearch();
+    $totales = Yii::$app->db->createCommand('SELECT * FROM venta WHERE id = '.$id)->queryAll();
+    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		$registroSistema= new RegistroSistema();
+    $cliente = new Cliente();
+
+      if($privilegio[0]['apertura_caja'] == 1){
+  			if ($pagoVenta->load(Yii::$app->request->post()))
+  			{
+  				//CAJA
+          $caja->id_sucursal = 1;
+          $caja->descripcion="Pago a la venta ".$id;
+  				$caja->efectivo=$pagoVenta->ingreso;
+  				$caja->tarjeta=0;
+  				$caja->deposito=0;
+  				$caja->tipo_pago=0;
+  				$caja->create_user=Yii::$app->user->identity->id;
+  				$caja->create_time=date('Y-m-d H:i:s');
+
+  				//Registro de sistema
+  				$registroSistema->descripcion=$reserva->create_user= Yii::$app->user->identity->nombre ." realizado un pago a la venta ". $id ." por un monto de  ".$pagoVenta->ingreso;
+
+          //Pago venta
+          $model->id_venta = $id;
+          $model->create_user=Yii::$app->user->identity->id;
+  				$model->create_time=date('Y-m-d H:i:s');
+          if($registroSistema->save()){
+            return $this->redirect(['view', 'id' => $model->id]);
+          }
+
+  		}
+    }
+		else{
+			return $this->redirect(['index']);
+		}
+		return $this->renderAjax('pago_venta', [
+		'model' => $model,
+    'searchModel' => $searchModel,
+    'dataProvider' => $dataProvider,
+    'privilegio'=>$privilegio,
+    'totales'=>$totales,
+		]);
+	}
 
     /**
      * Deletes an existing Venta model.

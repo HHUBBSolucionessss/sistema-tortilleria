@@ -23,6 +23,9 @@ jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
 });
 ';
 $this->registerJs($js);
+$this->title = 'Nueva venta '. $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Venta', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="venta-form">

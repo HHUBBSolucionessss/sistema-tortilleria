@@ -39,16 +39,13 @@ class ProductoController extends Controller
     {
         $searchModel = new ProductoSearch();
         $id_current_user = Yii::$app->user->identity->id;
-
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-        $totalBoveda = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM boveda AS Boveda')->queryAll();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'privilegio'=>$privilegio,
-            'totalBoveda'=>$totalBoveda,
         ]);
     }
 

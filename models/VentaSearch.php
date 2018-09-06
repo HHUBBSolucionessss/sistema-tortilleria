@@ -78,6 +78,9 @@ class VentaSearch extends Venta
             'cancel_time' => $this->cancel_time,
         ]);
 
+
+                $query->andFilterWhere(['!=','saldo', '0']);
+
         return $dataProvider;
     }
 
