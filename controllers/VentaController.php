@@ -67,7 +67,6 @@ class VentaController extends Controller
     public function actionView($id)
     {
       $searchModel = new VentaSearch();
-
       $id_current_user = Yii::$app->user->identity->id;
 
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
@@ -182,55 +181,59 @@ class VentaController extends Controller
         ]);
     }
 
-  public function actionPagoVenta($id)
-	{
-    $model = new PagoVenta();
-		$id_current_user = Yii::$app->user->identity->id;
-		$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-		$caja= new Caja();
-    $pagoVenta = new Venta();
-    $searchModel = new VentaSearch();
-    $totales = Yii::$app->db->createCommand('SELECT * FROM venta WHERE id = '.$id)->queryAll();
-    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-		$registroSistema= new RegistroSistema();
-    $cliente = new Cliente();
+    public function actionPagoVenta($id)
+    {
+        $registroSistema = new RegistroSistema();
+        $pagoVenta = new PagoVenta();
+        $estado_caja = new EstadoCaja();
+        $caja = new Caja();
+        $id_current_user = Yii::$app->user->identity->id;
+        $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+        $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
+        $totales = Yii::$app->db->createCommand('SELECT total,saldo FROM venta WHERE id = '.$id)->queryAll();
 
-      if($privilegio[0]['apertura_caja'] == 1){
-  			if ($pagoVenta->load(Yii::$app->request->post()))
-  			{
-  				//CAJA
-          $caja->id_sucursal = 1;
-          $caja->descripcion="Pago a la venta ".$id;
-  				$caja->efectivo=$pagoVenta->ingreso;
-  				$caja->tarjeta=0;
-  				$caja->deposito=0;
-  				$caja->tipo_pago=0;
-  				$caja->create_user=Yii::$app->user->identity->id;
-  				$caja->create_time=date('Y-m-d H:i:s');
+    if($privilegio[0]['apertura_caja'] == 1)
+    {
+      if ($pagoVenta->load(Yii::$app->request->post())) 
+      {
 
-  				//Registro de sistema
-  				$registroSistema->descripcion=$reserva->create_user= Yii::$app->user->identity->nombre ." realizado un pago a la venta ". $id ." por un monto de  ".$pagoVenta->ingreso;
+        //CAJA
+        $caja->id_sucursal = 1;
+        $caja->descripcion="Pago a la venta ".$id;
+        $caja->efectivo=$pagoVenta->ingreso;
+        $caja->tarjeta=0;
+        $caja->deposito=0;
+        $caja->tipo_movimiento=0;
+        $caja->tipo_pago=0;
+        $caja->create_user=Yii::$app->user->identity->id;
+        $caja->create_time=date('Y-m-d H:i:s');
 
-          //Pago venta
-          $model->id_venta = $id;
-          $model->create_user=Yii::$app->user->identity->id;
-  				$model->create_time=date('Y-m-d H:i:s');
-          if($registroSistema->save()){
-            return $this->redirect(['view', 'id' => $model->id]);
-          }
+        //Registro de sistema
+        $registroSistema->descripcion=Yii::$app->user->identity->nombre." ha realizado un pago a la venta ". $id ." por un monto de  ".$pagoVenta->ingreso;
+        $registroSistema->id_sucursal=1;
 
-  		}
+        //Pago venta
+        $pagoVenta->id_venta = $id;
+        $pagoVenta->create_user=Yii::$app->user->identity->id;
+        $pagoVenta->create_time=date('Y-m-d H:i:s');
+
+
+        if($pagoVenta->save())
+        {
+          return $this->redirect(['view', 'id' => $id]);
+        }
+      }
     }
-		else{
-			return $this->redirect(['index']);
-		}
-		return $this->renderAjax('pago_venta', [
-		'model' => $model,
-    'searchModel' => $searchModel,
-    'dataProvider' => $dataProvider,
-    'privilegio'=>$privilegio,
-    'totales'=>$totales,
-		]);
+    else{
+      return $this->redirect(['index']);
+    }
+
+    return $this->renderAjax('pagoVenta', [
+        'estado_caja' => $estado_caja,
+        'privilegio'=>$privilegio,
+        'totales'=>$totales,
+        'pagoVenta'=>$pagoVenta,
+    ]);
 	}
 
     /**

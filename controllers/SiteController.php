@@ -96,10 +96,10 @@ class SiteController extends Controller
 		if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
 			$id_current_user = Yii::$app->user->identity->id;
-			$tipo_usuario = Yii::$app->db->createCommand('SELECT id_sucursal FROM usuario WHERE id= '.$id_current_user)->queryOne();
+			//$tipo_usuario = Yii::$app->db->createCommand('SELECT id_sucursal FROM usuario WHERE id= '.$id_current_user)->queryOne();
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-				return $this->render('multiusuario', [
+				return $this->render('index', [
 				            'model' => $model,
 										'privilegio'=>$privilegio,
 				        ]);

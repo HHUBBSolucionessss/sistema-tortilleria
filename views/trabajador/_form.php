@@ -42,9 +42,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'fecha_fin')->textInput() ?>
 
-    <?= $form->field($model, 'imagen')->textInput() ?>
-
-    <?= $form->field($model, 'huella')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
