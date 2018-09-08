@@ -102,9 +102,9 @@ class VentaController extends Controller
 
           $model->create_user=Yii::$app->user->identity->id;
           $model->create_time=date('Y-m-d H:i:s');
-          $model->id_sucursal = 1;
+          $model->id_sucursal = Yii::$app->user->identity->id_sucursal;
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una venta";
-          $registroSistema->id_sucursal = 1;
+          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
           $modelVentaDetallada = Model::createMultiple(VentaDetallada::classname());
           Model::loadMultiple($modelVentaDetallada, Yii::$app->request->post());
@@ -194,7 +194,7 @@ class VentaController extends Controller
 
     if($privilegio[0]['apertura_caja'] == 1)
     {
-      if ($pagoVenta->load(Yii::$app->request->post())) 
+      if ($pagoVenta->load(Yii::$app->request->post()))
       {
 
         //CAJA
@@ -207,10 +207,11 @@ class VentaController extends Controller
         $caja->tipo_pago=0;
         $caja->create_user=Yii::$app->user->identity->id;
         $caja->create_time=date('Y-m-d H:i:s');
+        $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
 
         //Registro de sistema
         $registroSistema->descripcion=Yii::$app->user->identity->nombre." ha realizado un pago a la venta ". $id ." por un monto de  ".$pagoVenta->ingreso;
-        $registroSistema->id_sucursal=1;
+        $registroSistema->id_sucursal=Yii::$app->user->identity->id_sucursal;
 
         //Pago venta
         $pagoVenta->id_venta = $id;

@@ -61,6 +61,7 @@ class ProductoSearch extends Producto
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'id_sucursal' => $this->id_sucursal,
             'proveedor_id' => $this->proveedor_id,
             'categoria' => $this->categoria,
             'costo' => $this->costo,
@@ -81,9 +82,27 @@ class ProductoSearch extends Producto
             ->andFilterWhere(['like', 'codigo', $this->codigo])
             ->andFilterWhere(['like', 'descripcion1', $this->descripcion1])
             ->andFilterWhere(['like', 'imagen', $this->imagen]);
+        
 
-        $query->andFilterWhere(['eliminado' => 0 ]);
+        $id = Yii::$app->user->identity->id_sucursal;
+        $sucursal = Yii::$app->db->createCommand('SELECT id_sucursal FROM producto WHERE id_sucursal = '.$id)->queryAll();
 
-        return $dataProvider;
+        if($sucursal != NULL){
+            $query->andFilterWhere(['eliminado' => 0 ])
+            ->andFilterWhere(['id_sucursal' => $sucursal[0]['id_sucursal']]);
+
+            return $dataProvider;
+        }
+        else{
+
+            $sucursal = 0;
+
+            $query->andFilterWhere(['eliminado' => 0 ])
+            ->andFilterWhere(['id_sucursal' => $sucursal]);
+
+            return $dataProvider;
+        }
+
+        
     }
 }

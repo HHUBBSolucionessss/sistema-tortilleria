@@ -40,14 +40,12 @@ class TrabajadorController extends Controller
         $id_current_user = Yii::$app->user->identity->id;
 
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-        $totalBoveda = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM boveda AS Boveda')->queryAll();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'privilegio'=>$privilegio,
-            'totalBoveda'=>$totalBoveda,
         ]);
     }
 
@@ -64,7 +62,7 @@ class TrabajadorController extends Controller
       if ($model->load(Yii::$app->request->post()))
       {
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha actualizado datos del trabajador ". $model->nombre;
-          $registroSistema->id_sucursal = 1;
+          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
           $model->update_user=Yii::$app->user->identity->id;
           $model->update_time=date('Y-m-d H:i:s');
 
@@ -113,9 +111,9 @@ class TrabajadorController extends Controller
 
           $model->create_user=Yii::$app->user->identity->id;
           $model->create_time=date('Y-m-d H:i:s');
-          $model->sucursal_id = 1;
+          $model->sucursal_id = Yii::$app->user->identity->id_sucursal;
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado al trabajador ". $model->nombre;
-          $registroSistema->id_sucursal = 1;
+          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
           if($model->save() && $registroSistema->save())
           {
@@ -170,7 +168,7 @@ class TrabajadorController extends Controller
 
         $model->eliminado = 1;
         $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha eliminado al trabajador ". $model->nombre;
-        $registroSistema->id_sucursal = 1;
+        $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
         if($model->save() && $registroSistema->save()){
           Yii::$app->session->setFlash('kv-detail-success', 'El trabajador se ha eliminado correctamente');

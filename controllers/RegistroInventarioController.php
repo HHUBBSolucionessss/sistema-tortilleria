@@ -82,9 +82,9 @@ class RegistroInventarioController extends Controller
 
           $model->create_user=Yii::$app->user->identity->id;
           $model->create_time=date('Y-m-d H:i:s');
-          $model->id_sucursal = 1;
+          $model->id_sucursal = Yii::$app->user->identity->id_sucursal;
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha hecho un registro en el inventario";
-          $registroSistema->id_sucursal = 1;
+          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
           if($model->save() && $registroSistema->save())
           {

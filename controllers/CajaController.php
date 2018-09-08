@@ -90,17 +90,18 @@ class CajaController extends Controller
            {
              $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
              $model->create_user=Yii::$app->user->identity->id;
+             $model->id_sucursalYii::$app->user->identity->id_sucursal;
              $model->create_time=date('Y-m-d H:i:s');
 
              if($model->tipo_movimiento == 1){
                $model->efectivo=-($model->efectivo);
                $registroSistema->descripcion = Yii::$app->user->identity->nombre ." retiró $".-($model->efectivo). ' de la caja';
-               $registroSistema->id_sucursal = 1;
+               $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
              }
              else{
                $model->efectivo= $model->efectivo;
                $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ingresó $".$model->efectivo. ' a la caja';
-               $registroSistema->id_sucursal = 1;
+               $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
              }
 
                if($model->save() && $registroSistema->save())
@@ -145,11 +146,12 @@ class CajaController extends Controller
             $model->descripcion="Apertura de caja";
             $model->tipo_movimiento = 0;
             $model->create_user=Yii::$app->user->identity->id;
+            $model->id_sucursal=Yii::$app->user->identity->id_sucursal;
             $model->create_time=date('Y-m-d H:i:s');
             $sql = EstadoCaja::findOne(['id' => 1]);
             $sql->estado_caja = 1;
             $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una apertura de caja con $".$model->efectivo. ' de efectivo';
-            $registroSistema->id_sucursal = 1;
+            $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
             if($model->save() && $sql->save() && $registroSistema->save())
             {
@@ -193,8 +195,6 @@ class CajaController extends Controller
           $model = new Caja();
           $estado_caja = new EstadoCaja();
           $registroSistema= new RegistroSistema();
-          $banco = new Banco();
-          $boveda = new Boveda();
 
           if ($model->load(Yii::$app->request->post()))
             {
@@ -208,21 +208,10 @@ class CajaController extends Controller
               $model->tipo_movimiento=1;
               $model->efectivo=-($model->efectivo);
               $model->create_user=Yii::$app->user->identity->id;
+              $model->id_sucursal=Yii::$app->user->identity->id_sucursal;
               $model->create_time=date('Y-m-d H:i:s');
 
-              $banco->id_sucursal = 1;
-              $banco->id_cuenta = 1;
-              $banco->tarjeta =-($totalesRetirado[0]['tarjeta']);
-              $banco->deposito =-($totalesRetirado[0]['deposito']);
-              $banco->tipo_movimiento = $totalesRetirado[0]['tipo_movimiento'];
-              $banco->descripcion = "Cierre de caja con el folio ". $totalesRetirado[0]['id'];
-
-              $boveda->descripcion = "Cierre de caja con el folio ". $totalesRetirado[0]['id'];
-              $boveda->tipo_movimiento = $totalesRetirado[0]['tipo_movimiento'];
-              $boveda->create_user = Yii::$app->user->identity->id;
-              $boveda->efectivo = -($totalesRetirado[0]['efectivo']);
-
-              if($model->save() && $sql->save() && $registroSistema->save() && $boveda->save() && $banco->save())
+              if($model->save() && $sql->save() && $registroSistema->save())
               {
                   return $this->render('info');
               }

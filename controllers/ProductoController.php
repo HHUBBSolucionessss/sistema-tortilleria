@@ -62,7 +62,7 @@ class ProductoController extends Controller
       if ($model->load(Yii::$app->request->post()))
       {
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha actualizado datos del producto ". $model->nombre;
-          $registroSistema->id_sucursal = 1;
+          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
           $model->update_user=Yii::$app->user->identity->id;
           $model->update_time=date('Y-m-d H:i:s');
 
@@ -112,10 +112,11 @@ class ProductoController extends Controller
 
           $model->create_user=Yii::$app->user->identity->id;
           $model->create_time=date('Y-m-d H:i:s');
+          $model->id_sucursal = Yii::$app->user->identity->id_sucursal;
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado el producto ". $model->nombre;
-          $registroSistema->id_sucursal = 1;
+          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
           $inventario->id_producto = $model->id;
-          $inventario->id_sucursal = 1;
+          $inventario->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
           if($model->save() && $registroSistema->save())
           {
@@ -170,7 +171,7 @@ class ProductoController extends Controller
 
         $model->eliminado = 1;
         $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha eliminado el producto ". $model->nombre;
-        $registroSistema->id_sucursal = 1;
+        $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
         if($model->save() && $registroSistema->save()){
           Yii::$app->session->setFlash('kv-detail-success', 'El cliente se ha eliminado correctamente');

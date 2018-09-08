@@ -74,7 +74,7 @@ class ClienteController extends Controller
       if ($model->load(Yii::$app->request->post()))
       {
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha actualizado datos del cliente ". $model->nombre;
-          $registroSistema->id_sucursal = 1;
+          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
           $model->update_user=Yii::$app->user->identity->id;
           $model->update_time=date('Y-m-d H:i:s');
 
@@ -130,9 +130,9 @@ class ClienteController extends Controller
 
           $model->create_user=Yii::$app->user->identity->id;
           $model->create_time=date('Y-m-d H:i:s');
-          $model->sucursal_id = 1;
+          $model->sucursal_id = Yii::$app->user->identity->id_sucursal;
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado al cliente ". $model->nombre;
-          $registroSistema->id_sucursal = 1;
+          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
           if($model->save() && $registroSistema->save())
           {
@@ -189,7 +189,7 @@ class ClienteController extends Controller
 
         $model->eliminado = 1;
         $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha eliminado al cliente ". $model->nombre;
-        $registroSistema->id_sucursal = 1;
+        $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
         if($model->save() && $registroSistema->save()){
           Yii::$app->session->setFlash('kv-detail-success', 'El cliente se ha eliminado correctamente');

@@ -15,6 +15,7 @@ use app\models\ReservacionSearch;
 use app\models\RegistroSistema;
 use app\models\RegistroSistemaSearch;
 use yii\helpers\Json;
+use yii\web\NotFoundHttpException;
 
 use app\models\User;
 
@@ -93,6 +94,8 @@ class SiteController extends Controller
 		}
 
 		$model = new LoginForm();
+		$sucursal = new Sucursal();
+
 		if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
 			$id_current_user = Yii::$app->user->identity->id;
@@ -106,10 +109,8 @@ class SiteController extends Controller
 				        ]);
 			}
 			else{
-				return $this->render('multiusuario', [
-				            'model' => $model,
-										'privilegio'=>$privilegio,
-				        ]);
+				//return $this->redirect(['multiusuario', 'id'=>$id_current_user]);
+				return $this->redirect(['multiusuario']);
 			}
 		}
 		return $this->render('login', [
@@ -119,29 +120,30 @@ class SiteController extends Controller
 
 	public function actionMultiusuario()
 	{
-			$model = new Sucursal();
-			$usuario = new User();
-			$id_current_user = Yii::$app->user->identity->id;
-			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+		$modelSucursal = new Sucursal();
 
-			if ($model->load(Yii::$app->request->post())) {
+		$usuario = new User();
+		$id_current_user = Yii::$app->user->identity->id;
+		$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-				$usuario = User::findOne()
-				->where(['id'=>$id_current_user]);
+		if ($modelSucursal->load(Yii::$app->request->post())) {
 
-				$usuario->id_sucursal = $model->id;
+			$usuario = User::findOne()
+			->where(['id'=>$id_current_user]);
 
-				if($model->save() && $usuario->save())
-				{
-					return $this->redirect(['index']);
-				}
+			$usuario->id_sucursal = $model->id;
+
+			if($model->save() && $usuario->save())
+			{
+				return $this->redirect(['index']);
 			}
+		}
 
-
-			return $this->render('multiusuario', [
-									'model' => $model,
-									'privilegio'=>$privilegio,
-							]);
+		return $this->render('multiusuario', [
+								'modelSucursal' => $modelSucursal,
+								'usuario' => $usuario,
+								'privilegio'=>$privilegio,
+						]);
 	}
 
 
