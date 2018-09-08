@@ -85,4 +85,5 @@ class Sucursal extends \yii\db\ActiveRecord
             'update_time' => 'Actualizado a las',
         ];
     }
+
 }

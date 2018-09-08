@@ -56,6 +56,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
           'id' => 'ID',
+          'id_sucursal' => 'Sucursal',
+          'temp' => 'Multisucursal',
           'username' => 'Usuario',
           'nombre' => 'Nombre de usuario',
           'password_hash' => 'Contraseña',

@@ -83,11 +83,11 @@ class SiteController extends Controller
 
 	/**
 	* Login action.
-	     *
-	     * @return Response|string
-	     */
-	    public function actionLogin()
-	    {
+	*
+	* @return Response|string
+	*/
+	  public function actionLogin()
+	  {
 		if (!Yii::$app->user->isGuest) {
 			return $this->goHome();
 		}
@@ -96,19 +96,52 @@ class SiteController extends Controller
 		if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
 			$id_current_user = Yii::$app->user->identity->id;
-			//$tipo_usuario = Yii::$app->db->createCommand('SELECT id_sucursal FROM usuario WHERE id= '.$id_current_user)->queryOne();
+			$tipo_usuario = Yii::$app->db->createCommand('SELECT temp FROM usuario WHERE id= '.$id_current_user)->queryAll();
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
+			if($tipo_usuario[0]['temp']=="0"){
 				return $this->render('index', [
 				            'model' => $model,
 										'privilegio'=>$privilegio,
 				        ]);
-
-
+			}
+			else{
+				return $this->render('multiusuario', [
+				            'model' => $model,
+										'privilegio'=>$privilegio,
+				        ]);
+			}
 		}
 		return $this->render('login', [
 		            'model' => $model,
 		        ]);
+	}
+
+	public function actionMultiusuario()
+	{
+			$model = new Sucursal();
+			$usuario = new User();
+			$id_current_user = Yii::$app->user->identity->id;
+			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+
+			if ($model->load(Yii::$app->request->post())) {
+
+				$usuario = User::findOne()
+				->where(['id'=>$id_current_user]);
+
+				$usuario->id_sucursal = $model->id;
+
+				if($model->save() && $usuario->save())
+				{
+					return $this->redirect(['index']);
+				}
+			}
+
+
+			return $this->render('multiusuario', [
+									'model' => $model,
+									'privilegio'=>$privilegio,
+							]);
 	}
 
 

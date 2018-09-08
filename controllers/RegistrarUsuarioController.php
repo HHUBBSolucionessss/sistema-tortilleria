@@ -7,6 +7,7 @@ use Yii;
 
 use app\models\User;
 use app\models\Privilegio;
+use app\models\Sucursal;
 use app\models\PrivilegioSearch;
 use app\models\UsuarioSearch;
 use app\models\RegistroSistema;
@@ -126,11 +127,12 @@ class RegistrarUsuarioController extends Controller
 	{
 			$id_current_user = Yii::$app->user->identity->id;
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+			$modelSucursal = new Sucursal();
 
 			if($privilegio[0]['crear_usuario'] == 1){
 				$model = new SignupForm();
-				$usuario = new User();
 				$privilegio= new Privilegio();
+				$usuario = new User();
 				$registroSistema= new RegistroSistema();
 
 				if ($model->load(Yii::$app->request->post()))
@@ -142,15 +144,16 @@ class RegistrarUsuarioController extends Controller
 					if ($model->signup())
 					{
 
-						$sql = User::findOne(['email' => $model->email]);
+						$user_created = User::findOne(['email' => $model->email]);
 
-						$id = $sql->id;
+						$id = $user_created->id;
+						$user_created->create_user=$id_current_user;
 						$privilegio->id_usuario = $id;
 						$privilegio->movimientos_caja=1;
 						$privilegio->apertura_caja=1;
 						$privilegio->cierre_caja=1;
 
-						if($privilegio->save() && $registroSistema->save()){
+						if($privilegio->save() && $registroSistema->save() && $user_created->save()){
 							return $this->redirect(['index']);
 						}
 
@@ -164,12 +167,14 @@ class RegistrarUsuarioController extends Controller
 
 				return $this->renderAjax('create', [
 				'model' => $model,
+				'modelSucursal' => $modelSucursal,
+				'usuario' => $usuario,
 				]);
 
 
 
 	}
-	
+
 	/**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

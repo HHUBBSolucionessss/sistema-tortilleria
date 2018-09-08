@@ -15,6 +15,9 @@ class SignupForm extends Model
 	public $email;
 	public $password;
 	public $nombre;
+	public $temp;
+	public $che;
+	public $id_sucursal;
 
 
 	/**
@@ -56,6 +59,8 @@ class SignupForm extends Model
 		$user->username = $this->username;
 		$user->nombre = $this->nombre;
 		$user->email = $this->email;
+		$user->temp = $this->temp;
+		$user->id_sucursal = $this->id_sucursal;
 		$user->setPassword($this->password);
 		$user->generateAuthKey();
 
