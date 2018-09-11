@@ -32,27 +32,6 @@ use app\models\RegistroInventarioDetallado;
   </div>
   <div class="col-md-6">
 
-    <?php
-        $url = \yii\helpers\Url::to(['producto']);
-        echo $form->field($detallado, 'id_producto')->widget(Select2::classname(), [
-        'options' => ['placeholder' => 'Buscar producto ...'],
-        'pluginOptions' => [
-            'allowClear' => true,
-            'minimumInputLength' => 1,
-            'language' => [
-                'errorLoading' => new JsExpression("function () { return 'Esperando resultados...'; }"),
-            ],
-            'ajax' => [
-                'url' => $url,
-                'dataType' => 'json',
-                'data' => new JsExpression('function(params) { return {q:params.term}; }')
-            ],
-            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-            'templateResult' => new JsExpression('function(nombre) { return nombre.text; }'),
-            'templateSelection' => new JsExpression('function (nombre) { return nombre.text; }'),
-        ],
-    ]);?>
-
     <?= $form->field($detallado, 'codigo')->textInput() ?>
 
     <?= $form->field($detallado, 'id_producto')->textInput() ?>

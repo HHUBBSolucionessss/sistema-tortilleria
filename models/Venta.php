@@ -52,7 +52,7 @@ class Venta extends \yii\db\ActiveRecord
         return [
             [['id_cliente', 'id_sucursal'], 'required'],
             [['id_cliente', 'id_sucursal', 'id_vendedor', 'cancelada', 'a_pagos', 'create_user', 'update_user', 'cancel_user'], 'integer'],
-            [['subtotal', 'impuesto', 'descuento', 'total', 'saldo'], 'number'],
+            [['subtotal', 'descuento', 'total', 'saldo'], 'number'],
             [['create_time', 'update_time', 'cancel_time'], 'safe'],
         ];
     }

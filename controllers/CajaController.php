@@ -90,7 +90,7 @@ class CajaController extends Controller
            {
              $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
              $model->create_user=Yii::$app->user->identity->id;
-             $model->id_sucursalYii::$app->user->identity->id_sucursal;
+             $model->id_sucursal=Yii::$app->user->identity->id_sucursal;
              $model->create_time=date('Y-m-d H:i:s');
 
              if($model->tipo_movimiento == 1){

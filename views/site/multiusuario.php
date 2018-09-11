@@ -13,17 +13,6 @@ $this->title = 'Tortillería Los Cuates';
     <div class="jumbotron">
       <h1>Selecciona la sucursal</h1>
 
-      <script type="text/javascript">
-
-      $(document).on('click', '#_ibre', function(){
-              var sucursal;
-              var sucursal = $("#_sucursal");
-
-              <?= $sucursal ?> = sucursal;
-            });
-
-      </script>
-
       <?php $form = ActiveForm::begin(); ?>
 
       <?= $form->field($modelSucursal, 'id')->widget(Select2::classname(), [
@@ -39,7 +28,7 @@ $this->title = 'Tortillería Los Cuates';
 
             <?php
 
-            echo Html::a(Yii::t('app', 'Continuar'), ['multiusuario', 'id_sucursal' => $sucursal], ['class' => 'btn btn-info']) ?>
+            echo Html::a(Yii::t('app', 'Continuar'), ['multiusuario'], ['class' => 'btn btn-info']) ?>
 
           </div>
 
