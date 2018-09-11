@@ -46,6 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
               [
                   'attribute' => 'id_producto',
                   'vAlign'=>'middle',
+                  'value'=>function ($model) {
+                      return $model->obtenerNombreProducto($model->id_producto);
+                    },
                   'headerOptions'=>['class'=>'kv-sticky-column'],
                   'contentOptions'=>['class'=>'kv-sticky-column'],
               ],

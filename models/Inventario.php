@@ -61,4 +61,14 @@ class Inventario extends \yii\db\ActiveRecord
             'update_time' => 'Update Time',
         ];
     }
+
+    public function obtenerNombreProducto($id)
+    {
+      $model = Producto::find()
+      ->where(['id'=>$id])
+      ->one();
+
+      return $model->nombre;
+    }
+
 }

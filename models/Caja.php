@@ -71,43 +71,43 @@ class Caja extends \yii\db\ActiveRecord
       }*/
 
     public function obtenerTipoMovimiento($key)
-      {
-          switch ($key) {
-              case 0:
-                  return 'Entrada';
-                  break;
-              case 1:
-                  return 'Salida';
-                  break;
-              default:
-                  return 'Sin información';
-                  break;
-          }
-  	}
-
-    public function obtenerTipoPago($key)
-      {
-          switch ($key) {
+    {
+        switch ($key) {
             case 0:
-                return 'Efectivo';
+                return 'Entrada';
                 break;
             case 1:
-                return 'Tarjeta';
+                return 'Salida';
                 break;
-            case 2:
-                return 'Transferencia';
+            default:
+                return 'Sin información';
                 break;
-            case 3:
-                return 'Depósito';
+        }
+	}
+
+    public function obtenerTipoPago($key)
+    {
+        switch ($key) {
+          case 0:
+              return 'Efectivo';
+              break;
+          case 1:
+              return 'Tarjeta';
+              break;
+          case 2:
+              return 'Transferencia';
+              break;
+          case 3:
+              return 'Depósito';
+              break;
+          case 4:
+              return 'Cheque';
+              break;
+            default:
+                return 'Sin información';
                 break;
-            case 4:
-                return 'Cheque';
-                break;
-              default:
-                  return 'Sin información';
-                  break;
-          }
-  	}
+        }
+	}
 
 
 }

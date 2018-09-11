@@ -47,7 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'sucursal_id',
                 'nombre',
                 'apellidos',
-                'puesto',
                 'telefono',
                 'celular',
                 'email:email',

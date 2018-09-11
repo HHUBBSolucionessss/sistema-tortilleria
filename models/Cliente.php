@@ -22,7 +22,6 @@ use Yii;
  * @property string $telefono1
  * @property string $lada1
  * @property string $lada2
- * @property int $tipo Tipos de clientes-Cliente con crédit
  * @property string $limite_credito
  * @property int $eliminado
  * @property int $create_user
@@ -49,7 +48,7 @@ class Cliente extends \yii\db\ActiveRecord
     {
         return [
             [['sucursal_id'], 'required'],
-            [['sucursal_id', 'cuenta_id', 'tipo', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
+            [['sucursal_id', 'cuenta_id', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['limite_credito'], 'number'],
             [['create_time', 'update_time', 'delete_time'], 'safe'],
             [['nombre','calle', 'colonia', 'ciudad', 'estado', 'telefono1',], 'string', 'max' => 45],
@@ -64,20 +63,19 @@ class Cliente extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'sucursal_id' => 'Sucursal ID',
-            'cuenta_id' => 'Cuenta ID',
+            'sucursal_id' => 'Sucursal',
+            'cuenta_id' => 'Cuenta',
             'nombre' => 'Nombre',
             'calle' => 'Calle',
             'colonia' => 'Colonia',
             'ciudad' => 'Ciudad',
             'estado' => 'Estado',
             'cp' => 'Código Postal',
-            'telefono1' => 'Teléfono 1',
-            'tipo' => 'Tipo de Cliente',
+            'telefono1' => 'Teléfono',
             'limite_credito' => 'Límite de Crédito',
             'eliminado' => 'Eliminado',
             'create_user' => 'Registró',
-            'create_time' => 'Creado a las',
+            'create_time' => 'Creado',
             'update_user' => 'Actualizó',
             'update_time' => 'Actualizado a las',
             'delete_user' => 'Delete User',

@@ -37,12 +37,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'id_cliente',
                     'vAlign'=>'middle',
+                    'value'=>function ($model) {
+                        return $model->obtenerNombreCliente($model->id_cliente);
+                      },
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],
                 [
                     'attribute' => 'id_vendedor',
                     'vAlign'=>'middle',
+                    'value'=>function ($model) {
+                        return $model->obtenerNombreTrabajador($model->id_cliente);
+                      },
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],

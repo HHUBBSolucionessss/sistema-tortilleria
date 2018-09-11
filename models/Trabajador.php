@@ -11,7 +11,6 @@ use Yii;
  * @property int $sucursal_id
  * @property string $nombre
  * @property string $apellidos
- * @property int $puesto
  * @property string $telefono
  * @property string $celular
  * @property string $email
@@ -49,8 +48,8 @@ class Trabajador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sucursal_id', 'puesto'], 'required'],
-            [['sucursal_id', 'puesto', 'cp', 'nomina', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
+            [['sucursal_id'], 'required'],
+            [['sucursal_id', 'cp', 'nomina', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['sueldo'], 'number'],
             [['fecha_inicio', 'fecha_fin', 'create_time', 'update_time', 'delete_time'], 'safe'],
             [['imagen', 'huella'], 'string'],
@@ -68,7 +67,6 @@ class Trabajador extends \yii\db\ActiveRecord
             'sucursal_id' => 'Sucursal',
             'nombre' => 'Nombre',
             'apellidos' => 'Apellidos',
-            'puesto' => 'Puesto',
             'telefono' => 'Teléfono',
             'celular' => 'Celular',
             'email' => 'Email',

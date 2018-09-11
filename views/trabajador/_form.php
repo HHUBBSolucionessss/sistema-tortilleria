@@ -18,8 +18,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'apellidos')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'puesto')->textInput() ?>
-
     <?= $form->field($model, 'telefono')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'celular')->textInput(['maxlength' => true]) ?>

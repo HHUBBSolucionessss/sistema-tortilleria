@@ -60,7 +60,7 @@ class Producto extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'proveedor_id' => 'ID Proveedor',
+            'proveedor_id' => 'Proveedor',
             'categoria' => 'Categoría',
             'nombre' => 'Nombre',
             'marca' => 'Marca',
@@ -73,7 +73,7 @@ class Producto extends \yii\db\ActiveRecord
             'imagen' => 'Imagen',
             'eliminado' => 'Eliminado',
             'create_user' => 'Registró',
-            'create_time' => 'Creado a las',
+            'create_time' => 'Creado',
             'update_user' => 'Actualizó',
             'update_time' => 'Actualizado a las',
             'delete_user' => 'Delete User',

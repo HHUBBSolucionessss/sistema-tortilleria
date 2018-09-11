@@ -26,8 +26,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'telefono1')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tipo')->textInput() ?>
-
     <?= $form->field($model, 'limite_credito')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">

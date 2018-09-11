@@ -113,12 +113,22 @@ class User extends ActiveRecord implements IdentityInterface
         ]);
     }
 
-    public function obtenerNombre($id)
+    public function obtenerNombre($create_user)
     {
+      $model = User::find()
+      ->where(['id'=>$create_user])
+      ->one();
 
-        $model = new User();
-        return $model->nombre;
+      return $model->nombre;
+    }
 
+    public function obtenerUpdate($update_user)
+    {
+      $model = User::find()
+      ->where(['id'=>$update_user])
+      ->one();
+
+      return $model->nombre;
     }
 
     /**

@@ -23,8 +23,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'apellidos') ?>
 
-    <?= $form->field($model, 'puesto') ?>
-
     <?php // echo $form->field($model, 'telefono') ?>
 
     <?php // echo $form->field($model, 'celular') ?>

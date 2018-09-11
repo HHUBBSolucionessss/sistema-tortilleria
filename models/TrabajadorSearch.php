@@ -18,7 +18,7 @@ class TrabajadorSearch extends Trabajador
     public function rules()
     {
         return [
-            [['id', 'sucursal_id', 'puesto', 'cp', 'nomina', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
+            [['id', 'sucursal_id', 'cp', 'nomina', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['nombre', 'apellidos', 'telefono', 'celular', 'email', 'direccion', 'ciudad', 'estado', 'fecha_inicio', 'fecha_fin', 'imagen', 'huella', 'create_time', 'update_time', 'delete_time'], 'safe'],
             [['sueldo'], 'number'],
         ];
@@ -62,7 +62,6 @@ class TrabajadorSearch extends Trabajador
         $query->andFilterWhere([
             'id' => $this->id,
             'sucursal_id' => $this->sucursal_id,
-            'puesto' => $this->puesto,
             'cp' => $this->cp,
             'sueldo' => $this->sueldo,
             'nomina' => $this->nomina,

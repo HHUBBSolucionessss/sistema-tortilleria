@@ -54,12 +54,18 @@ $this->params['breadcrumbs'][] = $this->title;
               [
                   'attribute' => 'id_sucursal',
                   'vAlign'=>'middle',
+                  'value'=>function ($model) {
+                      return $model->obtenerNombreSucursal($model->id_sucursal);
+                    },
                   'headerOptions'=>['class'=>'kv-sticky-column'],
                   'contentOptions'=>['class'=>'kv-sticky-column'],
               ],
               [
                 'attribute'=>'estado',
                 'vAlign'=>'middle',
+                'value'=>function ($model) {
+                    return $model->obtenerEstado($model->estado);
+                  },
                 'headerOptions'=>['class'=>'kv-sticky-column'],
                 'contentOptions'=>['class'=>'kv-sticky-column'],
               ],

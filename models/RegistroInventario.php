@@ -56,4 +56,29 @@ class RegistroInventario extends \yii\db\ActiveRecord
             'cancel_time' => 'Cancel Time',
         ];
     }
+
+    public function obtenerNombreSucursal($id)
+    {
+      $model = Sucursal::find()
+      ->where(['id'=>$id])
+      ->one();
+
+      return $model->nombre;
+    }
+
+    public function obtenerEstado($estado)
+    {
+        switch ($estado) {
+            case 0:
+                return 'Inactivo';
+                break;
+            case 1:
+                return 'Activo';
+                break;
+            default:
+                return 'Sin información';
+                break;
+        }
+	}
+
 }

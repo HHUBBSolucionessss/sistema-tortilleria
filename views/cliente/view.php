@@ -53,7 +53,6 @@ $this->params['breadcrumbs'][] = $this->title;
               'estado',
               'cp',
               'telefono1',
-              'tipo',
               'limite_credito',
                 [
                     'attribute'=>'create_user',
@@ -65,16 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute'=>'create_time',
                     'format'=>'date',
                     'value'=>$model->create_time,
-                    'displayOnly'=>true,
-                ],
-                [
-                    'attribute'=>'update_user',
-                    'format'=>'raw',
-                    'displayOnly'=>true,
-                ],
-                [
-                    'attribute'=>'update_time',
-                    'format'=>'raw',
                     'displayOnly'=>true,
                 ],
             ]

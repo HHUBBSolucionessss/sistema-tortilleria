@@ -47,8 +47,6 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'lada2') ?>
 
-    <?php // echo $form->field($model, 'tipo') ?>
-
     <?php // echo $form->field($model, 'limite_credito') ?>
 
     <?php // echo $form->field($model, 'eliminado') ?>

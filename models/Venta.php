@@ -72,11 +72,29 @@ class Venta extends \yii\db\ActiveRecord
             'saldo' => 'Saldo',
             'a_pagos' => 'A Pagos',
             'create_user' => 'Registró',
-            'create_time' => 'Registrado a las',
+            'create_time' => 'Creado',
             'update_user' => 'Actualizó',
             'update_time' => 'Actualizado a las',
             'cancel_user' => 'Cancel User',
             'cancel_time' => 'Cancel Time',
         ];
     }
+
+    public function obtenerNombreCliente($id)
+    {
+      $model = Cliente::find()
+      ->where(['id'=>$id])
+      ->one();
+
+      return $model->nombre;
+    }
+    public function obtenerNombreTrabajador($id)
+    {
+      $model = Trabajador::find()
+      ->where(['id'=>$id])
+      ->one();
+
+      return $model->nombre;
+    }
+
 }
