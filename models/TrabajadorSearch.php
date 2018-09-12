@@ -19,7 +19,7 @@ class TrabajadorSearch extends Trabajador
     {
         return [
             [['id', 'sucursal_id', 'cp', 'nomina', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
-            [['nombre', 'apellidos', 'telefono', 'celular', 'email', 'direccion', 'ciudad', 'estado', 'fecha_inicio', 'fecha_fin', 'imagen', 'huella', 'create_time', 'update_time', 'delete_time'], 'safe'],
+            [['nombre', 'apellidos', 'telefono', 'celular', 'email', 'direccion', 'ciudad', 'estado', 'create_time', 'update_time', 'delete_time'], 'safe'],
             [['sueldo'], 'number'],
         ];
     }
@@ -65,8 +65,6 @@ class TrabajadorSearch extends Trabajador
             'cp' => $this->cp,
             'sueldo' => $this->sueldo,
             'nomina' => $this->nomina,
-            'fecha_inicio' => $this->fecha_inicio,
-            'fecha_fin' => $this->fecha_fin,
             'eliminado' => $this->eliminado,
             'create_user' => $this->create_user,
             'create_time' => $this->create_time,
@@ -83,9 +81,7 @@ class TrabajadorSearch extends Trabajador
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'direccion', $this->direccion])
             ->andFilterWhere(['like', 'ciudad', $this->ciudad])
-            ->andFilterWhere(['like', 'estado', $this->estado])
-            ->andFilterWhere(['like', 'imagen', $this->imagen])
-            ->andFilterWhere(['like', 'huella', $this->huella]);
+            ->andFilterWhere(['like', 'estado', $this->estado]);
 
         $query->andFilterWhere(['eliminado' => 0 ]);
 

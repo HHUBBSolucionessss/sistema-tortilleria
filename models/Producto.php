@@ -9,16 +9,12 @@ use Yii;
  *
  * @property int $id
  * @property int $proveedor_id
- * @property int $categoria
  * @property string $nombre
  * @property string $marca
  * @property string $codigo
  * @property string $descripcion1
  * @property string $costo
  * @property string $precio
- * @property string $precio2
- * @property int $unidad Unidades para el producto -Pieza -Paquete
- * @property resource $imagen
  * @property int $eliminado
  * @property int $create_user
  * @property string $create_time
@@ -43,10 +39,9 @@ class Producto extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['proveedor_id', 'categoria', 'precio'], 'required'],
-            [['proveedor_id', 'categoria', 'unidad', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
-            [['costo', 'precio', 'precio2'], 'number'],
-            [['imagen'], 'string'],
+            [['precio'], 'required'],
+            [['eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
+            [['costo', 'precio'], 'number'],
             [['create_time', 'update_time', 'delete_time'], 'safe'],
             [['nombre', 'marca', 'codigo', 'descripcion1'], 'string', 'max' => 45],
             [['codigo'], 'unique'],
@@ -60,17 +55,12 @@ class Producto extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'proveedor_id' => 'Proveedor',
-            'categoria' => 'Categoría',
             'nombre' => 'Nombre',
             'marca' => 'Marca',
             'codigo' => 'Código',
             'descripcion1' => 'Descripción',
             'costo' => 'Costo',
             'precio' => 'Precio',
-            'precio2' => 'Precio 2',
-            'unidad' => 'Unidad',
-            'imagen' => 'Imagen',
             'eliminado' => 'Eliminado',
             'create_user' => 'Registró',
             'create_time' => 'Creado',

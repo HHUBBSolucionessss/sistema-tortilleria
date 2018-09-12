@@ -41,10 +41,10 @@ class RegistroSistema extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Folio',
             'id_sucursal' => 'Id Sucursal',
-            'descripcion' => 'Descripcion',
-            'create_time' => 'Create Time',
+            'descripcion' => 'Descripción',
+            'create_time' => 'Creado',
         ];
     }
 }

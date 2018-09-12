@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Sucursal */
 
-$this->title = $model->id;
+$this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Sucursales', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -56,8 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'telefono2',
                 'fax',
                 'email:email',
-                'logotipo',
-                'web',
                 'rfc',
                   [
                       'attribute'=>'create_user',
@@ -69,16 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
                       'attribute'=>'create_time',
                       'format'=>'date',
                       'value'=>$model->create_time,
-                      'displayOnly'=>true,
-                  ],
-                  [
-                      'attribute'=>'update_user',
-                      'format'=>'raw',
-                      'displayOnly'=>true,
-                  ],
-                  [
-                      'attribute'=>'update_time',
-                      'format'=>'raw',
                       'displayOnly'=>true,
                   ],
               ]

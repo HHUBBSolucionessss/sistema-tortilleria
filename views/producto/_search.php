@@ -17,10 +17,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'proveedor_id') ?>
-
-    <?= $form->field($model, 'categoria') ?>
-
     <?= $form->field($model, 'nombre') ?>
 
     <?= $form->field($model, 'marca') ?>

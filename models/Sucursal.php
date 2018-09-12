@@ -48,9 +48,8 @@ class Sucursal extends \yii\db\ActiveRecord
         return [
             [['colonia'], 'required'],
             [['numero_ext', 'numero_int', 'cp', 'asignada', 'eliminado', 'create_user', 'update_user'], 'integer'],
-            [['logotipo'], 'string'],
             [['create_time', 'update_time'], 'safe'],
-            [['nombre', 'calle', 'estado', 'ciudad', 'telefono1', 'telefono2', 'fax', 'email', 'web', 'rfc'], 'string', 'max' => 45],
+            [['nombre', 'calle', 'estado', 'ciudad', 'telefono1', 'telefono2', 'fax', 'email', 'rfc'], 'string', 'max' => 45],
             [['colonia'], 'string', 'max' => 75],
         ];
     }
@@ -70,17 +69,15 @@ class Sucursal extends \yii\db\ActiveRecord
             'colonia' => 'Colonia',
             'estado' => 'Estado',
             'ciudad' => 'Ciudad',
-            'telefono1' => 'Teléfono 1',
+            'telefono1' => 'Teléfono',
             'telefono2' => 'Teléfono 2',
             'fax' => 'Fax',
             'email' => 'Email',
-            'logotipo' => 'Logotipo',
-            'web' => 'Web',
             'rfc' => 'RFC',
             'asignada' => 'Asignada',
             'eliminado' => 'Eliminado',
             'create_user' => 'Registró',
-            'create_time' => 'Create Creado a las',
+            'create_time' => 'Creado',
             'update_user' => 'Actualizó',
             'update_time' => 'Actualizado a las',
         ];

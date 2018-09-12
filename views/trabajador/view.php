@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Trabajadores */
 
-$this->title = $model->id;
+$this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Trabajadores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -44,7 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format'=>'raw',
                     'displayOnly'=>true,
                 ],
-                'sucursal_id',
+                [
+                    'attribute'=>'sucursal_id',
+                    'format'=>'raw',
+                    'value'=>$model->obtenerNombreSucursal($model->sucursal_id),
+                    'displayOnly'=>true,
+                ],
                 'nombre',
                 'apellidos',
                 'telefono',
@@ -56,10 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'cp',
                 'sueldo',
                 'nomina',
-                'fecha_inicio',
-                'fecha_fin',
-                'imagen',
-                'huella',
                   [
                       'attribute'=>'create_user',
                       'format'=>'raw',
@@ -70,16 +71,6 @@ $this->params['breadcrumbs'][] = $this->title;
                       'attribute'=>'create_time',
                       'format'=>'date',
                       'value'=>$model->create_time,
-                      'displayOnly'=>true,
-                  ],
-                  [
-                      'attribute'=>'update_user',
-                      'format'=>'raw',
-                      'displayOnly'=>true,
-                  ],
-                  [
-                      'attribute'=>'update_time',
-                      'format'=>'raw',
                       'displayOnly'=>true,
                   ],
               ]

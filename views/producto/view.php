@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model app\models\Producto */
 
-$this->title = $model->id;
+$this->title = $model->nombre;
 $this->params['breadcrumbs'][] = ['label' => 'Productos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -40,21 +40,15 @@ $this->params['breadcrumbs'][] = $this->title;
               'attributes'=>
               [
                 [
-                    'attribute'=>'id',
+                    'attribute'=>'codigo',
                     'format'=>'raw',
                     'displayOnly'=>true,
                 ],
-                'proveedor_id',
-                'categoria',
                 'nombre',
                 'marca',
-                'codigo',
                 'descripcion1',
                 'costo',
                 'precio',
-                'precio2',
-                'unidad',
-                'imagen',
                   [
                       'attribute'=>'create_user',
                       'format'=>'raw',
@@ -66,16 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
                       'format'=>'date',
                       'value'=>$model->create_time,
                       'displayOnly'=>true,
-                  ],
-                  [
-                      'attribute'=>'update_user',
-                      'format'=>'raw',
-                      'displayOnly'=>true,
-                  ],
-                  [
-                      'attribute'=>'update_time',
-                      'format'=>'raw',
-                      'displayOnly'=>true,  
                   ],
               ]
           ]);

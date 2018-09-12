@@ -36,11 +36,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nomina')->textInput() ?>
 
-    <?= $form->field($model, 'fecha_inicio')->textInput() ?>
-
-    <?= $form->field($model, 'fecha_fin')->textInput() ?>
-
-
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
     </div>

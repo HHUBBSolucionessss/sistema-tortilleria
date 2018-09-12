@@ -19,7 +19,7 @@ class SucursalSearch extends Sucursal
     {
         return [
             [['id', 'numero_ext', 'numero_int', 'cp', 'asignada', 'eliminado', 'create_user', 'update_user'], 'integer'],
-            [['nombre', 'calle', 'colonia', 'estado', 'ciudad', 'telefono1', 'telefono2', 'fax', 'email', 'logotipo', 'web', 'rfc', 'create_time', 'update_time'], 'safe'],
+            [['nombre', 'calle', 'colonia', 'estado', 'ciudad', 'telefono1', 'telefono2', 'fax', 'email', 'rfc', 'create_time', 'update_time'], 'safe'],
         ];
     }
 
@@ -80,8 +80,6 @@ class SucursalSearch extends Sucursal
             ->andFilterWhere(['like', 'telefono2', $this->telefono2])
             ->andFilterWhere(['like', 'fax', $this->fax])
             ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'logotipo', $this->logotipo])
-            ->andFilterWhere(['like', 'web', $this->web])
             ->andFilterWhere(['like', 'rfc', $this->rfc]);
 
         $query->andFilterWhere(['eliminado' => 0 ]);

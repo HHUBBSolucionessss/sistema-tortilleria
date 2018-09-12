@@ -36,10 +36,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'logotipo')->textInput() ?>
-
-    <?= $form->field($model, 'web')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'rfc')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">

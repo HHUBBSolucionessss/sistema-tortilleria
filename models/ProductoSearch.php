@@ -18,9 +18,9 @@ class ProductoSearch extends Producto
     public function rules()
     {
         return [
-            [['id', 'proveedor_id', 'categoria', 'unidad', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
-            [['nombre', 'marca', 'codigo', 'descripcion1', 'imagen', 'create_time', 'update_time', 'delete_time'], 'safe'],
-            [['costo', 'precio', 'precio2'], 'number'],
+            [['id', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
+            [['nombre', 'marca', 'codigo', 'descripcion1','create_time', 'update_time', 'delete_time'], 'safe'],
+            [['costo', 'precio'], 'number'],
         ];
     }
 
@@ -62,12 +62,8 @@ class ProductoSearch extends Producto
         $query->andFilterWhere([
             'id' => $this->id,
             'id_sucursal' => $this->id_sucursal,
-            'proveedor_id' => $this->proveedor_id,
-            'categoria' => $this->categoria,
             'costo' => $this->costo,
             'precio' => $this->precio,
-            'precio2' => $this->precio2,
-            'unidad' => $this->unidad,
             'eliminado' => $this->eliminado,
             'create_user' => $this->create_user,
             'create_time' => $this->create_time,
@@ -80,9 +76,8 @@ class ProductoSearch extends Producto
         $query->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'marca', $this->marca])
             ->andFilterWhere(['like', 'codigo', $this->codigo])
-            ->andFilterWhere(['like', 'descripcion1', $this->descripcion1])
-            ->andFilterWhere(['like', 'imagen', $this->imagen]);
-        
+            ->andFilterWhere(['like', 'descripcion1', $this->descripcion1]);
+
 
         $id = Yii::$app->user->identity->id_sucursal;
         $sucursal = Yii::$app->db->createCommand('SELECT id_sucursal FROM producto WHERE id_sucursal = '.$id)->queryAll();
@@ -103,6 +98,6 @@ class ProductoSearch extends Producto
             return $dataProvider;
         }
 
-        
+
     }
 }

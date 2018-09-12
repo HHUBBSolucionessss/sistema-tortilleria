@@ -51,8 +51,7 @@ class Trabajador extends \yii\db\ActiveRecord
             [['sucursal_id'], 'required'],
             [['sucursal_id', 'cp', 'nomina', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['sueldo'], 'number'],
-            [['fecha_inicio', 'fecha_fin', 'create_time', 'update_time', 'delete_time'], 'safe'],
-            [['imagen', 'huella'], 'string'],
+            [['create_time', 'update_time', 'delete_time'], 'safe'],
             [['nombre', 'apellidos', 'telefono', 'celular', 'email', 'direccion', 'ciudad', 'estado'], 'string', 'max' => 45],
         ];
     }
@@ -76,17 +75,22 @@ class Trabajador extends \yii\db\ActiveRecord
             'cp' => 'Código Postal',
             'sueldo' => 'Sueldo',
             'nomina' => 'Nómina',
-            'fecha_inicio' => 'Fecha Inicio',
-            'fecha_fin' => 'Fecha Fin',
-            'imagen' => 'Imagen',
-            'huella' => 'Huella',
             'eliminado' => 'Eliminado',
             'create_user' => 'Registró',
-            'create_time' => 'Creado a las',
+            'create_time' => 'Creado',
             'update_user' => 'Actualizó',
-            'update_time' => 'Actualizado a las',
+            'update_time' => 'Actualizado',
             'delete_user' => 'Delete User',
             'delete_time' => 'Delete Time',
         ];
+    }
+
+    public function obtenerNombreSucursal($id)
+    {
+      $model = Sucursal::find()
+      ->where(['id'=>$id])
+      ->one();
+
+      return $model->nombre;
     }
 }

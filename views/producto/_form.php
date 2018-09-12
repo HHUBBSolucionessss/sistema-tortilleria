@@ -12,10 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'proveedor_id')->textInput() ?>
-
-    <?= $form->field($model, 'categoria')->textInput() ?>
-
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'marca')->textInput(['maxlength' => true]) ?>
@@ -27,12 +23,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'costo')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'precio')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'precio2')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'unidad')->textInput() ?>
-
-    <?= $form->field($model, 'imagen')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
