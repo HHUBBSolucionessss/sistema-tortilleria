@@ -78,8 +78,8 @@ class VentaSearch extends Venta
             'cancel_time' => $this->cancel_time,
         ]);
 
-
-                $query->andFilterWhere(['!=','saldo', '0']);
+      $query->andFilterWhere(['!=','saldo', '0'])
+          ->andFilterWhere(['id_cliente' => $this->id_cliente]);
 
         return $dataProvider;
     }
@@ -129,28 +129,9 @@ class VentaSearch extends Venta
             'cancel_time' => $this->cancel_time,
         ]);
 
-        $query->andFilterWhere(['saldo' => 0]);
+        $query->andFilterWhere(['saldo' => 0 ])
+            ->andFilterWhere(['id_cliente' => $this->id_cliente]);
 
         return $dataProvider;
     }
-
-    /*public function getVenta($id)
-    {
-        $query = Venta::find()
-            ->where(['id_cliente'=>$id]);
-
-        $dataProvider = new ActiveDataProvider([
-                'query' => $query,
-            ]);
-        return $dataProvider;
-	}
-
-  public function obtenerSuma($id)
-    {
-        $data=Yii::$app->db->createCommand('SELECT sum(total) FROM venta WHERE id_cliente ='.$id)->queryAll();
-
-        return $data;
-
-    }*/
-
 }

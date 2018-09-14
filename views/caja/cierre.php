@@ -22,6 +22,8 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'efectivo')->Input(['autofocus' => true], ['placeholder' => "Efectivo a retirar"]) ?>
 
+    <?= $form->field($costales, 'costales_fin')->Input(['autofocus' => true], ['placeholder' => "Costales restantes"])->label('Costales Cierre',['class'=>'label-class']) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Cierre de caja', ['class' => 'btn btn-danger']) ?>
     </div>

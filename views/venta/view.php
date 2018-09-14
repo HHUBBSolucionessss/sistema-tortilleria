@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
       <p>
         <?php
-        if($privilegio[0]['apertura_caja'] == 1)
+        if($privilegio[0]['pago_venta'] == 1)
           echo Html::button('Realizar pago', ['value'=>Url::to(['pago-venta', 'id' => $model->id]), 'class' => 'btn btn-warning', 'id' => 'modalButton']) ?>
       </p>
 
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
       <p>
         <?php
-        if($privilegio[0]['apertura_caja'] == 1)
+        if($privilegio[0]['cancelar_venta'] == 1)
         echo Html::a(Yii::t('app', 'Cancelar venta'), ['', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
       </p>
 

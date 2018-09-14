@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if($estado_caja[0]['estado_caja'] == 1)
+        if($privilegio[0]['crear_venta'] == 1)
          echo Html::a('Nueva venta', ['create'], ['class' => 'btn btn-success']);
         else{
          ?>
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'id_vendedor',
                     'vAlign'=>'middle',
                     'value'=>function ($model) {
-                        return $model->obtenerNombreTrabajador($model->id_cliente);
+                        return $model->obtenerNombreTrabajador($model->id_vendedor);
                       },
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],

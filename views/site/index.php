@@ -15,6 +15,8 @@ $this->title = 'Tortillería Los Cuates';
         <?= Html::a('Productos', ['/producto/index'], ['class'=>'btn']) ?>
         <?= Html::a('Sucursal', ['/sucursal/index'], ['class'=>'btn']) ?>
         <?= Html::a('Trabajadores', ['/trabajador/index'], ['class'=>'btn']) ?>
+        <?= Html::a('Reportes', ['/reportes/index'], ['class'=>'btn']) ?>
+        <?= Html::a('Costales', ['/costales/index'], ['class'=>'btn']) ?>
         <?php
         //if($privilegio[0]['ver_registro_sistema'] == 1)
         echo Html::a('Registro Sistema', ['site/registro'], ['class'=>'btn']) ?>

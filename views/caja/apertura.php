@@ -22,6 +22,8 @@ use kartik\select2\Select2;
 
     <?= $form->field($model, 'efectivo')->Input(['autofocus' => true], ['placeholder' => "Efectivo a ingresar"]) ?>
 
+    <?= $form->field($costales, 'costales_ini')->textInput(['value'=>$fin])->label('Costales Iniciales',['class'=>'label-class']) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Abrir Caja', ['class' => 'btn btn-success']) ?>
     </div>

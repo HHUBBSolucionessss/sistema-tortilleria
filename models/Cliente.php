@@ -82,4 +82,23 @@ class Cliente extends \yii\db\ActiveRecord
             'delete_time' => 'Delete Time',
         ];
     }
+
+    public function obtenerTotal($id)
+    {
+      $model = Venta::find()
+      ->where(['id'=>$id])
+      ->one();
+
+      return $model->total;
+
+    }
+
+    public function obtenerSaldo($id)
+    {
+      $model = Venta::find()
+      ->where(['id'=>$id])
+      ->one();
+
+      return $model->saldo;
+    }
 }

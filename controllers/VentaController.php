@@ -9,6 +9,7 @@ use app\models\VentaSearch;
 use app\models\RegistroSistema;
 use app\models\Privilegio;
 use app\models\PagoVenta;
+use app\models\Model;
 use app\models\EstadoCaja;
 use app\models\Caja;
 use app\models\cliente;
@@ -91,81 +92,72 @@ class VentaController extends Controller
     public function actionCreate()
     {
       $id_current_user = Yii::$app->user->identity->id;
-      $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+        $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['apertura_caja'] == 1){
-        $model = new Venta();
-        $registroSistema = new RegistroSistema();
-
-        if ($model->load(Yii::$app->request->post())) {
-
-          $model->create_user=Yii::$app->user->identity->id;
-          $model->create_time=date('Y-m-d H:i:s');
-          $model->id_sucursal = Yii::$app->user->identity->id_sucursal;
-          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una venta con folio ". $model->id;
-          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
-
-          if($model->save() && $registroSistema->save())
+        if($privilegio[0]['apertura_caja'] == 1){
+          $modelVenta = new Venta;
+          $registroSistema= new RegistroSistema();
+          $ventaProductos = [new VentaDetallada];
+          if ($modelVenta->load(Yii::$app->request->post()))
           {
-            $pagoVenta = new PagoVenta();
-            $estado_caja = new EstadoCaja();
-            $caja = new Caja();
-            $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
-            $id = Yii::$app->db->createCommand('SELECT MAX(id) FROM venta')->queryAll();
-            $totales = Yii::$app->db->createCommand('SELECT total,saldo FROM venta WHERE id = '.$id[0]['MAX(id)'])->queryAll();
-
-
-              if ($pagoVenta->load(Yii::$app->request->post()))
+              $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha creado la tarifa ";
+              $modelVenta->create_user=Yii::$app->user->identity->id;
+              $modelVenta->id_sucursal = Yii::$app->user->identity->id_sucursal;
+              $modelVenta->saldo=1800;
+              $modelVenta->a_pagos=1;
+              $modelVenta->create_time=date('Y-m-d H:i:s');
+              $registroSistema->save();
+              $ventaProducto = Model::createMultiple(VentaDetallada::classname());
+              Model::loadMultiple($ventaProducto, Yii::$app->request->post());
+              // ajax validation
+              if (Yii::$app->request->isAjax)
               {
-
-                //CAJA
-                $caja->id_sucursal = 1;
-                $caja->descripcion="Pago a la venta ".$id;
-                $caja->efectivo=$pagoVenta->ingreso;
-                $caja->tarjeta=0;
-                $caja->deposito=0;
-                $caja->tipo_movimiento=0;
-                $caja->tipo_pago=0;
-                $caja->create_user=Yii::$app->user->identity->id;
-                $caja->create_time=date('Y-m-d H:i:s');
-                $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
-
-                //Registro de sistema
-                $registroSistema->descripcion=Yii::$app->user->identity->nombre." ha realizado un pago a la venta ". $id ." por un monto de  ".$pagoVenta->ingreso;
-                $registroSistema->id_sucursal=Yii::$app->user->identity->id_sucursal;
-
-                //Pago venta
-                $pagoVenta->id_venta = $id;
-                $pagoVenta->create_user=Yii::$app->user->identity->id;
-                $pagoVenta->create_time=date('Y-m-d H:i:s');
-
-
-                if($pagoVenta->save())
-                {
-                  return $this->redirect(['view', 'id' => $id]);
-                }
+                  Yii::$app->response->format = Response::FORMAT_JSON;
+                  return ArrayHelper::merge(
+                      ActiveForm::validateMultiple($ventaProducto),
+                      ActiveForm::validate($modelVenta)
+                  );
               }
-              else{
-                return $this->redirect(['pagoVenta', 'id' => $id]);
+              // validate all models
+              $valid = $modelVenta->validate();
+              //$modelTarifaDetallada->id_tarifa=0;
+              //$valid =  $validacion && $valid;
+              if ($valid)
+              {
+                  $transaction = \Yii::$app->db->beginTransaction();
+                  try
+                  {
+                      if ($flag = $modelVenta->save(false))
+                      {
+                          foreach ($ventaProductos as $ventaProducto)
+                          {
+                              $ventaProducto->id_venta = $modelVenta->id;
+                              if (! ($flag = $ventaProducto->save(false)))
+                              {
+                                  $transaction->rollBack();
+                                  break;
+                              }
+                          }
+                      }
+                      if ($flag)
+                      {
+                          $transaction->commit();
+                          return $this->redirect(['view', 'id' => $modelVenta->id]);
+                      }
+                  } catch (Exception $e) {
+                      $transaction->rollBack();
+                  }
               }
-
-              return $this->renderAjax('pagoVenta', [
-                  'estado_caja' => $estado_caja,
-                  'privilegio'=>$privilegio,
-                  'totales'=>$totales,
-                  'pagoVenta'=>$pagoVenta,
-              ]);
-
           }
         }
-      }
-      else{
-        return $this->redirect(['index']);
-      }
+        else{
+          return $this->redirect(['index']);
+        }
 
-      return $this->render('create', [
-          'model' => $model,
-      ]);
+        return $this->render('_form', [
+            'modelVenta' => $modelVenta,
+            'ventaProducto' => (empty($ventaProducto)) ? [new VentaDetallada] : $ventaProductos
+        ]);
     }
 
     public function actionPagoVenta($id)
@@ -179,7 +171,7 @@ class VentaController extends Controller
         $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
         $totales = Yii::$app->db->createCommand('SELECT total,saldo FROM venta WHERE id = '.$id)->queryAll();
 
-    if($privilegio[0]['apertura_caja'] == 1)
+    if($privilegio[0]['pago_venta'] == 1)
     {
       if ($pagoVenta->load(Yii::$app->request->post()))
       {

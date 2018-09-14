@@ -4,6 +4,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Reservacion;
 use app\models\Caja;
+use app\models\Costales;
 use app\models\Banco;
 use app\models\Boveda;
 use app\models\EstadoCaja;
@@ -131,52 +132,66 @@ class CajaController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionApertura()
-    {
-        $id_current_user = Yii::$app->user->identity->id;
-        $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-        $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
+     public function actionApertura()
+     {
+         $id_current_user = Yii::$app->user->identity->id;
+         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+         $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
 
-        if($privilegio[0]['apertura_caja'] == 1){
-          $model = new Caja();
-          $registroSistema= new RegistroSistema();
+         if($privilegio[0]['apertura_caja'] == 1){
+           $model = new Caja();
+           $costales = new Costales();
+           $costales_cuenta = Costales::find()->orderBy('id DESC')->one();
+           $fin = $costales_cuenta->costales_fin;
+           $registroSistema= new RegistroSistema();
 
-          if ($model->load(Yii::$app->request->post()))
-          {
-            $model->descripcion="Apertura de caja";
-            $model->tipo_movimiento = 0;
-            $model->create_user=Yii::$app->user->identity->id;
-            $model->id_sucursal=Yii::$app->user->identity->id_sucursal;
-            $model->create_time=date('Y-m-d H:i:s');
-            $sql = EstadoCaja::findOne(['id' => 1]);
-            $sql->estado_caja = 1;
-            $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una apertura de caja con $".$model->efectivo. ' de efectivo';
-            $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
+           if ($model->load(Yii::$app->request->post()) && $costales->load(Yii::$app->request->post()))
+           {
+             $model->descripcion="Apertura de caja";
+             $model->tipo_movimiento = 0;
+             $model->create_user=Yii::$app->user->identity->id;
+             $model->id_sucursal=Yii::$app->user->identity->id_sucursal;
+             $model->create_time=date('Y-m-d H:i:s');
+             $sql = EstadoCaja::findOne(['id' => 1]);
+             $sql->estado_caja = 1;
+             $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una apertura de caja con $".$model->efectivo. ' de efectivo';
+             $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
-            if($model->save() && $sql->save() && $registroSistema->save())
-            {
-                $searchModel = new CajaSearch();
-                $estado_caja = new EstadoCaja();
-                $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
-                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-                return $this->redirect(['index', [
-                    'searchModel' => $searchModel,
-                    'dataProvider' => $dataProvider,
-                    'estado_caja' => $estado_caja,
-                    'totalCaja'=>$totalCaja,
+             if($model->save() && $sql->save() && $registroSistema->save())
+             {
+                 $model = Caja::find()->orderBy('id DESC')->one();
+                 $last_model = $model->id;
+                 $costales->id_sucursal = Yii::$app->user->identity->id_sucursal;
+                 $costales->costales_fin = "0";
+                 $costales->id_caja_ini = $last_model;
+                 $costales->id_caja_fin = 0;
 
-                ]]);
-            }
-          }
-        }
-        else {
-          return $this->redirect(['index']);
-        }
-        return $this->renderAjax('apertura', [
-            'model' => $model,
-            'totalCaja'=>$totalCaja,
-        ]);
-    }
+                 if($costales->save())
+                 {
+                   $searchModel = new CajaSearch();
+                   $estado_caja = new EstadoCaja();
+                   $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
+                   $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                   return $this->redirect(['index', [
+                       'searchModel' => $searchModel,
+                       'dataProvider' => $dataProvider,
+                       'estado_caja' => $estado_caja,
+                       'totalCaja' => $totalCaja,
+                   ]]);
+                 }
+             }
+           }
+         }
+         else {
+           return $this->redirect(['index']);
+         }
+         return $this->renderAjax('apertura', [
+             'model' => $model,
+             'totalCaja'=>$totalCaja,
+             'costales' => $costales,
+             'fin' => $fin,
+         ]);
+     }
 
 
     /**
@@ -193,10 +208,11 @@ class CajaController extends Controller
 
         if($privilegio[0]['cierre_caja'] == 1){
           $model = new Caja();
+          $costales = new Costales();
           $estado_caja = new EstadoCaja();
           $registroSistema= new RegistroSistema();
 
-          if ($model->load(Yii::$app->request->post()))
+          if ($model->load(Yii::$app->request->post()) && $costales->load(Yii::$app->request->post()))
             {
               $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado un cierre de caja de $".$model->efectivo. ' de efectivo';
               $registroSistema->id_sucursal = 1;
@@ -213,7 +229,18 @@ class CajaController extends Controller
 
               if($model->save() && $sql->save() && $registroSistema->save())
               {
+
+                $model = Caja::find()->orderBy('id DESC')->one();
+                $last_model = $model->id;
+                $costales_ultimo = new Costales();
+                $costales_ultimo = Costales::find()->orderBy('id DESC')->one();
+                $ultimo = $costales->costales_fin;
+                $costales_ultimo->costales_fin = $ultimo;
+                $costales_ultimo->id_caja_fin = $last_model;
+
+                if($costales_ultimo->save()){
                   return $this->render('info');
+                }
               }
             }
           }
@@ -225,6 +252,7 @@ class CajaController extends Controller
             'model' => $model,
             'totalCaja'=>$totalCaja,
             'estado_caja' => $estado_caja,
+            'costales' => $costales,
         ]);
     }
 

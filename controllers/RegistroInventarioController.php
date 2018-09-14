@@ -73,7 +73,7 @@ class RegistroInventarioController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['crear_proveedor'] == 1){
+      if($privilegio[0]['crear_inventario'] == 1){
         $model = new RegistroInventario();
         $detallado = new RegistroInventarioDetallado();
         $registroSistema = new RegistroSistema();

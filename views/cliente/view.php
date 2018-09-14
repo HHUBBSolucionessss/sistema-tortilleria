@@ -78,13 +78,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'total',
                     'vAlign'=>'middle',
+                    'value'=>function ($model) {
+                        $cli = $model->id_cliente;
+                        return $model->obtenerTotal($cli);
+                      },
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],
                 [
                     'attribute'=>'saldo',
-                    'vAlign'=>'middle',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'value'=>function ($model) {
+                        $cli = $model->id_cliente;
+                        return $model->obtenerSaldo($cli);
+                      },
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                     'format'=>'raw'
                   ],
@@ -125,12 +132,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'total',
                     'vAlign'=>'middle',
+                    'value'=>function ($model) {
+                        return $model->obtenerTotal($model->id_cliente);
+                      },
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],
                 [
                     'attribute'=>'saldo',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'value'=>function ($model) {
+                        return $model->obtenerSaldo($model->id_cliente);
+                      },
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                     'format'=>'raw'
                   ],

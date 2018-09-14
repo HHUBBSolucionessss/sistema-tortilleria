@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <p>
     <?php
-    if($privilegio[0]['crear_usuario'] == 1)
+    if($privilegio[0]['crear_inventario'] == 1)
     echo Html::a('Realizar inventario', ['create'], ['class' => 'btn btn-success']) ?>
   </p>
 

@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Boveda;
+use app\models\Costales;
 
 /**
- * BovedaSearch represents the model behind the search form of `app\models\Boveda`.
+ * CostalesSearch represents the model behind the search form of `app\models\Costales`.
  */
-class BovedaSearch extends Boveda
+class CostalesSearch extends Costales
 {
     /**
      * {@inheritdoc}
@@ -18,9 +18,8 @@ class BovedaSearch extends Boveda
     public function rules()
     {
         return [
-            [['id', 'tipo_movimiento', 'create_user'], 'integer'],
-            [['efectivo'], 'number'],
-            [['descripcion', 'create_time'], 'safe'],
+            [['id_sucursal', 'costales_ini', 'costales_fin', 'id_caja_ini', 'id_caja_fin'], 'integer'],
+            [['id_sucursal'], 'required']
         ];
     }
 
@@ -42,7 +41,7 @@ class BovedaSearch extends Boveda
      */
     public function search($params)
     {
-        $query = Boveda::find();
+        $query = Costales::find();
 
         // add conditions that should always apply here
 
@@ -61,13 +60,12 @@ class BovedaSearch extends Boveda
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'efectivo' => $this->efectivo,
-            'tipo_movimiento' => $this->tipo_movimiento,
-            'create_user' => $this->create_user,
-            'create_time' => $this->create_time,
+            'id_sucursal' => $this->id_sucursal,
+            'costales_ini' => $this->costales_ini,
+            'costales_fin' => $this->costales_fin,
+            'id_caja_ini' => $this->id_caja_ini,
+            'id_caja_fin' => $this->id_caja_fin,
         ]);
-
-        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
 
         return $dataProvider;
     }
