@@ -18,7 +18,6 @@ $this->title = 'Tortillería Los Cuates';
       <?= $form->field($modelSucursal, 'id')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map(Sucursal::find()->all(), 'id', 'nombre'),
                 'value'=>1,
-                'options' => ['placeholder' => 'Elige una sucursal ...', 'select'=>'0'],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],
@@ -26,11 +25,11 @@ $this->title = 'Tortillería Los Cuates';
             ]);
             ?>
 
-            <?php
+            <div class="form-group">
+                <?= Html::submitButton('Continuar', ['class' => 'btn btn-info']) ?>
+            </div>
 
-            echo Html::a(Yii::t('app', 'Continuar'), ['multiusuario'], ['class' => 'btn btn-info']) ?>
+          <?php ActiveForm::end(); ?>
 
-          </div>
-
-      <?php ActiveForm::end(); ?>
+      </div>
   </div>

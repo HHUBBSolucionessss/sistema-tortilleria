@@ -111,7 +111,6 @@ class TrabajadorController extends Controller
 
           $model->create_user=Yii::$app->user->identity->id;
           $model->create_time=date('Y-m-d H:i:s');
-          $model->sucursal_id = Yii::$app->user->identity->id_sucursal;
           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado al trabajador ". $model->nombre;
           $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 

@@ -5,8 +5,15 @@ use yii\helpers\Html;
 $this->title = 'Tortillería Los Cuates';
 ?>
 
+<h1>
+  <?php
+    echo "Sucursal ". $sucursal[0]['nombre'];
+  ?>
+</h1>
+
 <div class="site-index">
     <div class="jumbotron">
+
         <?= Html::a('Caja', ['/caja/index'], ['class'=>'btn']) ?>
         <?= Html::a('Clientes', ['/cliente/index'], ['class'=>'btn']) ?>
         <?= Html::a('Inventario', ['/inventario/index'], ['class'=>'btn']) ?>
@@ -16,6 +23,7 @@ $this->title = 'Tortillería Los Cuates';
         <?= Html::a('Sucursal', ['/sucursal/index'], ['class'=>'btn']) ?>
         <?= Html::a('Trabajadores', ['/trabajador/index'], ['class'=>'btn']) ?>
         <?= Html::a('Reportes', ['/reportes/index'], ['class'=>'btn']) ?>
+        <?= Html::a('Nóminas', ['/nomina/index'], ['class'=>'btn']) ?>
         <?= Html::a('Costales', ['/costales/index'], ['class'=>'btn']) ?>
         <?php
         //if($privilegio[0]['ver_registro_sistema'] == 1)

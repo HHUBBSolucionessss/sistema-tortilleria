@@ -8,8 +8,9 @@ use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
-use app\models\ContactForm;
 use app\models\Sucursal;
+use app\models\ContactForm;
+use app\models\SucursalSearch;
 use app\models\Reservacion;
 use app\models\ReservacionSearch;
 use app\models\RegistroSistema;
@@ -75,10 +76,14 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
 		$id_current_user = Yii::$app->user->identity->id;
+		$nombreSucursal = Yii::$app->user->identity->id_sucursal;
+
 		$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+		$sucursal = Yii::$app->db->createCommand('SELECT nombre FROM sucursal WHERE id = '.$nombreSucursal)->queryAll();
 
 		return $this->render('index', [
-				'privilegio'=>$privilegio,
+			'privilegio'=>$privilegio,
+			'sucursal'=>$sucursal,
 		]);
 	}
 
@@ -94,7 +99,6 @@ class SiteController extends Controller
 		}
 
 		$model = new LoginForm();
-		$sucursal = new Sucursal();
 
 		if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
@@ -120,26 +124,34 @@ class SiteController extends Controller
 
 	public function actionMultiusuario()
 	{
-		$modelSucursal = new Sucursal();
+		$modelSucursal = new SucursalSearch();
 
 		$usuario = new User();
 		$id_current_user = Yii::$app->user->identity->id;
+		$nombreSucursal = Yii::$app->user->identity->id_sucursal;
 		$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+		$sucursal = Yii::$app->db->createCommand('SELECT nombre FROM sucursal WHERE id = '.$nombreSucursal)->queryAll();
 
 		if ($modelSucursal->load(Yii::$app->request->post())) {
 
-			$usuario = User::findOne()
-			->where(['id'=>$id_current_user]);
+			$usuario = User::find()
+			->where(['id'=>$id_current_user])
+			->one();
 
-			$usuario->id_sucursal = $model->id;
+			$id_sucursal = $modelSucursal->id;
 
-			if($model->save() && $usuario->save())
+			$usuario->id_sucursal = $id_sucursal;
+
+			if($usuario->save())
 			{
-				return $this->redirect(['index']);
+				return $this->render('index', [
+					'privilegio'=>$privilegio,
+					'sucursal'=>$sucursal,
+				]);
 			}
 		}
 
-		return $this->render('multiusuario', [
+		return $this->renderAjax('multiusuario', [
 								'modelSucursal' => $modelSucursal,
 								'usuario' => $usuario,
 								'privilegio'=>$privilegio,

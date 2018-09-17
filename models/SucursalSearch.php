@@ -20,6 +20,7 @@ class SucursalSearch extends Sucursal
         return [
             [['id', 'numero_ext', 'numero_int', 'cp', 'asignada', 'eliminado', 'create_user', 'update_user'], 'integer'],
             [['nombre', 'calle', 'colonia', 'estado', 'ciudad', 'telefono1', 'telefono2', 'fax', 'email', 'rfc', 'create_time', 'update_time'], 'safe'],
+            [['nombre'], 'required'],
         ];
     }
 

@@ -35,4 +35,10 @@ class ReportesController extends Controller
     {
       return $this->render('index');
     }
+
+    public function actionGeneral()
+    {
+      return $this->render('general');
+    }
+
 }

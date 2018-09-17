@@ -46,7 +46,7 @@ class Sucursal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['colonia'], 'required'],
+            [['nombre'], 'required'],
             [['numero_ext', 'numero_int', 'cp', 'asignada', 'eliminado', 'create_user', 'update_user'], 'integer'],
             [['create_time', 'update_time'], 'safe'],
             [['nombre', 'calle', 'estado', 'ciudad', 'telefono1', 'telefono2', 'fax', 'email', 'rfc'], 'string', 'max' => 45],

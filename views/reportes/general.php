@@ -9,7 +9,7 @@ use kartik\widgets\DatePicker;
 /* @var $searchModel app\models\ProductoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Reportes';
+$this->title = 'Reporte General';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="producto-index">
@@ -17,22 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <div class="col-md-12">
-
-    <?= Html::submitButton('Reporte general',  ['class' => 'btn btn-success']) ?>
-
-    <?= Html::button('Ingresos de caja', ['value'=>Url::to('../reportes/general'), 'class' => 'btn btn-success'])?>
-
-    <?= Html::button('Pagos Nóminas', ['value'=>Url::to('../reportes/general'), 'class' => 'btn btn-success'])?>
-
-    <?= Html::button('Cuentas X Cobrar', ['value'=>Url::to('../reportes/general'), 'class' => 'btn btn-success'])?>
-
-    <?= Html::button('Gastos', ['value'=>Url::to('../reportes/general'), 'class' => 'btn btn-success'])?>
-
-  </div>
-  
-  <div class="col-md-12">
       <?php
           echo DatePicker::widget([
               'name' => 'fecha_ini',
@@ -48,9 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
               ]
           ]);
       ?>
-    </div>
 
+      <?php ActiveForm::end(); ?>
 
-    <?php ActiveForm::end(); ?>
+    <?php
+    echo Html::button('Reporte general', ['value'=>Url::to('general'), 'class' => 'btn btn-success'])?>
 
 </div>

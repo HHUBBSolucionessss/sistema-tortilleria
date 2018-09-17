@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+use app\models\Sucursal;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Trabajador */
@@ -12,7 +15,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'sucursal_id')->textInput() ?>
+    <?= $form->field($model, 'sucursal_id')->widget(Select2::classname(), [
+              'data' => ArrayHelper::map(Sucursal::find()->all(), 'id', 'nombre'),
+              'value'=>1,
+              'pluginOptions' => [
+                  'allowClear' => true
+              ],
+          ]);
+          ?>
 
     <?= $form->field($model, 'nombre')->textInput(['maxlength' => true]) ?>
 
