@@ -18,8 +18,8 @@ class RegistroInventarioSearch extends RegistroInventario
     public function rules()
     {
         return [
-            [['id', 'id_sucursal', 'estado', 'create_user', 'cancel_user'], 'integer'],
-            [['nota', 'create_time', 'cancel_time'], 'safe'],
+            [['id', 'id_sucursal', 'estado', 'create_user'], 'integer'],
+            [['nota', 'create_time'], 'safe'],
         ];
     }
 
@@ -64,8 +64,6 @@ class RegistroInventarioSearch extends RegistroInventario
             'estado' => $this->estado,
             'create_user' => $this->create_user,
             'create_time' => $this->create_time,
-            'cancel_user' => $this->cancel_user,
-            'cancel_time' => $this->cancel_time,
         ]);
 
         $query->andFilterWhere(['like', 'nota', $this->nota]);

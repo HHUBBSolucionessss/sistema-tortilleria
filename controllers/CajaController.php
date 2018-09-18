@@ -46,7 +46,7 @@ class CajaController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
 
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-      $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
+      $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
       $estado_caja = new EstadoCaja();
       $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
@@ -89,7 +89,7 @@ class CajaController extends Controller
            $registroSistema= new RegistroSistema();
            if ($model->load(Yii::$app->request->post()))
            {
-             $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
+             $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
              $model->create_user=Yii::$app->user->identity->id;
              $model->id_sucursal=Yii::$app->user->identity->id_sucursal;
              $model->create_time=date('Y-m-d H:i:s');
@@ -136,7 +136,7 @@ class CajaController extends Controller
      {
          $id_current_user = Yii::$app->user->identity->id;
          $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-         $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
+         $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
 
          if($privilegio[0]['apertura_caja'] == 1){
            $model = new Caja();
@@ -203,7 +203,7 @@ class CajaController extends Controller
     {
         $id_current_user = Yii::$app->user->identity->id;
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-        $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
+        $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
         $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\')')->queryAll();
 
         if($privilegio[0]['cierre_caja'] == 1){
@@ -258,7 +258,7 @@ class CajaController extends Controller
 
     public function actionInfo(){
 
-      $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
+      $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
       $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\')')->queryAll();
       $searchModel = new CajaSearch();
       $dataProvider = $searchModel->buscarMovimientosCierre(Yii::$app->request->queryParams);

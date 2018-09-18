@@ -34,8 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'nota',
             'create_user',
             'create_time',
-            'cancel_user',
-            'cancel_time',
         ],
     ]) ?>
 

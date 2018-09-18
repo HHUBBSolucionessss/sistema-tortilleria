@@ -21,7 +21,7 @@ class CajaSearch extends Caja
         return [
             [['id', 'create_user'], 'integer'],
             [['descripcion', 'create_time'], 'safe'],
-            [['efectivo', 'tarjeta', 'tipo_movimiento', 'tipo_pago'], 'number'],
+            [['efectivo', 'tipo_movimiento', 'tipo_pago'], 'number'],
         ];
     }
 
@@ -95,7 +95,6 @@ public function search($params)
     $query->andFilterWhere([
         'id' => $this->id,
         'efectivo' => $this->efectivo,
-        'tarjeta' => $this->tarjeta,
         'tipo_movimiento' => $this->tipo_movimiento,
         'tipo_pago' => $this->tipo_pago,
         'create_time' => $this->create_time,

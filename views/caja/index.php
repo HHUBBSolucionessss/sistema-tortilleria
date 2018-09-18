@@ -26,8 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
           <p>Total en caja</p>
           <br>
             <p>Efectivo: $ <?=$totalCaja[0]['Sum(efectivo)']?></p>
-            <p>Tarjeta: $ <?=$totalCaja[0]['Sum(tarjeta)']?></p>
-            <p>Depósito: $ <?=$totalCaja[0]['Sum(deposito)']?></p>
           <br>
     </p>
     <p>
@@ -85,12 +83,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'attribute' => 'efectivo',
-                    'vAlign'=>'middle',
-                    'headerOptions'=>['class'=>'kv-sticky-column'],
-                    'contentOptions'=>['class'=>'kv-sticky-column'],
-                ],
-                [
-                    'attribute' => 'tarjeta',
                     'vAlign'=>'middle',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],

@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\detail\DetailView;
 use app\models\User;
+use app\models\Venta;
 use app\models\VentaSearch;
 use kartik\grid\GridView;
 use kartik\editable\Editable;
@@ -21,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="col-md-12">
   <div class="col-md-4">
     <?php
+    $v = $venta;
     $user= new User();
         echo DetailView::widget([
             'model'=>$model,
@@ -78,9 +80,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'total',
                     'vAlign'=>'middle',
-                    'value'=>function ($model) {
-                        $cli = $model->id_cliente;
-                        return $model->obtenerTotal($cli);
+                    'value'=>function ($venta) {
+                        return $venta->obtenerTotal($venta->id_cliente);
                       },
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
@@ -88,9 +89,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute'=>'saldo',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
-                    'value'=>function ($model) {
-                        $cli = $model->id_cliente;
-                        return $model->obtenerSaldo($cli);
+                    'value'=>function ($venta) {
+                        return $venta->obtenerSaldo($venta->id_cliente);
                       },
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                     'format'=>'raw'
@@ -133,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'total',
                     'vAlign'=>'middle',
                     'value'=>function ($model) {
-                        return $model->obtenerTotal($model->id_cliente);
+                        return $venta->obtenerTotal($model->total);
                       },
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
@@ -142,7 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute'=>'saldo',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'value'=>function ($model) {
-                        return $model->obtenerSaldo($model->id_cliente);
+                        return $venta->obtenerSaldo($model->saldo);
                       },
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                     'format'=>'raw'
@@ -156,8 +156,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ];
 
             echo GridView::widget([
-                'dataProvider' => $dataProvider2,
-                'filterModel' => $searchModel2,
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
                 'columns' => $gridColumns,
                 'containerOptions' => ['style'=>'overflow: false'], // only set when $responsive = false
                 'export' => false,

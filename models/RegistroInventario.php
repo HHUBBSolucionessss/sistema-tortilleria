@@ -13,8 +13,6 @@ use Yii;
  * @property string $nota
  * @property int $create_user
  * @property string $create_time
- * @property int $cancel_user
- * @property string $cancel_time
  */
 class RegistroInventario extends \yii\db\ActiveRecord
 {
@@ -33,9 +31,9 @@ class RegistroInventario extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_sucursal', 'estado', 'nota'], 'required'],
-            [['id_sucursal', 'estado', 'create_user', 'cancel_user'], 'integer'],
-            [['create_time', 'cancel_time'], 'safe'],
+            [['id_sucursal'], 'required'],
+            [['id_sucursal', 'estado', 'create_user'], 'integer'],
+            [['create_time'], 'safe'],
             [['nota'], 'string', 'max' => 255],
         ];
     }
@@ -52,8 +50,6 @@ class RegistroInventario extends \yii\db\ActiveRecord
             'nota' => 'Nota',
             'create_user' => 'Registró',
             'create_time' => 'Registrado a las',
-            'cancel_user' => 'Actualizó',
-            'cancel_time' => 'Cancel Time',
         ];
     }
 

@@ -32,7 +32,7 @@ class RegistroInventarioDetallado extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_registro', 'id_producto', 'cantidad_anterior', 'cantidad_actual', 'codigo', 'costo', 'precio'], 'required'],
+            [['id_registro', 'id_producto', 'cantidad_actual'], 'required'],
             [['id_registro', 'id_producto', 'cantidad_anterior', 'cantidad_actual'], 'integer'],
             [['costo', 'precio'], 'number'],
             [['codigo'], 'string', 'max' => 45],
@@ -49,8 +49,8 @@ class RegistroInventarioDetallado extends \yii\db\ActiveRecord
             'id_registro' => 'Registro',
             'codigo' => 'Código',
             'id_producto' => 'Producto',
-            'cantidad_anterior' => 'Cantidad Anterior',
-            'cantidad_actual' => 'Cantidad Actual',
+            'cantidad_anterior' => 'Cantidad Registrada',
+            'cantidad_actual' => 'Cantidad Real',
             'costo' => 'Costo',
             'precio' => 'Precio',
         ];

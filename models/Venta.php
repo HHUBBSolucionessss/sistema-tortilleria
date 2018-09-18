@@ -97,11 +97,12 @@ class Venta extends \yii\db\ActiveRecord
       return $model->nombre;
     }
 
-    public function obtenerTotal($id)
+    public function obtenerTotal($id_cliente)
     {
       $model = Venta::find('total')
-      ->where(['id'=>$id])
-      ->one();
+      ->where(['id_cliente'=>$id_cliente])
+      ->where(['saldo'=>0])
+      ->all();
 
       return $model->total;
     }

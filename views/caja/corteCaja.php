@@ -24,14 +24,10 @@ $this->title = 'Corte de caja';
     <p>Total retirado</p>
     <br>
       <p>Efectivo Retirado: $ <?php echo -($totalesRetirados[0]['efectivo'])?></p>
-      <p>Tarjeta Retirada: $ <?php echo $totalesRetirados[0]['tarjeta']?></p>
-      <p>Depósito Retirado: $ <?php echo $totalesRetirados[0]['deposito']?></p>
     <br>
     <p>Total en caja</p>
     <br>
       <p>Efectivo: $ <?=$totalCaja[0]['Sum(efectivo)']?></p>
-      <p>Tarjeta: $ <?=$totalCaja[0]['Sum(tarjeta)']?></p>
-      <p>Depósito: $ <?=$totalCaja[0]['Sum(deposito)']?></p>
     <br>
 
 
@@ -57,8 +53,6 @@ $this->title = 'Corte de caja';
                       'format'=>'raw'
                   ],
                   'efectivo',
-                  'tarjeta',
-                  'deposito',
                   [
                       'attribute'=>'create_user',
                       'vAlign'=>'middle',

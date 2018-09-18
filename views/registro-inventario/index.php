@@ -44,7 +44,25 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php Pjax::begin(); ?>
       <?php
           $gridColumns = [
-              ['class' => 'kartik\grid\SerialColumn'],
+              [
+                'class' => 'kartik\grid\SerialColumn',
+                'contentOptions' => ['class' => 'kartik-sheet-style'],
+                'width' => '36px',
+                'header' => '',
+                'headerOptions' => ['class' => 'kartik-sheet-style']
+            ],
+            [
+                    'class' => 'kartik\grid\ExpandRowColumn',
+                    'width' => '50px',
+                    'value' => function ($model, $key, $index, $column) {
+                        return GridView::ROW_COLLAPSED;
+                    },
+                    'detail' => function ($model, $key, $index, $column) {
+                        return Yii::$app->controller->renderPartial('view', ['model' => $model]);
+                    },
+                    'headerOptions' => ['class' => 'kartik-sheet-style'],
+                    'expandOneOnly' => true,
+                ],
               [
                   'attribute' => 'id',
                   'vAlign'=>'middle',
@@ -71,6 +89,12 @@ $this->params['breadcrumbs'][] = $this->title;
               ],
               [
                 'attribute'=>'nota',
+                'vAlign'=>'middle',
+                'headerOptions'=>['class'=>'kv-sticky-column'],
+                'contentOptions'=>['class'=>'kv-sticky-column'],
+              ],
+              [
+                'attribute'=>'create_time',
                 'vAlign'=>'middle',
                 'headerOptions'=>['class'=>'kv-sticky-column'],
                 'contentOptions'=>['class'=>'kv-sticky-column'],

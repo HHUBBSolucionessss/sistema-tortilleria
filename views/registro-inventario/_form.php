@@ -4,8 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use app\models\RegistroInventarioDetallado;
+use app\models\Producto;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\RegistroInventario */
@@ -14,45 +16,47 @@ use app\models\RegistroInventarioDetallado;
 
 <div class="registro-inventario-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+  <?php $form = ActiveForm::begin(); ?>
 
-    <div class="col-md-6">
+  <?php
+  $detallado = new RegistroInventarioDetallado;
+  ?>
 
-    <?php
-    $detallado = new RegistroInventarioDetallado;
-    ?>
-
-    <?= $form->field($model, 'estado')->textInput() ?>
+  <div class="col-md-12">
+    <div class="col-md-4">
+      <?= $form->field($detallado, 'id_producto')->widget(Select2::classname(), [
+         'data' => ArrayHelper::map(Producto::find()->all(), 'id', 'nombre'),
+         'value'=>1,
+         'options' => ['placeholder' => 'Selecciona un producto...', 'select'=>'0'],
+         'pluginOptions' => [
+             'allowClear' => true
+         ],
+     ]);
+     ?>
     </div>
-
-    <div class="col-md-6">
-
-    <?= $form->field($model, 'nota')->textInput(['maxlength' => true]) ?>
-
+    <div class="col-md-4">
+      <?= $form->field($detallado, 'codigo')->textInput(['readOnly'=>false]) ?>
+    </div>
+    <div class="col-md-4">
+      <?= $form->field($detallado, 'precio')->textInput(['readOnly'=>false]) ?>
+    </div>
   </div>
-  <div class="col-md-6">
-
-    <?= $form->field($detallado, 'codigo')->textInput() ?>
-
-    <?= $form->field($detallado, 'id_producto')->textInput() ?>
-
-
-
-    <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+  <div class="col-md-12">
+    <div class="col-md-3">
+      <?= $form->field($detallado, 'cantidad_anterior')->textInput(['readOnly'=>false]) ?>
     </div>
-
+    <div class="col-md-3">
+      <?= $form->field($detallado, 'cantidad_actual')->textInput() ?>
     </div>
-    <div class="col-md-2">
-
-    <?= $form->field($detallado, 'costo')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($detallado, 'precio')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($detallado, 'cantidad_actual')->textInput() ?>
-
+    <div class="col-md-6">
+      <?= $form->field($model, 'nota')->textArea(['maxlength' => true]) ?>
+    </div>
   </div>
 
-    <?php ActiveForm::end(); ?>
+  <div class="form-group">
+      <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+  </div>
+
+  <?php ActiveForm::end(); ?>
 
 </div>

@@ -42,13 +42,11 @@ class ClienteController extends Controller
         $id_current_user = Yii::$app->user->identity->id;
 
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-        $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo), Sum(tarjeta), Sum(deposito) FROM caja AS Caja')->queryAll();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'totalCaja'=>$totalCaja,
             'privilegio'=>$privilegio,
         ]);
     }
@@ -63,12 +61,11 @@ class ClienteController extends Controller
     public function actionView($id)
     {
       $model = $this->findModel($id);
+      $venta = $model;
       $registroSistema= new RegistroSistema();
       $searchModel = new VentaSearch();
-      $searchModel2 = new VentaSearch();
 
       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-      $dataProvider2 = $searchModel2->search2(Yii::$app->request->queryParams);
       $sumTotal=Yii::$app->db->createCommand('SELECT sum(total) FROM venta WHERE id_cliente ='.$model->id)->queryAll();
 
       if ($model->load(Yii::$app->request->post()))
@@ -101,12 +98,11 @@ class ClienteController extends Controller
       else
       {
           return $this->render('view', [
-            'searchModel2' => $searchModel2,
-            'dataProvider2' => $dataProvider2,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'sumTotal'=>$sumTotal,
             'model'=>$model,
+            'venta'=>$venta
           ]);
 
       }

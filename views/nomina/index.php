@@ -36,6 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
               [
                   'attribute' => 'id_trabajador',
                   'vAlign'=>'middle',
+                  'value'=>function ($model) {
+                      return $model->obtenerNombreTrabajador($model->id_trabajador);
+                    },
                   'headerOptions'=>['class'=>'kv-sticky-column'],
                   'contentOptions'=>['class'=>'kv-sticky-column'],
               ],

@@ -10,8 +10,6 @@ use Yii;
  * @property int $id
  * @property string $descripcion
  * @property string $efectivo
- * @property string $tarjeta
- * @property string $deposito
  * @property int $tipo_movimiento
  * @property int $tipo_pago
  * @property string $create_time
@@ -34,7 +32,7 @@ class Caja extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['efectivo', 'tarjeta', 'deposito'], 'number'],
+            [['efectivo'], 'number'],
             [['tipo_movimiento', 'tipo_pago', 'create_user', 'efectivo'], 'integer'],
             [['create_time'], 'safe'],
             [['create_user', 'efectivo', 'descripcion'], 'required'],
@@ -54,21 +52,12 @@ class Caja extends \yii\db\ActiveRecord
             'total_efectivo' => 'Total: $',
             'descripcion' => 'Descripción',
             'efectivo' => 'Efectivo',
-            'tarjeta' => 'Tarjeta',
-            'deposito' => 'Deposito',
             'tipo_movimiento' => 'Tipo Movimiento',
             'tipo_pago' => 'Tipo Pago',
             'create_time' => 'Fecha Creación',
             'create_user' => 'Registró',
         ];
     }
-
-    /*public function obtenerTotalCaja()
-  	{
-  		$totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo), sum(tarjeta), sum(deposito)');
-
-      return $totalCaja;
-      }*/
 
     public function obtenerTipoMovimiento($key)
     {
@@ -92,15 +81,9 @@ class Caja extends \yii\db\ActiveRecord
               return 'Efectivo';
               break;
           case 1:
-              return 'Tarjeta';
-              break;
-          case 2:
               return 'Transferencia';
               break;
-          case 3:
-              return 'Depósito';
-              break;
-          case 4:
+          case 2:
               return 'Cheque';
               break;
             default:
