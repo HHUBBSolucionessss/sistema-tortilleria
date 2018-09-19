@@ -44,12 +44,13 @@ class CajaController extends Controller
     {
       $searchModel = new CajaSearch();
       $id_current_user = Yii::$app->user->identity->id;
+      $id_sucursal = Yii::$app->user->identity->id_sucursal;
 
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-      $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
+      $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja WHERE id_sucursal = '.$id_sucursal)->queryAll();
       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
       $estado_caja = new EstadoCaja();
-      $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
+      $estado_caja = Yii::$app->db->createCommand('SELECT estado_caja FROM estado_caja WHERE id_sucursal = '.$id_sucursal)->queryAll();
 
       return $this->render('index', [
           'searchModel' => $searchModel,

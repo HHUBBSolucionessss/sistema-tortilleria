@@ -12,13 +12,6 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-  <p> Banco y Depósitos
-
-    <?= $form->field($model, 'movimientos_deposito')->checkbox(array('label'=>'Movimientos Depósitos')); ?>
-
-    <?= $form->field($model, 'movimientos_boveda')->checkbox(array('label'=>'Movimientos Bóveda')); ?>
-
-  </p>
   <p> Caja
 
     <?= $form->field($model, 'movimientos_caja')->checkbox(array('label'=>'Movimientos de caja')); ?>
@@ -44,15 +37,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'modificar_producto')->checkbox(array('label'=>'Modificar producto')); ?>
 
     <?= $form->field($model, 'eliminar_producto')->checkbox(array('label'=>'Eliminar producto')); ?>
-
-  </p>
-  <p> Proveedor
-
-    <?= $form->field($model, 'crear_proveedor')->checkbox(array('label'=>'Crear proveedor')); ?>
-
-    <?= $form->field($model, 'modificar_proveedor')->checkbox(array('label'=>'Modificar proveedor')); ?>
-
-    <?= $form->field($model, 'eliminar_proveedor')->checkbox(array('label'=>'Eliminar proveedor')); ?>
 
   </p>
   <p> Sucursal

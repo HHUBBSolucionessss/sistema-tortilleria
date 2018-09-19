@@ -16,8 +16,6 @@ $this->title = 'Tortillería Los Cuates';
 
         <?= Html::a('Caja', ['/caja/index'], ['class'=>'btn']) ?>
         <?= Html::a('Clientes', ['/cliente/index'], ['class'=>'btn']) ?>
-        <?= Html::a('Inventario', ['/inventario/index'], ['class'=>'btn']) ?>
-        <?= Html::a('Registro Inventario', ['/registro-inventario/index'], ['class'=>'btn']) ?>
         <?= Html::a('Venta', ['/venta/index'], ['class'=>'btn']) ?>
         <?= Html::a('Productos', ['/producto/index'], ['class'=>'btn']) ?>
         <?= Html::a('Sucursal', ['/sucursal/index'], ['class'=>'btn']) ?>

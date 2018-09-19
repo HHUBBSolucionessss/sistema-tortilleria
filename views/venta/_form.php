@@ -81,11 +81,10 @@ $this->registerJs($js);
                                 ?>
                                 <div class="row">
                                   <div class="col-sm-6">
-                                      <?= $form->field($modeldetallada, "[{$index}]id_producto")->textInput(['maxlength' => true]) ?>
                                       <?= $form->field($modeldetallada, "[{$index}]id_producto")->widget(Select2::classname(), [
                                          'data' => ArrayHelper::map(Producto::find()->all(), 'id', 'nombre'),
                                          'value'=>1,
-                                         'options' => ['placeholder' => 'Selecciona un trabajador ...', 'select'=>'0'],
+                                         'options' => ['placeholder' => 'Selecciona un producto ...', 'select'=>'0'],
                                          'pluginOptions' => [
                                              'allowClear' => true
                                          ],

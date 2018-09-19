@@ -25,19 +25,7 @@ use app\models\Sucursal;
 
     <?= $form->field($model, 'password')->textInput(['maxlength' => true])->input("password") ?>
 
-    <div class="col-md-6">
-
-      <?= $form->field($model, 'id_sucursal')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(Sucursal::find()->all(), 'id', 'id'),
-                'value'=>1,
-                'options' => ['placeholder' => 'Asignar una sucursal ...', 'select'=>'0'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);
-            ?>
-
-      </div>
+    <?= $form->field($model, 'temp')->checkbox(array('label'=>'Multi Sucursal')); ?>
 
     <div class="form-group">
         <?= Html::submitButton('Registrar', ['class' => 'btn btn-success'], ['id'=>'_submit']) ?>

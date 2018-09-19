@@ -16,7 +16,6 @@ class SignupForm extends Model
 	public $password;
 	public $nombre;
 	public $temp;
-	public $che;
 	public $id_sucursal;
 
 
@@ -31,17 +30,28 @@ class SignupForm extends Model
 				            ['username', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Este nombre de usuario ya existe.'],
 				            ['username', 'string', 'min' => 2, 'max' => 255],
 
-		['email', 'trim'],
+										['temp', 'trim'],
+				            ['temp', 'required'],
+
+										['email', 'trim'],
 				            ['email', 'required'],
 				            ['email', 'email'],
 				            ['email', 'string', 'max' => 255],
 				            ['email', 'unique', 'targetClass' => '\app\models\User', 'message' => 'Este email ya existe.'],
 
-		['password', 'required'],
+										['password', 'required'],
 				            ['password', 'string', 'min' => 6],
-		        ['nombre','required'],
-		        ['nombre','string'],
+						        ['nombre','required'],
+						        ['nombre','string'],
 		        ];
+	}
+
+	public function attributeLabels()
+	{
+			return [
+					'id_sucursal' => 'Sucursal',
+					'temp' => 'Multi Sucursal',
+			];
 	}
 
 	/**

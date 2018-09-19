@@ -44,7 +44,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
         ['status', 'default', 'value' => self::STATUS_ACTIVE],
         ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-          [['create_time', 'create_user', 'update_time'], 'safe'],
+          [['create_time', 'create_user', 'update_time', 'temp'], 'safe'],
           [['username', 'nombre', 'email'], 'string', 'max' => 45],
         ];
     }
@@ -57,7 +57,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
           'id' => 'ID',
           'id_sucursal' => 'Sucursal',
-          'temp' => 'Multisucursal',
+          'temp' => 'Multi Sucursal',
           'username' => 'Usuario',
           'nombre' => 'Nombre de usuario',
           'password_hash' => 'Contraseña',

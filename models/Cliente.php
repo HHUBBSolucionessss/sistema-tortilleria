@@ -9,7 +9,6 @@ use Yii;
  *
  * @property int $id
  * @property int $sucursal_id
- * @property int $cuenta_id
  * @property string $nombre
  * @property string $rfc
  * @property string $calle
@@ -48,7 +47,7 @@ class Cliente extends \yii\db\ActiveRecord
     {
         return [
             [['sucursal_id'], 'required'],
-            [['sucursal_id', 'cuenta_id', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
+            [['sucursal_id', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['limite_credito'], 'number'],
             [['create_time', 'update_time', 'delete_time'], 'safe'],
             [['nombre','calle', 'colonia', 'ciudad', 'estado', 'telefono1',], 'string', 'max' => 45],
@@ -64,7 +63,6 @@ class Cliente extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'sucursal_id' => 'Sucursal',
-            'cuenta_id' => 'Cuenta',
             'nombre' => 'Nombre',
             'calle' => 'Calle',
             'colonia' => 'Colonia',

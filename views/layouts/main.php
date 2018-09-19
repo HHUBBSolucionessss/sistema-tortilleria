@@ -66,7 +66,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Sistema Tortillería <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Tortillería Los Cuates <?= date('Y')?></p>
 
     </div>
 </footer>

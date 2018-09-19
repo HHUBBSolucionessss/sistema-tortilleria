@@ -103,13 +103,17 @@ class SiteController extends Controller
 		if ($model->load(Yii::$app->request->post()) && $model->login()) {
 
 			$id_current_user = Yii::$app->user->identity->id;
+			$nombreSucursal = Yii::$app->user->identity->id_sucursal;
+
 			$tipo_usuario = Yii::$app->db->createCommand('SELECT temp FROM usuario WHERE id= '.$id_current_user)->queryAll();
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+			$sucursal = Yii::$app->db->createCommand('SELECT nombre FROM sucursal WHERE id = '.$nombreSucursal)->queryAll();
 
 			if($tipo_usuario[0]['temp']=="0"){
 				return $this->render('index', [
 				            'model' => $model,
 										'privilegio'=>$privilegio,
+										'sucursal'=>$sucursal,
 				        ]);
 			}
 			else{
@@ -144,7 +148,7 @@ class SiteController extends Controller
 
 			if($usuario->save())
 			{
-				return $this->render('index', [
+				return $this->redirect(['index',
 					'privilegio'=>$privilegio,
 					'sucursal'=>$sucursal,
 				]);

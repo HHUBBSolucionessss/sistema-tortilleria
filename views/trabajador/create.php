@@ -7,12 +7,11 @@ use yii\helpers\Html;
 /* @var $model app\models\Trabajador */
 
 $this->title = 'Create Trabajador';
-$this->params['breadcrumbs'][] = ['label' => 'Trabajadors', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Trabajadores', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="trabajador-create">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

@@ -26,7 +26,6 @@ class EstadoCaja extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id'], 'required'],
             [['id', 'estado_caja'], 'integer'],
             [['id'], 'unique'],
         ];

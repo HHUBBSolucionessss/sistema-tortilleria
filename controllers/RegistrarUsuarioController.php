@@ -126,13 +126,14 @@ class RegistrarUsuarioController extends Controller
 	public function actionCreate()
 	{
 			$id_current_user = Yii::$app->user->identity->id;
+			$sucursal_actual = Yii::$app->user->identity->id_sucursal;
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 			$modelSucursal = new Sucursal();
+			$usuario = new User();
 
 			if($privilegio[0]['crear_usuario'] == 1){
 				$model = new SignupForm();
 				$privilegio= new Privilegio();
-				$usuario = new User();
 				$registroSistema= new RegistroSistema();
 
 				if ($model->load(Yii::$app->request->post()))
@@ -140,6 +141,9 @@ class RegistrarUsuarioController extends Controller
 
 					$registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha registrado al usuario ". $model->nombre;
 					$registroSistema->id_sucursal=1;
+					$model->id_sucursal = $sucursal_actual;
+
+					$temporal = $model->temp;
 
 					if ($model->signup())
 					{
@@ -147,6 +151,7 @@ class RegistrarUsuarioController extends Controller
 						$user_created = User::findOne(['email' => $model->email]);
 
 						$id = $user_created->id;
+						$user_created->temp = $temporal;
 						$user_created->create_user=$id_current_user;
 						$privilegio->id_usuario = $id;
 						$privilegio->movimientos_caja=1;

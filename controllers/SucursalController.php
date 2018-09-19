@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Sucursal;
+use app\models\EstadoCaja;
 use app\models\SucursalSearch;
 use app\models\RegistroSistema;
 use yii\web\Controller;
@@ -116,7 +117,15 @@ class SucursalController extends Controller
 
           if($model->save() && $registroSistema->save())
           {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $ult_sucursal = Yii::$app->db->createCommand('SELECT MAX(id) FROM sucursal')->queryAll();
+
+            $estadoCaja = new EstadoCaja();
+            $estadoCaja->estado_caja = 0;
+            $estadoCaja->id_sucursal = $ult_sucursal[0]['MAX(id)'];
+
+            if($estadoCaja->save()){
+              return $this->redirect(['view', 'id' => $model->id]);
+            }
           }
         }
       }

@@ -18,7 +18,7 @@ class ClienteSearch extends Cliente
     public function rules()
     {
         return [
-            [['id', 'sucursal_id', 'cuenta_id', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
+            [['id', 'sucursal_id', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['nombre', 'rfc', 'calle', 'num_ext', 'num_int', 'colonia', 'ciudad', 'estado', 'cp', 'telefono1', 'create_time', 'update_time', 'delete_time'], 'safe'],
             [['limite_credito'], 'number'],
         ];
@@ -62,7 +62,6 @@ class ClienteSearch extends Cliente
         $query->andFilterWhere([
             'id' => $this->id,
             'sucursal_id' => $this->sucursal_id,
-            'cuenta_id' => $this->cuenta_id,
             'limite_credito' => $this->limite_credito,
             'eliminado' => $this->eliminado,
             'create_user' => $this->create_user,

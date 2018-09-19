@@ -19,8 +19,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'sucursal_id') ?>
 
-    <?= $form->field($model, 'cuenta_id') ?>
-
     <?= $form->field($model, 'nombre') ?>
 
     <?php // echo $form->field($model, 'rfc') ?>
