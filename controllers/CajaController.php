@@ -216,7 +216,8 @@ class CajaController extends Controller
           $model = new Caja();
           $costales = new Costales();
           $estado_caja = new EstadoCaja();
-          $registroSistema= new RegistroSistema();
+          $registroSistema = new RegistroSistema();
+          $banco = new Banco();
 
           if ($model->load(Yii::$app->request->post()) && $costales->load(Yii::$app->request->post()))
             {
@@ -244,7 +245,15 @@ class CajaController extends Controller
                 $costales_ultimo->costales_fin = $ultimo;
                 $costales_ultimo->id_caja_fin = $last_model;
 
-                if($costales_ultimo->save()){
+                $banco->id_sucursal = Yii::$app->user->identity->id_sucursal;
+                $banco->id_cuenta = 0;
+                $banco->descripcion = "Cierre de caja con folio ". $last_model;
+                $banco->deposito = -($model->efectivo);
+                $banco->tipo_movimiento = 0;
+                $banco->create_user = Yii::$app->user->identity->id;
+                $banco->create_time = $model->create_time=date('Y-m-d H:i:s');
+
+                if($costales_ultimo->save() && $banco->save()){
                   return $this->render('info');
                 }
               }

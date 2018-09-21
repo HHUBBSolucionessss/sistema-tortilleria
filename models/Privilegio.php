@@ -27,6 +27,9 @@ class Privilegio extends \yii\db\ActiveRecord
             'crear_sucursal', 'modificar_sucursal', 'eliminar_sucursal',
             'crear_trabajador', 'modificar_trabajador', 'eliminar_trabajador',
             'crear_venta', 'pago_venta', 'cancelar_venta', 'crear_nomina', 'cancelar_nomina',
+            'crear_cuenta', 'modificar_cuenta', 'eliminar_cuenta',
+            'ver_banco', 'ver_boveda', 'ver_caja', 'ver_clientes', 'ver_venta', 'ver_productos',
+            'ver_sucursales', 'ver_trabajadores', 'ver_reportes', 'ver_nominas', 'ver_costales', 'ver_usuarios', 'ver_cuentas',
             'crear_usuario','modificar_usuario','eliminar_usuario','definir_privilegios', 'ver_registro_sistema'], 'integer'],
         ];
     }
