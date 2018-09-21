@@ -39,6 +39,22 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'eliminar_producto')->checkbox(array('label'=>'Eliminar producto')); ?>
 
   </p>
+  <p> Ventas
+
+    <?= $form->field($model, 'crear_venta')->checkbox(array('label'=>'Crear venta')); ?>
+
+    <?= $form->field($model, 'pago_venta')->checkbox(array('label'=>'Pago venta')); ?>
+
+    <?= $form->field($model, 'cancelar_venta')->checkbox(array('label'=>'Cancelar venta')); ?>
+
+  </p>
+  <p> Nóminas
+
+    <?= $form->field($model, 'crear_nomina')->checkbox(array('label'=>'Crear nómina')); ?>
+
+    <?= $form->field($model, 'cancelar_nomina')->checkbox(array('label'=>'Cancelar nómina')); ?>
+
+  </p>
   <p> Sucursal
 
     <?= $form->field($model, 'crear_sucursal')->checkbox(array('label'=>'Crear sucursal')); ?>

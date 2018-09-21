@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if($privilegio[0]['crear_venta'] == 1)
+        if($privilegio[0]['crear_venta'] == 1 && $estado_caja[0]['estado_caja'] == 1)
          echo Html::a('Nueva venta', ['create'], ['class' => 'btn btn-success']);
         else{
          ?>

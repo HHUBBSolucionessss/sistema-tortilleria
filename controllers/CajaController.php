@@ -109,7 +109,8 @@ class CajaController extends Controller
                if($model->save() && $registroSistema->save())
                {
                      $searchModel = new CajaSearch();
-                     $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
+                     $id_sucursal = Yii::$app->user->identity->id_sucursal;
+                     $estado_caja = Yii::$app->db->createCommand('SELECT estado_caja FROM estado_caja WHERE id_sucursal = '.$id_sucursal)->queryAll();
                      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
                      return $this->redirect(['index', [
                          'searchModel' => $searchModel,
@@ -136,8 +137,10 @@ class CajaController extends Controller
      public function actionApertura()
      {
          $id_current_user = Yii::$app->user->identity->id;
+         $id_sucursal = Yii::$app->user->identity->id_sucursal;
          $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-         $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
+         $id_sucursal = Yii::$app->user->identity->id_sucursal;
+         $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja WHERE id_sucursal = '.$id_sucursal)->queryAll();
 
          if($privilegio[0]['apertura_caja'] == 1){
            $model = new Caja();
@@ -153,7 +156,7 @@ class CajaController extends Controller
              $model->create_user=Yii::$app->user->identity->id;
              $model->id_sucursal=Yii::$app->user->identity->id_sucursal;
              $model->create_time=date('Y-m-d H:i:s');
-             $sql = EstadoCaja::findOne(['id' => 1]);
+             $sql = EstadoCaja::findOne(['id_sucursal' => $id_sucursal]);
              $sql->estado_caja = 1;
              $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una apertura de caja con $".$model->efectivo. ' de efectivo';
              $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
@@ -171,7 +174,7 @@ class CajaController extends Controller
                  {
                    $searchModel = new CajaSearch();
                    $estado_caja = new EstadoCaja();
-                   $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
+                   $estado_caja = Yii::$app->db->createCommand('SELECT estado_caja FROM estado_caja WHERE id_sucursal = '.$id_sucursal)->queryAll();
                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
                    return $this->redirect(['index', [
                        'searchModel' => $searchModel,
@@ -203,8 +206,10 @@ class CajaController extends Controller
     public function actionCierre()
     {
         $id_current_user = Yii::$app->user->identity->id;
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-        $totalCaja=Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+        $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja WHERE id_sucursal = '.$id_sucursal)->queryAll();
         $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\')')->queryAll();
 
         if($privilegio[0]['cierre_caja'] == 1){
@@ -218,7 +223,7 @@ class CajaController extends Controller
               $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado un cierre de caja de $".$model->efectivo. ' de efectivo';
               $registroSistema->id_sucursal = 1;
 
-              $sql = EstadoCaja::findOne(['id' => 1]);
+              $sql = EstadoCaja::findOne(['id_sucursal' => $id_sucursal]);
               $sql->estado_caja = 0;
 
               $model->descripcion="Cierre de caja";

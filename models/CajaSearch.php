@@ -94,6 +94,7 @@ public function search($params)
     // grid filtering conditions
     $query->andFilterWhere([
         'id' => $this->id,
+        'id_sucursal' => $this->id_sucursal,
         'efectivo' => $this->efectivo,
         'tipo_movimiento' => $this->tipo_movimiento,
         'tipo_pago' => $this->tipo_pago,
@@ -101,7 +102,11 @@ public function search($params)
         'create_user' => $this->create_user,
     ]);
 
-    $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
+    $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+    $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
+          ->andFilterWhere(['id_sucursal' => $id_sucursal]);
+
 
     return $dataProvider;
 }

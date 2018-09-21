@@ -36,7 +36,7 @@ class Nomina extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_sucursal', 'id_trabajador', 'dias_trabajados', 'create_user'], 'required'],
+            [['id_sucursal', 'id_trabajador', 'dias_trabajados', 'total', 'create_user'], 'required'],
             [['id_sucursal', 'id_trabajador', 'dias_trabajados', 'eliminado', 'create_user'], 'integer'],
             [['sueldo_base', 'descuentos', 'sueldo', 'bonos'], 'number'],
             [['create_time'], 'safe'],
@@ -55,8 +55,9 @@ class Nomina extends \yii\db\ActiveRecord
             'id_trabajador' => 'Nombre Trabajador',
             'sueldo_base' => 'Sueldo Base',
             'descuentos' => 'Descuento',
-            'sueldo' => 'Sueldo',
+            'sueldo' => 'Sub Total',
             'bonos' => 'Bonos',
+            'total' => 'Total',
             'notas' => 'Notas',
             'dias_trabajados' => 'Días Trabajados',
             'eliminado' => 'Eliminado',

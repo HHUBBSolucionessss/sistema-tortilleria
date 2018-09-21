@@ -89,6 +89,8 @@ class PrivilegioSearch extends Privilegio
             'crear_usuario' => $this->crear_usuario,
             'modificar_usuario' => $this->modificar_usuario,
             'eliminar_usuario' => $this->eliminar_usuario,
+            'crear_nomina' => $this->crear_nomina,
+            'cancelar_nomina' => $this->cancelar_nomina,
             'definir_privilegios' => $this->definir_privilegios,
             'ver_registro_sistema' => $this->ver_registro_sistema,
 

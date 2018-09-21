@@ -26,6 +26,7 @@ class Privilegio extends \yii\db\ActiveRecord
             'crear_proveedor', 'modificar_proveedor', 'eliminar_proveedor',
             'crear_sucursal', 'modificar_sucursal', 'eliminar_sucursal',
             'crear_trabajador', 'modificar_trabajador', 'eliminar_trabajador',
+            'crear_venta', 'pago_venta', 'cancelar_venta', 'crear_nomina', 'cancelar_nomina',
             'crear_usuario','modificar_usuario','eliminar_usuario','definir_privilegios', 'ver_registro_sistema'], 'integer'],
         ];
     }

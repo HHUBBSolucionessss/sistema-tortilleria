@@ -68,6 +68,7 @@ class NominaSearch extends Nomina
             'sueldo' => $this->sueldo,
             'bonos' => $this->bonos,
             'dias_trabajados' => $this->dias_trabajados,
+            'total' => $this->total,
             'eliminado' => $this->eliminado,
             'create_user' => $this->create_user,
             'create_time' => $this->create_time,

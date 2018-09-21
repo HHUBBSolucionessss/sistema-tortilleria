@@ -67,6 +67,9 @@ class CostalesSearch extends Costales
             'id_caja_fin' => $this->id_caja_fin,
         ]);
 
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+        $query->andFilterWhere(['id_sucursal' => $id_sucursal]);
+
         return $dataProvider;
     }
 }
