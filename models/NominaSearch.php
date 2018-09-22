@@ -19,7 +19,7 @@ class NominaSearch extends Nomina
     {
         return [
             [['id', 'id_sucursal', 'id_trabajador', 'dias_trabajados', 'eliminado', 'create_user'], 'integer'],
-            [['sueldo_base', 'descuentos', 'sueldo', 'bonos'], 'number'],
+            [['sueldo_base', 'descuentos', 'sueldo', 'bonos','total'], 'number'],
             [['notas', 'create_time'], 'safe'],
         ];
     }

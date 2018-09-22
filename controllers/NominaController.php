@@ -95,17 +95,17 @@ class NominaController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['crear_cliente'] == 1){
+      if($privilegio[0]['crear_cliente'] == 1)
+      {
         $model = new Nomina();
         $registroSistema = new RegistroSistema();
 
-        if ($model->load(Yii::$app->request->post())) {
-
+        if ($model->load(Yii::$app->request->post())) 
+        {
           $model->create_user=Yii::$app->user->identity->id;
           $model->create_time=date('Y-m-d H:i:s');
           $model->id_sucursal = Yii::$app->user->identity->id_sucursal;
-          $model->sueldo_base = 1200;
-          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." facturó la nómina del trabajador fulanito de tal";
+          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." realizo un pago de Nómina por la cantidad de ".$model->total;
           $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
           if($model->save() && $registroSistema->save())

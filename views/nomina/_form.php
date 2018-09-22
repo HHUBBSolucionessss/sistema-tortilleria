@@ -22,13 +22,21 @@ use yii\helpers\Url;
     var sueldoDiario=0;
     var total=0;
     var subtotal=0;
-    sueldoDiario =$("#_sueldoBase").val() / 7;
-    subTotal =sueldoDiario * $("#_dias_trabajados").val();
-    total=subTotal + $("#_bonos").val() - $("#_descuentos").val();
-
-    $("#_sueldo").val(subTotal);
-    $("#_total").val(total);
+    sueldoDiario =parseFloat($("#_sueldoBase").val()) / 7;
+    subTotal =sueldoDiario.toFixed(2) * parseInt($("#_dias_trabajados").val());
+    $("#_sueldo").val(parseFloat(subTotal));
+    $("#_total").val(parseFloat(subTotal));
+    calcularTotal();
   }
+
+  function calcularTotal()
+  {
+    var total=0;
+    total=parseFloat($("#_sueldo").val())  + parseFloat($("#_bono").val()) - parseFloat($("#_descuento").val())
+    
+      $("#_total").val(total.toFixed(2));  
+  }
+
   $(document).on('click', '#_btnSueldo', function()
   {
       $.ajax({
@@ -40,6 +48,8 @@ use yii\helpers\Url;
       .done(function( data, textStatus, jqXHR )
       {
         $("#_sueldoBase").val(data);
+        calcularSueldo();
+
       })
       .fail(function( jqXHR, textStatus, errorThrown ) {
           if ( console && console.log ) {
@@ -53,7 +63,6 @@ use yii\helpers\Url;
 
     <?php 
       $form = ActiveForm::begin(); 
-      Pjax::begin();
     ?>
 
     <div class="col-md-12">
@@ -71,22 +80,22 @@ use yii\helpers\Url;
       <button type="button" class="btn btn-large btn-success" id="_btnSueldo">Obtener Sueldo </button>
     </div>
     <div class="col-md-4">
-      <?= $form->field($model, 'dias_trabajados')->textInput(['id'=>'_dias_trabajados', 'onchange' => 'calcularSueldo();']) ?>
+      <?= $form->field($model, 'dias_trabajados')->textInput(['value' => '7','id'=>'_dias_trabajados', 'onchange' => 'calcularSueldo();']) ?>
     </div>
 </div>
 
   <div class="col-md-12">
     <div class="col-md-3">
-    <?= $form->field($model, 'descuentos')->textInput(['id'=>'_descuentos', 'maxlength' => true, 'onchange' => 'calcularSueldo();']) ?>
+    <?= $form->field($model, 'sueldo')->textInput(['readOnly'=>true,'id'=>'_sueldo']) ?>
+  </div>
+    <div class="col-md-3">
+    <?= $form->field($model, 'descuentos')->textInput(['id'=>'_descuento', 'value' => '0.00','maxlength' => true, 'onchange' => 'calcularTotal();']) ?>
   </div>
   <div class="col-md-3">
-    <?= $form->field($model, 'bonos')->textInput(['id'=>'_bonos', 'maxlength' => true, 'onchange' => 'calcularSueldo();']) ?>
+    <?= $form->field($model, 'bonos')->textInput(['id'=>'_bono', 'value' => '0.00','maxlength' => true, 'onchange' => 'calcularTotal();']) ?>
   </div>
   <div class="col-md-3">
-    <?= $form->field($model, 'sueldo')->textInput(['id'=>'_sueldo', 'value' => '0.00', 'onchange' => 'calcularSueldo();']) ?>
-  </div>
-  <div class="col-md-3">
-    <?= $form->field($model, 'total')->textInput(['id'=>'_total', 'value' => '0.00', 'onchange' => 'calcularSueldo();']) ?>
+    <?= $form->field($model, 'total')->textInput(['readOnly'=>true,'id'=>'_total']) ?>
   </div>
 </div>
 
@@ -103,7 +112,6 @@ use yii\helpers\Url;
   </div>
 
     <?php 
-      Pjax::end(); 
       ActiveForm::end();
     ?>
 

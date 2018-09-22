@@ -100,9 +100,7 @@ class ClienteController extends Controller
           return $this->render('view', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'sumTotal'=>$sumTotal,
             'model'=>$model,
-            'venta'=>$venta
           ]);
 
       }
