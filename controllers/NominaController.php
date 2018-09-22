@@ -27,7 +27,7 @@ class NominaController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                ],   
+                ],
             ],
             [
 				'class' =>  'yii\filters\ContentNegotiator',
@@ -65,24 +65,24 @@ class NominaController extends Controller
      */
     public function actionView($id)
     {
-      $model = $this->findModel($id);
-      $id_current_user = Yii::$app->user->identity->id;
-      $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+        $model = $this->findModel($id);
+        $id_current_user = Yii::$app->user->identity->id;
+        $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post())) {
 
-      $model = $this->findModel($id);
-      Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
-      return $this->render('view', [
-          'model' => $model,
-          'privilegio'=>$privilegio,
-      ]);
-    }
-
+        $model = $this->findModel($id);
+        Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
         return $this->render('view', [
             'model' => $model,
             'privilegio'=>$privilegio,
         ]);
+      }
+
+          return $this->render('view', [
+              'model' => $model,
+              'privilegio'=>$privilegio,
+          ]);
     }
 
     /**
@@ -167,10 +167,10 @@ class NominaController extends Controller
          return $model->sueldo;
      }
 
-     
-     
-     
-     
+
+
+
+
      public function actionCancelar($id)
      {
        $model = $this->findModel($id);

@@ -1,61 +1,61 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\grid\GridView;
+use app\models\User;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\ProductoSearch */
+/* @var $searchModel app\models\VentaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Cuentas';
+$this->title = 'Devoluciones';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="cuenta-index">
+<div class="devoluciones-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-      <?php
-      if($privilegio[0]['crear_cuenta'] == 1)
-        echo Html::button('Crear cuenta', ['value'=>Url::to('../cuenta/create'), 'class' => 'btn btn-success', 'id' => 'modalButton']) ?>
+        <?php
+        if($privilegio[0]['crear_venta'] == 1)
+            echo Html::a('Nueva devolución', ['create'], ['class' => 'btn btn-success']);
+         ?>
     </p>
 
-    <?php
-      Modal::begin([
-        'header' => '<h4 style="color:#337AB7";>Crear cuenta</h4>',
-        'id' => 'modal',
-        'size' => 'modal-lg',
-      ]);
-
-      echo "<div id='modalContent'></div>";
-
-      Modal::end();
-
-    ?>
-
-    <?php Pjax::begin(); ?>
-    <?php
+<?php Pjax::begin(); ?>
+        <?php
             $gridColumns = [
                 ['class' => 'kartik\grid\SerialColumn'],
                 [
-                    'attribute' => 'nombre',
+                    'attribute' => 'id_cliente',
+                    'vAlign'=>'middle',
+                    'value'=>function ($model) {
+                        return $model->obtenerNombreCliente($model->id_cliente);
+                      },
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
+                ],
+                [
+                    'attribute' => 'id_vendedor',
+                    'vAlign'=>'middle',
+                    'value'=>function ($model) {
+                        return $model->obtenerNombreTrabajador($model->id_vendedor);
+                      },
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
+                ],
+                [
+                    'attribute' => 'total',
                     'vAlign'=>'middle',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],
                 [
-                    'attribute' => 'num_cuenta',
-                    'vAlign'=>'middle',
-                    'headerOptions'=>['class'=>'kv-sticky-column'],
-                    'contentOptions'=>['class'=>'kv-sticky-column'],
-                ],
-                [
-                    'attribute' => 'clabe',
+                    'attribute' => 'notas',
                     'vAlign'=>'middle',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
@@ -64,7 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'kartik\grid\ActionColumn',
                     'template'=>'{view}{delete}',
                     'vAlign'=>'middle',
-
                 ],
             ];
 
@@ -90,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                        'showPageSummary' => true,
                        'showFooter' => true,
                        'showCaption' => true,
-                       'filename' => 'exportacion-huespedes',
+                       'filename' => 'exportacion-caja',
                        'alertMsg' => 'The EXCEL export file will be generated for download.',
                        'options' => ['title' => 'Microsoft Excel 95+'],
                        'mime' => 'application/vnd.ms-excel',
@@ -114,8 +113,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ]);
 
         ?>
-
-
     <?php Pjax::end(); ?>
 
 </div>

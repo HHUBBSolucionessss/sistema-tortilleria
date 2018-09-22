@@ -51,8 +51,8 @@ use yii\helpers\Url;
 </script>
 
 
-    <?php 
-      $form = ActiveForm::begin(); 
+    <?php
+      $form = ActiveForm::begin();
       Pjax::begin();
     ?>
 
@@ -61,7 +61,7 @@ use yii\helpers\Url;
       <?= $form->field($model, 'id_trabajador')->dropDownList(
         ArrayHelper::map(Trabajador::find()->all(), 'id', 'nombre'),
         [
-          'prompt' => 'Seleccione Un trabajador',
+          'prompt' => 'Seleccione un trabajador',
           'id'=>'_trabajador',
         ]);
      ?>
@@ -102,8 +102,8 @@ use yii\helpers\Url;
 
   </div>
 
-    <?php 
-      Pjax::end(); 
+    <?php
+      Pjax::end();
       ActiveForm::end();
     ?>
 

@@ -14,7 +14,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 /* @var $this yii\web\View */
 /* @var $model app\models\Venta */
 /* @var $form yii\widgets\ActiveForm */
-$this->title = 'Nueva venta '. $modelVenta->id;
+$this->title = 'Devolución'. $modelVenta->id;
 
 $js ='
     jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item)
@@ -41,10 +41,10 @@ $this->registerJs($js);
         var subtotal=0;
             jQuery(".dynamicform_wrapper .panel-title-precio").each(function(index)
             {
-                if ($("#ventadetallada-"+index+"-precio").val()!='' && $("#ventadetallada-"+index+"-cant").val()!='')
+                if ($("#devoluciondetallada-"+index+"-precio").val()!='' && $("#devoluciondetallada-"+index+"-cantidad").val()!='')
                 {
-                    var precio=$("#ventadetallada-"+index+"-precio").val();
-                    var cantidad=$("#ventadetallada-"+index+"-cant").val();
+                    var precio=$("#devoluciondetallada-"+index+"-precio").val();
+                    var cantidad=$("#devoluciondetallada-"+index+"-cantidad").val();
                     subtotal+=parseFloat(precio)*parseFloat(cantidad);
                     $("#_subtotal").val(subtotal);
                     calcularTotal();
@@ -56,8 +56,7 @@ $this->registerJs($js);
     function calcularTotal()
     {
         var subtotal=parseFloat($("#_subtotal").val());
-        var descuento=parseFloat($("#_descuento").val());
-        $("#_total").val(subtotal-descuento);
+        $("#_total").val(subtotal);
     };
 </script>
 <h1><?= Html::encode($this->title) ?></h1>
@@ -81,7 +80,7 @@ $this->registerJs($js);
                 'formId' => 'dynamic-form',
                 'formFields' => [
                     'id_producto',
-                    'cant',
+                    'cantidad',
                     'precio',
                 ],
 
@@ -117,7 +116,7 @@ $this->registerJs($js);
                                         <?= $form->field($modeldetallada, "[{$index}]precio")->textInput(['maxlength' => true, 'onchange'=>"calcularSubTotal()"]) ?>
                                     </div>
                                     <div class="col-sm-2">
-                                        <?= $form->field($modeldetallada, "[{$index}]cant")->textInput(['maxlength' => true, 'onchange'=>"calcularSubTotal()"]) ?>
+                                        <?= $form->field($modeldetallada, "[{$index}]cantidad")->textInput(['maxlength' => true, 'onchange'=>"calcularSubTotal()"]) ?>
                                     </div>
                                 </div><!-- end:row -->
                             </div>
@@ -156,14 +155,17 @@ $this->registerJs($js);
 
             <?= $form->field($modelVenta, 'subtotal')->textInput(['readOnly' => true, 'maxlength' => true,'id'=>'_subtotal', 'onchange'=>"calcularTotal()"]) ?>
 
-            <?= $form->field($modelVenta, 'descuento')->textInput(['maxlength' => true, 'value' => 0,'id'=>'_descuento' ,'onchange'=>"calcularTotal()"]) ?>
-
             <?= $form->field($modelVenta, 'total')->textInput(['readOnly' => true, 'maxlength' => true,'id'=>'_total']) ?>
 
-            <div class="form-group">
-                <?= Html::submitButton($modeldetallada->isNewRecord ? 'Guardar' : 'Update', ['class' => 'btn btn-success']) ?>
-            </div>
 
+
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <?= $form->field($modelVenta, 'notas')->textArea(['maxlength' => true]) ?>
+      <div class="form-group">
+          <?= Html::submitButton($modeldetallada->isNewRecord ? 'Guardar' : 'Update', ['class' => 'btn btn-success']) ?>
       </div>
     </div>
 

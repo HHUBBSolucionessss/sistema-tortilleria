@@ -102,7 +102,7 @@ class VentaController extends Controller
           $ventaProductos = [new VentaDetallada];
           if ($modelVenta->load(Yii::$app->request->post()))
           {
-              $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha creado la tarifa ";
+              $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una venta";
               $modelVenta->create_user=Yii::$app->user->identity->id;
               $modelVenta->id_sucursal = Yii::$app->user->identity->id_sucursal;
               $modelVenta->saldo=1800;
