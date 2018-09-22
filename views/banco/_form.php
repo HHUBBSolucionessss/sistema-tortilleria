@@ -13,12 +13,54 @@ use kartik\select2\Select2;
 ?>
 
 <div class="banco-form">
+<script type="text/javascript">
+    function cambiarDescripcionGas()
+    {
+        if($("#_compraGas").prop("checked"))
+        {
+            $("#_descripcion").val("COMPRA GAS LP");
+            $("#_descripcion").prop("readonly", true);
+            $("#_descripcion").prop("visible", true);
+            $("#_compraMaterial").prop("disabled", true);
+        }
+        else
+        {
+            $("#_descripcion").val("");
+            $("#_descripcion").prop("readonly", false);
+            
+             $("#_descripcion").prop("visible", false);
+            $("#_compraMaterial").prop("disabled", false);
+        }
+
+    }
+    function cambiarDescripcionMaterial()
+    {
+        
+        if($("#_compraMaterial").prop("checked"))
+        {
+            $("#_descripcion").val("COMPRA MATERIAL");
+
+            $("#_descripcion").prop("readonly", true);
+             $("#_descripcion").prop("visible", true);
+            $("#_compraGas").prop("disabled", true);
+        }
+        else
+        {
+            $("#_descripcion").val("");
+            $("#_descripcion").prop("readonly", false);
+             $("#_descripcion").prop("visible", false);
+            $("#_compraGas").prop("disabled", false);
+        }
+    }
+</script>
 
   <?php $form = ActiveForm::begin(); ?>
-
-  <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
-  <?= $form->field($model, 'deposito')->textInput(['maxlength' => true]) ?>
-  <?= $form->field($model, 'id_cuenta')->widget(Select2::classname(), [
+    <label class="checkbox-inline"><input type="checkbox" id="_compraGas" onchange="cambiarDescripcionGas()">Compra Gas LP</label>
+    <label class="checkbox-inline"><input type="checkbox" id="_compraMaterial" onchange="cambiarDescripcionMaterial()">Compra Material</label>
+    <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true,'id'=>'_descripcion','visible'=>false]) ?>
+    
+    <?= $form->field($model, 'deposito')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'id_cuenta')->widget(Select2::classname(), [
      'data' => ArrayHelper::map(Cuenta::find()->all(), 'id', 'nombre'),
      'value'=>1,
      'options' => ['placeholder' => 'Selecciona una cuenta...', 'select'=>'0'],

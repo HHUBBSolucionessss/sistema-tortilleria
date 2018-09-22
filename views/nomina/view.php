@@ -52,9 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'displayOnly'=>true,
                 ],
                 'sueldo_base',
-                'descuentos',
                 'sueldo',
+                'descuentos',
                 'bonos',
+                'total',
                 'notas',
                 'dias_trabajados',
                   [

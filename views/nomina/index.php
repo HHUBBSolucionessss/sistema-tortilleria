@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   'contentOptions'=>['class'=>'kv-sticky-column'],
               ],
               [
-                  'attribute' => 'sueldo',
+                  'attribute' => 'total',
                   'vAlign'=>'middle',
                   'headerOptions'=>['class'=>'kv-sticky-column'],
                   'contentOptions'=>['class'=>'kv-sticky-column'],
