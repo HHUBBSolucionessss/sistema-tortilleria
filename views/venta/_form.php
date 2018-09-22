@@ -16,24 +16,50 @@ use wbraganca\dynamicform\DynamicFormWidget;
 /* @var $form yii\widgets\ActiveForm */
 $this->title = 'Nueva venta '. $modelVenta->id;
 
-$js = 'jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-    jQuery(".dynamicform_wrapper .panel-title-precio").each(function(index) {
-        jQuery(this).html("Precio: " + (index + 1))
+$js ='
+    jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) 
+    {
+        jQuery(".dynamicform_wrapper .panel-title-precio").each(function(index) 
+        {
+            jQuery(this).html("Precio: " + (index + 1));
+        });
     });
-});
 
-jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
-    jQuery(".dynamicform_wrapper .panel-title-precio").each(function(index) {
-        jQuery(this).html("Precio: " + (index + 1))
+    jQuery(".dynamicform_wrapper").on("afterDelete", function(e) {
+        jQuery(".dynamicform_wrapper .panel-title-precio").each(function(index) 
+        {
+            jQuery(this).html("Precio: " + (index + 1))
+        });
     });
-});
 ';
 $this->registerJs($js);
-
 ?>
+<script type="text/javascript">
+    
+    function calcularSubTotal()
+    {
+        var subtotal=0;
+            jQuery(".dynamicform_wrapper .panel-title-precio").each(function(index) 
+            {
+                if ($("#ventadetallada-"+index+"-precio").val()!='' && $("#ventadetallada-"+index+"-cant").val()!='') 
+                {
+                    var precio=$("#ventadetallada-"+index+"-precio").val();
+                    var cantidad=$("#ventadetallada-"+index+"-cant").val();
+                    subtotal+=parseFloat(precio)*parseFloat(cantidad);
+                    $("#_subtotal").val(subtotal);
+                    calcularTotal();
+                    
+                }
 
-<div class="venta-form">
-
+            });
+    };
+    function calcularTotal()
+    {
+        var subtotal=parseFloat($("#_subtotal").val());
+        var descuento=parseFloat($("#_descuento").val());
+        $("#_total").val(subtotal-descuento);
+    };
+</script>
   <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
     <div class="padding-v-md">
@@ -81,21 +107,16 @@ $this->registerJs($js);
                                 ?>
                                 <div class="row">
                                   <div class="col-sm-6">
-                                      <?= $form->field($modeldetallada, "[{$index}]id_producto")->widget(Select2::classname(), [
-                                         'data' => ArrayHelper::map(Producto::find()->all(), 'id', 'nombre'),
-                                         'value'=>1,
-                                         'options' => ['placeholder' => 'Selecciona un producto ...', 'select'=>'0'],
-                                         'pluginOptions' => [
-                                             'allowClear' => true
-                                         ],
-                                     ]);
-                                     ?>
+                                      <?=$form->field($modeldetallada, "[{$index}]id_producto")->dropDownList(
+                                            ArrayHelper::map(Producto::find()->all(), 'id', 'nombre')
+                                            );
+                                    ?>
                                   </div>
                                     <div class="col-sm-2">
-                                        <?= $form->field($modeldetallada, "[{$index}]precio")->textInput(['maxlength' => true]) ?>
+                                        <?= $form->field($modeldetallada, "[{$index}]precio")->textInput(['maxlength' => true, 'onchange'=>"calcularSubTotal()"]) ?>
                                     </div>
                                     <div class="col-sm-2">
-                                        <?= $form->field($modeldetallada, "[{$index}]cant")->textInput(['maxlength' => true]) ?>
+                                        <?= $form->field($modeldetallada, "[{$index}]cant")->textInput(['maxlength' => true, 'onchange'=>"calcularSubTotal()"]) ?>
                                     </div>
                                 </div><!-- end:row -->
                             </div>
@@ -132,11 +153,11 @@ $this->registerJs($js);
         </div>
         <div class="col-md-4">
 
-            <?= $form->field($modelVenta, 'subtotal')->textInput(['readOnly' => false, 'maxlength' => true]) ?>
+            <?= $form->field($modelVenta, 'subtotal')->textInput(['readOnly' => true, 'maxlength' => true,'id'=>'_subtotal', 'onchange'=>"calcularTotal()"]) ?>
 
-            <?= $form->field($modelVenta, 'descuento')->textInput(['maxlength' => true, 'value' => 0]) ?>
+            <?= $form->field($modelVenta, 'descuento')->textInput(['maxlength' => true, 'value' => 0,'id'=>'_descuento' ,'onchange'=>"calcularTotal()"]) ?>
 
-            <?= $form->field($modelVenta, 'total')->textInput(['readOnly' => false, 'maxlength' => true]) ?>
+            <?= $form->field($modelVenta, 'total')->textInput(['readOnly' => true, 'maxlength' => true,'id'=>'_total']) ?>
 
             <div class="form-group">
                 <?= Html::submitButton($modeldetallada->isNewRecord ? 'Guardar' : 'Update', ['class' => 'btn btn-success']) ?>

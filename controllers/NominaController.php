@@ -7,6 +7,8 @@ use app\models\Nomina;
 use app\models\NominaSearch;
 use yii\web\Controller;
 use app\models\RegistroSistema;
+use app\models\Trabajador;
+use yii\web\Response;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -25,8 +27,18 @@ class NominaController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
-                ],
+                ],   
             ],
+            [
+				'class' =>  'yii\filters\ContentNegotiator',
+				'only' => ['obtener-sueldo'],
+				'formats' => [
+					'application/html' => Response::FORMAT_HTML,
+				],
+				'languages' => [
+					'es',
+				],
+			],
         ];
     }
 
@@ -145,6 +157,20 @@ class NominaController extends Controller
          return $this->redirect(['view', 'id'=>$model->id]);
      }
 
+
+
+
+
+     public function actionObtenerSueldo()
+     {
+         $model=Trabajador::find()->where(['id' => Yii::$app->request->post('id_trabajador')])->one();
+         return $model->sueldo;
+     }
+
+     
+     
+     
+     
      public function actionCancelar($id)
      {
        $model = $this->findModel($id);

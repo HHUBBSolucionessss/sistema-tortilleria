@@ -13,68 +13,107 @@ use yii\helpers\ArrayHelper;
 
 <div class="nomina-form">
 
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://momentjs.com/downloads/moment.min.js"></script>
-        <script type="text/javascript">
+<script type="text/javascript">
+  function calcularSueldo()
+  {
 
-        function calcularSueldo(){
+    var sueldoBase =parseFloat($("_sueldoBase").val());
+    var diasTrabajados=$("_dias_trabajados").val();
+    var descuentos =parseFloat($("_descuentos").val());
+    var bonos =parseFloat($("_bonos").val());
+    var sueldoDiario, num2;
+    var total;
+    var subtotal;
 
-          var sueldoBase =document.getElementById("_sueldoBase").value;
-          var diasTrabajados =document.getElementById("_dias_trabajados").value;
-          var descuentos =document.getElementById("_descuentos").value;
-          var bonos =document.getElementById("_bonos").value;
-          var totalp =document.getElementById("_total").value;
-          var num, num2;
+    sueldoDiario = (sueldoBase / 7) * (diasTrabajados);
+    subTotal = parseFloat(sueldoDiario);
 
-          num = (sueldoBase / 7) * (diasTrabajados);
-          var subTotal = num.toFixed(2);
+    total=(subTotal + bonos) - (descuentos);
 
-          num2 = (subTotal + bonos) - (descuentos);
-          total = totalp + bonos;
-          var total = num2.toFixed(2);
+    $("#_sueldo").val(subTotal);
+    $("#_total").val(total);
+  }
 
-          $("#_sueldo").val(subTotal);
-          $("#_total").val(total);
+    $(document).on('change', '#_trabajador', function()
+    {
+          $.ajax
+          ({
+              data: {"id_trabajador":$("#_trabajador").prop('selectedIndex')},
+              type: "POST",
+              dataType: "text",
+              url:"<?php echo \yii\helpers\Url::to(['nomina/obtener-sueldo'])?>",
+          })
+          .done(function( data, textStatus, jqXHR )
+          {
+              $("#_sueldoBase").val(data);
 
-        }
+          })
+          .fail(function( jqXHR, textStatus, errorThrown ) 
+          {
+              if ( console && console.log ) 
+                console.log( "La solicitud a fallado: " +  textStatus);
+          });
+    });
 
-        </script>
+</script>
 
 
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="col-md-12">
     <div class="col-md-4">
-      <?= $form->field($model, 'id_trabajador')->widget(Select2::classname(), [
-         'data' => ArrayHelper::map(Trabajador::find()->all(), 'id', 'nombre'),
-         'value'=>1,
-         'options' => ['placeholder' => 'Selecciona un trabajador ...', 'select'=>'0'],
-         'pluginOptions' => [
-             'allowClear' => true
-         ],
-     ]);
+      <?= $form->field($model, 'id_trabajador')->dropDownList(
+        ArrayHelper::map(Trabajador::find()->all(), 'id', 'nombre'),
+        [
+          'prompt' => 'Seleccione Un trabajador',
+          'id'=>'_trabajador',
+          'onchange'=>
+          '
+              $.ajax
+              ({
+                  data: {"id_trabajador":$("#_trabajador").prop("selectedIndex")},
+                  type: "POST",
+                  dataType: "text",
+                  url:"<?php echo \yii\helpers\Url::to(["nomina/obtener-sueldo"])?>",
+              })
+              .done(function( data, textStatus, jqXHR )
+              {
+                  $("#_sueldoBase").val(data);
+
+              })
+              .fail(function( jqXHR, textStatus, errorThrown ) 
+              {
+                  if ( console && console.log ) 
+                    console.log( "La solicitud a fallado: " +  textStatus);
+              });
+            });
+
+          '
+        ]);
      ?>
     </div>
     <div class="col-md-4">
-    <?= $form->field($model, 'sueldo_base')->textInput(['id'=>'_sueldoBase', 'readOnly' => false, 'onchange' => 'calcularSueldo()']) ?>
+    <?= $form->field($model, 'sueldo_base')->textInput(['id'=>'_sueldoBase', 'readOnly' => true]) ?>
   </div>
   <div class="col-md-4">
-  <?= $form->field($model, 'dias_trabajados')->textInput(['id'=>'_dias_trabajados', 'onchange' => 'js:calcularSueldo();']) ?>
+  <?= $form->field($model, 'dias_trabajados')->textInput(['id'=>'_dias_trabajados', 'onchange' => 'calcularSueldo();']) ?>
 </div>
 </div>
 
   <div class="col-md-12">
     <div class="col-md-3">
-    <?= $form->field($model, 'descuentos')->textInput(['id'=>'_descuentos', 'maxlength' => true, 'onchange' => 'js:calcularSueldo()']) ?>
+    <?= $form->field($model, 'descuentos')->textInput(['id'=>'_descuentos', 'maxlength' => true, 'onchange' => 'calcularSueldo()']) ?>
   </div>
   <div class="col-md-3">
-    <?= $form->field($model, 'bonos')->textInput(['id'=>'_bonos', 'maxlength' => true, 'onchange' => 'js:calcularSueldo()']) ?>
+    <?= $form->field($model, 'bonos')->textInput(['id'=>'_bonos', 'maxlength' => true, 'onchange' => 'calcularSueldo()']) ?>
   </div>
   <div class="col-md-3">
-    <?= $form->field($model, 'sueldo')->textInput(['id'=>'_sueldo', 'value' => '0.00', 'onchange' => 'js:calcularSueldo()']) ?>
+    <?= $form->field($model, 'sueldo')->textInput(['id'=>'_sueldo', 'value' => '0.00', 'onchange' => 'calcularSueldo()']) ?>
   </div>
   <div class="col-md-3">
-    <?= $form->field($model, 'total')->textInput(['id'=>'_total', 'value' => '0.00', 'onchange' => 'js:calcularSueldo()']) ?>
+    <?= $form->field($model, 'total')->textInput(['id'=>'_total', 'value' => '0.00', 'onchange' => 'calcularSueldo()']) ?>
   </div>
 </div>
 
