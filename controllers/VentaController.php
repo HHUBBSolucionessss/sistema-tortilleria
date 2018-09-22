@@ -179,16 +179,13 @@ class VentaController extends Controller
       {
 
         //CAJA
-        $caja->id_sucursal = 1;
-        $caja->descripcion="Pago a la venta ".$id;
+        $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
+        $caja->descripcion="Pago a la venta con folio ".$id;
         $caja->efectivo=$pagoVenta->ingreso;
-        $caja->tarjeta=0;
-        $caja->deposito=0;
         $caja->tipo_movimiento=0;
         $caja->tipo_pago=0;
         $caja->create_user=Yii::$app->user->identity->id;
         $caja->create_time=date('Y-m-d H:i:s');
-        $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
 
         //Registro de sistema
         $registroSistema->descripcion=Yii::$app->user->identity->nombre." ha realizado un pago a la venta ". $id ." por un monto de  ".$pagoVenta->ingreso;
@@ -225,12 +222,39 @@ class VentaController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+     public function actionDelete($id)
+     {
+       $model = $this->findModel($id);
 
-        return $this->redirect(['index']);
-    }
+       if($model->load(Yii::$app->request->post())){
+         Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
+         return $this->redirect(['view', 'id'=>$model->id]);
+       }
+     }
+
+     public function actionCancel($id)
+     {
+       $model = $this->findModel($id);
+       $id_current_user = Yii::$app->user->identity->id;
+       $privilegio = Yii::$app->db->createCommand('SELECT cancelar_venta FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+
+       if($privilegio[0]['cancelar_venta'] == 1){
+         $registroSistema= new RegistroSistema();
+
+         $model->cancelada = 1;
+         $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha cancelado la venta con folio ". $model->id;
+         $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+         if($model->save() && $registroSistema->save()){
+           Yii::$app->session->setFlash('kv-detail-success', 'La venta se ha cancelado correctamente');
+           return $this->redirect(['index']);
+         }
+       }
+       else{
+         Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
+         return $this->redirect(['view', 'id'=>$model->id]);
+       }
+     }
 
     /**
      * Finds the Venta model based on its primary key value.

@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Venta;
+use app\models\Banco;
 
 /**
- * VentaSearch represents the model behind the search form of `app\models\Venta`.
+ * BancoSearch represents the model behind the search form of `app\models\Banco`.
  */
-class VentaSearch extends Venta
+class BancoSearch extends Banco
 {
     /**
      * {@inheritdoc}
@@ -18,9 +18,9 @@ class VentaSearch extends Venta
     public function rules()
     {
         return [
-            [['id', 'id_cliente', 'id_sucursal', 'id_vendedor', 'cancelada', 'a_pagos', 'create_user', 'update_user', 'cancel_user'], 'integer'],
-            [['subtotal', 'descuento', 'total', 'saldo'], 'number'],
-            [['create_time', 'update_time', 'cancel_time'], 'safe'],
+            [['id', 'id_sucursal', 'id_cuenta', 'tipo_movimiento', 'create_user'], 'integer'],
+            [['deposito',], 'number'],
+            [['descripcion', 'create_time'], 'safe'],
         ];
     }
 
@@ -42,7 +42,7 @@ class VentaSearch extends Venta
      */
     public function search($params)
     {
-        $query = Venta::find();
+        $query = Banco::find();
 
         // add conditions that should always apply here
 
@@ -61,26 +61,20 @@ class VentaSearch extends Venta
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'id_cliente' => $this->id_cliente,
             'id_sucursal' => $this->id_sucursal,
-            'id_vendedor' => $this->id_vendedor,
-            'cancelada' => $this->cancelada,
-            'subtotal' => $this->subtotal,
-            'descuento' => $this->descuento,
-            'total' => $this->total,
-            'saldo' => $this->saldo,
-            'a_pagos' => $this->a_pagos,
+            'id_cuenta' => $this->id_cuenta,
+            'descripcion' => $this->descripcion,
+            'deposito' => $this->deposito,
+            'tipo_movimiento' => $this->tipo_movimiento,
             'create_user' => $this->create_user,
             'create_time' => $this->create_time,
-            'update_user' => $this->update_user,
-            'update_time' => $this->update_time,
-            'cancel_user' => $this->cancel_user,
-            'cancel_time' => $this->cancel_time,
         ]);
 
-        $query->andFilterWhere(['cancelada' => 0 ]);
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
+              ->andFilterWhere(['id_sucursal' => $id_sucursal]);
 
         return $dataProvider;
     }
-
 }

@@ -83,7 +83,36 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'definir_privilegios')->checkbox(array('label'=>'Asignar privilegios')); ?>
 
-    <?= $form->field($model, 'ver_registro_sistema')->checkbox(array('label'=>'Ver Registro Sistema')); ?>
+  </p>
+  <p> Ver
+
+    <?= $form->field($model, 'ver_banco')->checkbox(array('label'=>'Banco')); ?>
+
+    <?= $form->field($model, 'ver_boveda')->checkbox(array('label'=>'Bóvda')); ?>
+
+    <?= $form->field($model, 'ver_caja')->checkbox(array('label'=>'Caja')); ?>
+
+    <?= $form->field($model, 'ver_cuentas')->checkbox(array('label'=>'Cuentas')); ?>
+
+    <?= $form->field($model, 'ver_clientes')->checkbox(array('label'=>'Clientes')); ?>
+
+    <?= $form->field($model, 'ver_venta')->checkbox(array('label'=>'Venta')); ?>
+
+    <?= $form->field($model, 'ver_productos')->checkbox(array('label'=>'Productos')); ?>
+
+    <?= $form->field($model, 'ver_sucursales')->checkbox(array('label'=>'Sucursales')); ?>
+
+    <?= $form->field($model, 'ver_trabajadores')->checkbox(array('label'=>'Trabajadores')); ?>
+
+    <?= $form->field($model, 'ver_reportes')->checkbox(array('label'=>'Reportes')); ?>
+
+    <?= $form->field($model, 'ver_nominas')->checkbox(array('label'=>'Nóminas')); ?>
+
+    <?= $form->field($model, 'ver_costales')->checkbox(array('label'=>'Costales')); ?>
+
+    <?= $form->field($model, 'ver_registro_sistema')->checkbox(array('label'=>'Registro Sistema')); ?>
+
+    <?= $form->field($model, 'ver_usuarios')->checkbox(array('label'=>'Usuarios')); ?>
 
   </p>
 
