@@ -9,16 +9,13 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="pago-venta-form">
-<?php
-    echo "Total: $".$totales[0]['total'];
-    echo "<br>Restan: $".$totales[0]['saldo'];
-    echo "<br>";
-     ?>
-
+    <?php
+        echo "Total: $".$totales[0]['total'];
+        echo "<br>Restan: $".$totales[0]['saldo'];
+        echo "<br>";
+    ?>
     <?php $form = ActiveForm::begin(); ?>
-
     <?= $form->field($pagoVenta, 'ingreso')->textInput(['maxlength' => true]) ?>
-  </div>
 
     <div class="form-group">
         <?= Html::submitButton('Capturar pago', ['class' => 'btn btn-success']) ?>
