@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Devoluciones;
+use app\models\Caja;
 use app\models\DevolucionDetallada;
 use app\models\Model;
 use app\models\DevolucionesSearch;
@@ -91,14 +92,13 @@ class DevolucionesController extends Controller
          if($privilegio[0]['apertura_caja'] == 1){
            $modelVenta = new Devoluciones;
            $registroSistema= new RegistroSistema();
+           $caja = new Caja();
            $ventaProductos = [new DevolucionDetallada];
            if ($modelVenta->load(Yii::$app->request->post()))
            {
-               $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha hecho una devolución";
                $modelVenta->create_user=Yii::$app->user->identity->id;
                $modelVenta->id_sucursal = Yii::$app->user->identity->id_sucursal;
                $modelVenta->create_time=date('Y-m-d H:i:s');
-               $registroSistema->save();
                $ventaProducto = Model::createMultiple(DevolucionDetallada::classname());
                Model::loadMultiple($ventaProducto, Yii::$app->request->post());
                // ajax validation
@@ -134,6 +134,21 @@ class DevolucionesController extends Controller
                        if ($flag)
                        {
                            $transaction->commit();
+
+                           //CAJA
+                           $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
+                           $caja->descripcion="Devolución con folio ".$modelVenta->id;
+                           $caja->efectivo=-$modelVenta->total;
+                           $caja->tipo_movimiento=1;
+                           $caja->tipo_pago=0;
+                           $caja->create_user=Yii::$app->user->identity->id;
+                           $caja->create_time=date('Y-m-d H:i:s');
+
+                           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha hecho una devolución de $".$modelVenta->total;
+                           $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+                           if($registroSistema->save() && $caja->save())
+
                            return $this->redirect(['view', 'id' => $modelVenta->id]);
                        }
                    } catch (Exception $e) {

@@ -69,21 +69,24 @@ class VentaController extends Controller
      */
     public function actionView($id)
     {
-      $searchModel = new VentaSearch();
+      $model = $this->findModel($id);
       $id_current_user = Yii::$app->user->identity->id;
-
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
-      $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-      $estado_caja = new EstadoCaja();
-      $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
 
+      if ($model->load(Yii::$app->request->post())) {
+
+      $model = $this->findModel($id);
+      Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
       return $this->render('view', [
-          'model' => $this->findModel($id),
-          'searchModel' => $searchModel,
-          'dataProvider' => $dataProvider,
-          'estado_caja' => $estado_caja,
+          'model' => $model,
           'privilegio'=>$privilegio,
       ]);
+    }
+
+        return $this->render('view', [
+            'model' => $model,
+            'privilegio'=>$privilegio,
+        ]);
     }
 
     /**
@@ -105,7 +108,7 @@ class VentaController extends Controller
               $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una venta";
               $modelVenta->create_user=Yii::$app->user->identity->id;
               $modelVenta->id_sucursal = Yii::$app->user->identity->id_sucursal;
-              $modelVenta->saldo=1800;
+              $modelVenta->saldo= $modelVenta->total;
               $modelVenta->a_pagos=1;
               $modelVenta->create_time=date('Y-m-d H:i:s');
               $registroSistema->save();
@@ -168,6 +171,7 @@ class VentaController extends Controller
         $pagoVenta = new PagoVenta();
         $estado_caja = new EstadoCaja();
         $caja = new Caja();
+        $venta = new Venta();
         $id_current_user = Yii::$app->user->identity->id;
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
         $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
@@ -187,20 +191,39 @@ class VentaController extends Controller
         $caja->create_user=Yii::$app->user->identity->id;
         $caja->create_time=date('Y-m-d H:i:s');
 
-        //Registro de sistema
-        $registroSistema->descripcion=Yii::$app->user->identity->nombre." ha realizado un pago a la venta ". $id ." por un monto de  ".$pagoVenta->ingreso;
-        $registroSistema->id_sucursal=Yii::$app->user->identity->id_sucursal;
+        //VENTA
+        $venta = new Venta();
+        $venta = Venta::find()
+        ->where(['id' => $id])
+        ->one();
 
-        //Pago venta
-        $pagoVenta->id_venta = $id;
-        $pagoVenta->create_user=Yii::$app->user->identity->id;
-        $pagoVenta->create_time=date('Y-m-d H:i:s');
+        $nuevoSaldo = $venta->saldo - $pagoVenta->ingreso;
+
+        if($nuevoSaldo >= 0){
+
+            $venta->saldo = $nuevoSaldo;
+
+            //Registro de sistema
+            $registroSistema->descripcion=Yii::$app->user->identity->nombre." ha realizado un pago a la venta ". $id ." por un monto de $".$pagoVenta->ingreso;
+            $registroSistema->id_sucursal=Yii::$app->user->identity->id_sucursal;
+
+            //Pago venta
+            $pagoVenta->id_venta = $id;
+            $pagoVenta->create_user=Yii::$app->user->identity->id;
+            $pagoVenta->create_time=date('Y-m-d H:i:s');
+
+            //$venta
 
 
-        if($pagoVenta->save())
-        {
-          return $this->redirect(['view', 'id' => $id]);
-        }
+            if($pagoVenta->save() && $caja->save() && $registroSistema->save() && $venta->save())
+            {
+              return $this->redirect(['view', 'id' => $id]);
+            }
+          }
+          else{
+            Yii::$app->session->setFlash('kv-detail-warning', 'No puedes pagar más de lo que resta.');
+            return $this->redirect(['view', 'id'=>$id]);
+          }
       }
     }
     else{
@@ -240,12 +263,31 @@ class VentaController extends Controller
 
        if($privilegio[0]['cancelar_venta'] == 1){
          $registroSistema= new RegistroSistema();
+         $caja = new Caja();
+
+         $venta = new Venta();
+         $venta = Venta::find()
+         ->where(['id' => $id])
+         ->one();
+
+         $pagoDeCaja = $venta->saldo - $venta->total;
+
+         $venta->saldo = $venta->total;
+
+         //CAJA
+         $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
+         $caja->descripcion="Cancelación de venta con folio ".$id;
+         $caja->efectivo=$pagoDeCaja;
+         $caja->tipo_movimiento=1;
+         $caja->tipo_pago=0;
+         $caja->create_user=Yii::$app->user->identity->id;
+         $caja->create_time=date('Y-m-d H:i:s');
 
          $model->cancelada = 1;
-         $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha cancelado la venta con folio ". $model->id;
+         $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha cancelado la venta con folio ". $model->id. ". Se devolvieron $".-$pagoDeCaja;
          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
-         if($model->save() && $registroSistema->save()){
+         if($model->save() && $registroSistema->save() && $venta->save() && $caja->save()){
            Yii::$app->session->setFlash('kv-detail-success', 'La venta se ha cancelado correctamente');
            return $this->redirect(['index']);
          }

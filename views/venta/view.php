@@ -57,10 +57,26 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value'=>$model->obtenerNombreTrabajador($model->id_vendedor),
                     'displayOnly'=>true,
                 ],
-                'subtotal',
-                'descuento',
-                'total',
-                'saldo',
+                [
+                    'attribute'=>'subtotal',
+                    'format'=>'raw',
+                    'displayOnly'=>true,
+                ],
+                [
+                    'attribute'=>'descuento',
+                    'format'=>'raw',
+                    'displayOnly'=>true,
+                ],
+                [
+                    'attribute'=>'total',
+                    'format'=>'raw',
+                    'displayOnly'=>true,
+                ],
+                [
+                    'attribute'=>'saldo',
+                    'format'=>'raw',
+                    'displayOnly'=>true,
+                ],
                   [
                       'attribute'=>'create_user',
                       'format'=>'raw',
@@ -81,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
       <p>
         <?php
-        if($privilegio[0]['pago_venta'] == 1 && !$model->saldo <= 0.00)
+        if($privilegio[0]['pago_venta'] == 1 && $model->saldo != 0 && $model->saldo > 0)
           echo Html::button('Realizar pago', ['value'=>Url::to(['pago-venta', 'id' => $model->id]), 'class' => 'btn btn-warning', 'id' => 'modalButton']) ?>
       </p>
 
@@ -97,7 +113,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
       <p>
         <?php
-        if($privilegio[0]['cancelar_venta'] == 1 && !$model->saldo <= 0)
+        if($privilegio[0]['cancelar_venta'] == 1 && $model->saldo != 0 && $model->saldo > 0)
         echo Html::a(Yii::t('app', 'Cancelar venta'), ['cancel', 'id' => $model->id], ['class' => 'btn btn-danger']) ?>
       </p>
 

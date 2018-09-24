@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Nomina;
+use app\models\Caja;
 use app\models\NominaSearch;
 use yii\web\Controller;
 use app\models\RegistroSistema;
@@ -95,21 +96,37 @@ class NominaController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['crear_cliente'] == 1)
+      if($privilegio[0]['crear_nomina'] == 1)
       {
         $model = new Nomina();
+        $caja = new Caja();
         $registroSistema = new RegistroSistema();
 
-        if ($model->load(Yii::$app->request->post())) 
+        if ($model->load(Yii::$app->request->post()))
         {
+
           $model->create_user=Yii::$app->user->identity->id;
           $model->create_time=date('Y-m-d H:i:s');
           $model->id_sucursal = Yii::$app->user->identity->id_sucursal;
-          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." realizo un pago de Nómina por la cantidad de ".$model->total;
+          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." realizó un pago de Nómina por la cantidad de $".$model->total;
           $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
           if($model->save() && $registroSistema->save())
           {
+
+            $ultimaNomina = Yii::$app->db->createCommand('SELECT MAX(id) FROM nomina')->queryAll();
+
+            //CAJA
+            $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
+            $caja->descripcion="Pago de nómina con folio ".$ultimaNomina[0]['MAX(id)'];
+            $caja->efectivo=-$model->total;
+            $caja->tipo_movimiento=1;
+            $caja->tipo_pago=0;
+            $caja->create_user=Yii::$app->user->identity->id;
+            $caja->create_time=date('Y-m-d H:i:s');
+
+            if($caja->save())
+
             return $this->redirect(['view', 'id' => $model->id]);
           }
         }
@@ -175,13 +192,29 @@ class NominaController extends Controller
      {
        $model = $this->findModel($id);
        $id_current_user = Yii::$app->user->identity->id;
-       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+       $privilegio = Yii::$app->db->createCommand('SELECT cancelar_nomina FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-       if($privilegio[0]['eliminar_cliente'] == 1){
+       if($privilegio[0]['cancelar_nomina'] == 1){
          $registroSistema= new RegistroSistema();
 
+         $nomina = new Nomina();
+         $nomina = Nomina::find()
+         ->where(['id' => $id])
+         ->one();
+
+         $caja = new Caja();
+
+         //CAJA
+         $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
+         $caja->descripcion="Cancelación de nómina con folio ".$id;
+         $caja->efectivo=$nomina->total;
+         $caja->tipo_movimiento=0;
+         $caja->tipo_pago=0;
+         $caja->create_user=Yii::$app->user->identity->id;
+         $caja->create_time=date('Y-m-d H:i:s');
+
          $model->eliminado = 1;
-         $registroSistema->descripcion = Yii::$app->user->identity->nombre ." canceló la nómina con folio: ".$model->id;
+         $registroSistema->descripcion = Yii::$app->user->identity->nombre ." canceló la nómina con folio: ".$model->id. ". Se sumaron $". $nomina->total. " a la caja.";
          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
          if($model->save() && $registroSistema->save()){
