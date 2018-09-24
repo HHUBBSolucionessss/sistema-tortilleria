@@ -61,16 +61,11 @@ use yii\helpers\Url;
 </script>
 
 
-<<<<<<< HEAD
+
     <?php
       $form = ActiveForm::begin();
       Pjax::begin();
-=======
-    <?php 
-      $form = ActiveForm::begin(); 
->>>>>>> 41b921651492ef3c3b407446d8c2486c535a5742
     ?>
-
     <div class="col-md-12">
     <div class="col-md-4">
       <?= $form->field($model, 'id_trabajador')->dropDownList(
@@ -117,12 +112,8 @@ use yii\helpers\Url;
 
   </div>
 
-<<<<<<< HEAD
     <?php
       Pjax::end();
-=======
-    <?php 
->>>>>>> 41b921651492ef3c3b407446d8c2486c535a5742
       ActiveForm::end();
     ?>
 
