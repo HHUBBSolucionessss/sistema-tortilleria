@@ -33,8 +33,8 @@ use yii\helpers\Url;
   {
     var total=0;
     total=parseFloat($("#_sueldo").val())  + parseFloat($("#_bono").val()) - parseFloat($("#_descuento").val())
-    
-      $("#_total").val(total.toFixed(2));  
+
+      $("#_total").val(total.toFixed(2));
   }
 
   $(document).on('click', '#_btnSueldo', function()
@@ -69,7 +69,7 @@ use yii\helpers\Url;
     <div class="col-md-12">
     <div class="col-md-4">
       <?= $form->field($model, 'id_trabajador')->dropDownList(
-        ArrayHelper::map(Trabajador::find()->all(), 'id', 'nombre'),
+        ArrayHelper::map(Trabajador::find()->where(['eliminado' => 0 ])->all(), 'id', 'nombre'),
         [
           'prompt' => 'Seleccione un trabajador',
           'id'=>'_trabajador',

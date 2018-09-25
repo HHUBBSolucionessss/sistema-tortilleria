@@ -132,7 +132,7 @@ $this->registerJs($js);
     <div class="row">
         <div class="col-md-4">
           <?= $form->field($modelVenta, 'id_cliente')->widget(Select2::classname(), [
-             'data' => ArrayHelper::map(Cliente::find()->all(), 'id', 'nombre'),
+             'data' => ArrayHelper::map(Cliente::find()->where(['eliminado' => 0 ])->all(), 'id', 'nombre'),
              'value'=>1,
              'options' => ['placeholder' => 'Selecciona un cliente ...', 'select'=>'0'],
              'pluginOptions' => [
@@ -143,7 +143,7 @@ $this->registerJs($js);
         </div>
         <div class="col-md-4">
              <?= $form->field($modelVenta, 'id_vendedor')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(Trabajador::find()->all(), 'id', 'nombre'),
+                'data' => ArrayHelper::map(Trabajador::find()->where(['eliminado' => 0 ])->all(), 'id', 'nombre'),
                 'value'=>1,
                 'options' => ['placeholder' => 'Selecciona un trabajador ...', 'select'=>'0'],
                 'pluginOptions' => [

@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use kartik\detail\DetailView;
+use kartik\detail\BootstrapInterface;
 use app\models\User;
 use yii\bootstrap\Modal;
 use kartik\editable\Editable;
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-md-4">
       <?php
       $user= new User();
-          echo DetailView::widget([
+          echo BootstrapInterface::widget([
               'model'=>$model,
               'condensed'=>true,
               'hover'=>true,

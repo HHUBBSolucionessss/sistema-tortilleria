@@ -33,7 +33,7 @@ class Caja extends \yii\db\ActiveRecord
     {
         return [
             [['efectivo'], 'number'],
-            [['tipo_movimiento', 'tipo_pago', 'create_user', 'efectivo'], 'integer'],
+            [['tipo_movimiento', 'tipo_pago', 'create_user'], 'integer'],
             [['create_time'], 'safe'],
             [['create_user', 'efectivo', 'descripcion'], 'required'],
             [['descripcion'], 'string', 'max' => 45],

@@ -21,16 +21,14 @@ $this->title = 'Corte de caja';
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <p>Total retirado</p>
-    <br>
+    <h2>Total</h2>
       <p>Efectivo Retirado: $ <?php echo -($totalesRetirados[0]['efectivo'])?></p>
+      <p>Efectivo en Caja: $ <?=$totalCaja[0]['Sum(efectivo)']?></p>
     <br>
-    <p>Total en caja</p>
-    <br>
-      <p>Efectivo: $ <?=$totalCaja[0]['Sum(efectivo)']?></p>
-    <br>
+      <b>Costales Bodega: </b><?=$costales[0]['costales_ini']?> <b> Costales Usados: </b><?=$costales[0]['costales_fin']?>
 
 
+    <br>
     <br>
     <?php ActiveForm::end(); ?>
 

@@ -95,6 +95,7 @@ public function search($params)
     $query->andFilterWhere([
         'id' => $this->id,
         'id_sucursal' => $this->id_sucursal,
+        'descripcion2' => $this->descripcion2,
         'efectivo' => $this->efectivo,
         'tipo_movimiento' => $this->tipo_movimiento,
         'tipo_pago' => $this->tipo_pago,

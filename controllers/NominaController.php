@@ -217,7 +217,7 @@ class NominaController extends Controller
          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." canceló la nómina con folio: ".$model->id. ". Se sumaron $". $nomina->total. " a la caja.";
          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
-         if($model->save() && $registroSistema->save()){
+         if($model->save() && $registroSistema->save() && $caja->save()){
            Yii::$app->session->setFlash('kv-detail-success', 'La nómina ha sido cancelada');
            return $this->redirect(['index']);
          }
