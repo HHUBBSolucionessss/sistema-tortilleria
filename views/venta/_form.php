@@ -59,6 +59,7 @@ $this->registerJs($js);
         var descuento=parseFloat($("#_descuento").val());
         $("#_total").val(subtotal-descuento);
     };
+
 </script>
 <h1><?= Html::encode($this->title) ?></h1>
   <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
@@ -159,6 +160,11 @@ $this->registerJs($js);
             <?= $form->field($modelVenta, 'descuento')->textInput(['maxlength' => true, 'value' => 0,'id'=>'_descuento' ,'onchange'=>"calcularTotal()"]) ?>
 
             <?= $form->field($modelVenta, 'total')->textInput(['readOnly' => true, 'maxlength' => true,'id'=>'_total']) ?>
+
+            <?= $form->field($modelVenta, 'a_pagos')->checkbox(array(
+              'label'=>'A crédito',
+            ));
+            ?>
 
             <div class="form-group">
                 <?= Html::submitButton($modeldetallada->isNewRecord ? 'Guardar' : 'Update', ['class' => 'btn btn-success']) ?>

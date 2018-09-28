@@ -77,6 +77,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format'=>'raw',
                     'displayOnly'=>true,
                 ],
+                [
+                    'attribute'=>'a_pagos',
+                    'format'=>'raw',
+                    'value'=>$model->obtenerTipoPago($model->a_pagos),
+                    'displayOnly'=>true,
+                ],
                   [
                       'attribute'=>'create_user',
                       'format'=>'raw',
@@ -98,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <p>
         <?php
         if($privilegio[0]['pago_venta'] == 1 && $model->saldo != 0 && $model->saldo > 0)
-          echo Html::button('Realizar pago', ['value'=>Url::to(['pago-venta', 'id' => $model->id]), 'class' => 'btn btn-warning', 'id' => 'modalButton']) ?>
+          echo Html::button('Realizar pago', ['value'=>Url::to(['pago-venta', 'id' => $model->id]), 'class' => 'btn btn-warning', 'id' => 'modalButton']);?>
       </p>
 
       <?php

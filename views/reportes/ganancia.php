@@ -26,8 +26,7 @@ use demogorgorn\ajax\AjaxSubmitButton;
 
         </div>
         <div class="col-md-4">
-          <h2><p>Ingresos ( ͡° ͜ʖ ͡°)</p></h2>
-          <h3><p>Costal y Utilidad </p></h3>
+          <h2><p>Costal y Utilidad </p></h2>
 
           <p>Precio Costal: $<?=$costal['precioCostal']?></p>
           <p>Precio Kilo Tortilla: $<?=$costal['precioTortilla']?></p>

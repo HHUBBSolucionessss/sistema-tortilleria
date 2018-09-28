@@ -36,6 +36,8 @@ use Yii;
  */
 class Venta extends \yii\db\ActiveRecord
 {
+
+  public $credito=0;
     /**
      * {@inheritdoc}
      */
@@ -70,7 +72,7 @@ class Venta extends \yii\db\ActiveRecord
             'descuento' => 'Descuento',
             'total' => 'Total',
             'saldo' => 'Saldo',
-            'a_pagos' => 'A Pagos',
+            'a_pagos' => 'A crédito',
             'create_user' => 'Registró',
             'create_time' => 'Creado',
             'update_user' => 'Actualizó',
@@ -113,5 +115,20 @@ class Venta extends \yii\db\ActiveRecord
       ->all();
       return $model->saldo;
     }
+
+    public function obtenerTipoPago($key)
+    {
+        switch ($key) {
+          case 0:
+              return 'No';
+              break;
+          case 1:
+              return 'Sí';
+              break;
+          default:
+              return 'Sin información';
+              break;
+        }
+	}
 
 }

@@ -60,21 +60,67 @@ class ReportesController extends Controller
             $precioCostal=$precioTortilla=$utilidad=$porcentajeUtilidad=$precioCostalLP=0;
             $ingresoCaja=$ventas=$ingresoBoveda=$ingresoBanco=$ingresoExtra=0;
             $gastoCaja=$pagoNominas=$gastoBanco=$gastoBoveda=$gastoGas=$gastoCompras=0;
+            $fecha_inicio = Yii::$app->request->post('fecha_inicio');
+            $fecha_fin = Yii::$app->request->post('fecha_fin');
+
+            $venta = Venta::find()
+            ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
+            ->sum('total');
+
+            $caja = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM `caja` WHERE NOT (descripcion LIKE "Apertura de caja" OR descripcion LIKE "Cierre de caja") AND (tipo_movimiento = 0) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin)')
+            ->bindValue(':fecha_inicio', $fecha_inicio)
+		        ->bindValue(':fecha_fin', $fecha_fin)
+            ->queryAll();
+
+            $boveda = Boveda::find()
+            ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
+            ->where(['tipo_movimiento' => 0])
+            ->sum('efectivo');
+
+            $banco = Banco::find()
+            ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
+            ->where(['tipo_movimiento' => 0])
+            ->sum('deposito');
 
             $ingresos=[
-                'ingresoCaja'=>$ingresoCaja,
-                'ventas'=>$ventas=0,
-                'ingresoBoveda'=>$ingresoBoveda,
-                'ingresoBanco'=>$ingresoBanco,
+                'ingresoCaja'=>$caja[0]['efectivo'],
+                'ventas'=>$venta,
+                'ingresoBoveda'=>$boveda,
+                'ingresoBanco'=>$banco,
                 'ingresoExtra'=>$ingresoExtra
             ];
+
+            $caja = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM `caja` WHERE NOT (descripcion LIKE "Apertura de caja" OR descripcion LIKE "Cierre de caja") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin)')
+            ->bindValue(':fecha_inicio', $fecha_inicio)
+		        ->bindValue(':fecha_fin', $fecha_fin)
+            ->queryAll();
+
+            $nomina = Nomina::find()
+            ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
+            ->sum('total');
+
+            $banco = Banco::find()
+            ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
+            ->where(['tipo_movimiento' => 1])
+            ->sum('deposito');
+
+            $gas = Yii::$app->db->createCommand('SELECT SUM(deposito) AS gas FROM `banco` WHERE (descripcion LIKE "COMPRA GAS LP") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin)')
+            ->bindValue(':fecha_inicio', $fecha_inicio)
+		        ->bindValue(':fecha_fin', $fecha_fin)
+            ->queryAll();
+
+            $compras = Yii::$app->db->createCommand('SELECT SUM(deposito) AS compras FROM `banco` WHERE (descripcion LIKE "COMPRA MATERIAL") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin)')
+            ->bindValue(':fecha_inicio', $fecha_inicio)
+		        ->bindValue(':fecha_fin', $fecha_fin)
+            ->queryAll();
+
             $gastos=[
-                'gastoCaja'=>$gastoCaja,
-                'pagoNominas'=>$pagoNominas,
-                'gastoBanco'=>$gastoBanco,
+                'gastoCaja'=>-$caja[0]['efectivo'],
+                'pagoNominas'=>$nomina,
+                'gastoBanco'=>-$banco,
                 'gastoBoveda'=>$gastoBoveda,
-                'gastoGas'=>$gastoGas,
-                'gastoCompras'=>$gastoCompras
+                'gastoGas'=>-$gas[0]['gas'],
+                'gastoCompras'=>-$compras[0]['compras']
 
             ];
             $costal=[

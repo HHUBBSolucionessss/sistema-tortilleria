@@ -105,11 +105,9 @@ class VentaController extends Controller
           $ventaProductos = [new VentaDetallada];
           if ($modelVenta->load(Yii::$app->request->post()))
           {
-              $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado una venta";
               $modelVenta->create_user=Yii::$app->user->identity->id;
               $modelVenta->id_sucursal = Yii::$app->user->identity->id_sucursal;
               $modelVenta->saldo= $modelVenta->total;
-              $modelVenta->a_pagos=1;
               $modelVenta->create_time=date('Y-m-d H:i:s');
               $registroSistema->save();
               $ventaProducto = Model::createMultiple(VentaDetallada::classname());
@@ -147,7 +145,17 @@ class VentaController extends Controller
                       if ($flag)
                       {
                           $transaction->commit();
-                          return $this->redirect(['view', 'id' => $modelVenta->id]);
+                          $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado la venta con folio ".$modelVenta->id;
+                          $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+                          if($modelVenta->a_pagos == 0){
+                            $registroSistema->save();
+                            return $this->redirect(['efectivo', 'id' => $modelVenta->id]);
+                          }
+                          else{
+                            $registroSistema->save();
+                            return $this->redirect(['view', 'id' => $modelVenta->id]);
+                          }
                       }
                   } catch (Exception $e) {
                       $transaction->rollBack();
@@ -187,7 +195,7 @@ class VentaController extends Controller
         $caja->descripcion="Pago a la venta con folio ".$id;
         $caja->efectivo=$pagoVenta->ingreso;
         $caja->tipo_movimiento=0;
-        $caja->tipo_pago=0;
+        $caja->tipo_pago=1;
         $caja->create_user=Yii::$app->user->identity->id;
         $caja->create_time=date('Y-m-d H:i:s');
 
@@ -237,6 +245,80 @@ class VentaController extends Controller
         'pagoVenta'=>$pagoVenta,
     ]);
 	}
+
+  public function actionEfectivo($id)
+  {
+      $registroSistema = new RegistroSistema();
+      $pagoVenta = new PagoVenta();
+      $estado_caja = new EstadoCaja();
+      $caja = new Caja();
+      $venta = new Venta();
+      $id_current_user = Yii::$app->user->identity->id;
+      $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+      $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
+      $totales = Yii::$app->db->createCommand('SELECT total,saldo FROM venta WHERE id = '.$id)->queryAll();
+
+  if($privilegio[0]['pago_venta'] == 1)
+  {
+    if ($pagoVenta->load(Yii::$app->request->post()))
+    {
+
+      //CAJA
+      $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
+      $caja->descripcion="Pago a la venta con folio ".$id;
+      $caja->efectivo=$pagoVenta->ingreso;
+      $caja->tipo_movimiento=0;
+      $caja->tipo_pago=0;
+      $caja->create_user=Yii::$app->user->identity->id;
+      $caja->create_time=date('Y-m-d H:i:s');
+
+      //VENTA
+      $venta = new Venta();
+      $venta = Venta::find()
+      ->where(['id' => $id])
+      ->one();
+
+      $nuevoSaldo = $venta->saldo - $pagoVenta->ingreso;
+
+      if($nuevoSaldo >= 0){
+
+          $venta->saldo = $nuevoSaldo;
+
+          //Registro de sistema
+          $registroSistema->descripcion=Yii::$app->user->identity->nombre." ha realizado un pago a la venta ". $id ." por un monto de $".$pagoVenta->ingreso;
+          $registroSistema->id_sucursal=Yii::$app->user->identity->id_sucursal;
+
+          //Pago venta
+          $pagoVenta->id_venta = $id;
+          $pagoVenta->create_user=Yii::$app->user->identity->id;
+          $pagoVenta->create_time=date('Y-m-d H:i:s');
+
+          //$venta
+
+
+          if($pagoVenta->save() && $caja->save() && $registroSistema->save() && $venta->save())
+          {
+            return $this->redirect(['view', 'id' => $id]);
+          }
+        }
+        else{
+          Yii::$app->session->setFlash('kv-detail-warning', 'No puedes pagar más de lo que resta.');
+          return $this->redirect(['efectivo', 'id'=>$id]);
+        }
+    }
+  }
+  else{
+    return $this->redirect(['index']);
+  }
+
+  return $this->render('efectivo', [
+      'model' => $this->findModel($id),
+      'estado_caja' => $estado_caja,
+      'privilegio'=>$privilegio,
+      'totales'=>$totales,
+      'pagoVenta'=>$pagoVenta,
+  ]);
+}
 
     /**
      * Deletes an existing Venta model.
