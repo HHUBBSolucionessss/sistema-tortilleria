@@ -13,6 +13,7 @@ use app\models\User;
  */
 class UsuarioSearch extends User
 {
+  public $password_reset_token;
     /**
      * @inheritdoc
      */
@@ -20,7 +21,7 @@ class UsuarioSearch extends User
     {
         return [
             [['id'], 'integer'],
-            [['username', 'nombre', 'email'], 'safe'],
+            [['username', 'nombre', 'email', 'password_reset_token'], 'safe'],
         ];
     }
 
@@ -68,6 +69,7 @@ class UsuarioSearch extends User
             ->andFilterWhere(['like', 'nombre', $this->nombre])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'status', $this->status])
+            ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
             ->andFilterWhere(['like', 'create_time', $this->create_time])
             ->andFilterWhere(['like', 'create_user', $this->create_user]);
 

@@ -84,7 +84,7 @@ class Caja extends \yii\db\ActiveRecord
               return 'Tarjeta';
               break;
           case 2:
-              return 'Cheque';
+              return 'Efectivo';
               break;
             default:
                 return 'Sin información';

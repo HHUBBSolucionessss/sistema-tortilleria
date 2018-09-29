@@ -56,6 +56,7 @@ class ReportesController extends Controller
             $boveda= new Boveda();
             $banco= new Banco();
             $nomina= new Nomina();
+            $extras= new Caja();
 
             $precioCostal=$precioTortilla=$utilidad=$porcentajeUtilidad=$precioCostalLP=0;
             $ingresoCaja=$ventas=$ingresoBoveda=$ingresoBanco=$ingresoExtra=0;
@@ -82,12 +83,18 @@ class ReportesController extends Controller
             ->where(['tipo_movimiento' => 0])
             ->sum('deposito');
 
+            $extras = Caja::find()
+            ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
+            ->where(['tipo_movimiento' => 0])
+            ->where(['tipo_pago' => 2])
+            ->sum('efectivo');
+
             $ingresos=[
                 'ingresoCaja'=>$caja[0]['efectivo'],
                 'ventas'=>$venta,
                 'ingresoBoveda'=>$boveda,
                 'ingresoBanco'=>$banco,
-                'ingresoExtra'=>$ingresoExtra
+                'ingresoExtra'=>$extras
             ];
 
             $caja = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM `caja` WHERE NOT (descripcion LIKE "Apertura de caja" OR descripcion LIKE "Cierre de caja") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin)')

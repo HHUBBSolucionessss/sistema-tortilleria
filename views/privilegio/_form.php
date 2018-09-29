@@ -100,6 +100,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'ver_productos')->checkbox(array('label'=>'Productos')); ?>
 
+    <?= $form->field($model, 'ver_devoluciones')->checkbox(array('label'=>'Devoluciones')); ?>
+
     <?= $form->field($model, 'ver_sucursales')->checkbox(array('label'=>'Sucursales')); ?>
 
     <?= $form->field($model, 'ver_trabajadores')->checkbox(array('label'=>'Trabajadores')); ?>

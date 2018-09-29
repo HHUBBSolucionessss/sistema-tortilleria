@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if($privilegio[0]['crear_venta'] == 1)
+        if($privilegio[0]['crear_devolucion'] == 1)
             echo Html::a('Nueva devolución', ['create'], ['class' => 'btn btn-success']);
          ?>
     </p>

@@ -25,6 +25,7 @@ use yii\web\IdentityInterface;
 class User extends ActiveRecord implements IdentityInterface
 {
   public $idUsuario;
+  public $verification_code;
 
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 1;
@@ -44,7 +45,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
         ['status', 'default', 'value' => self::STATUS_ACTIVE],
         ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-          [['create_time', 'create_user', 'update_time', 'temp'], 'safe'],
+          [['create_time', 'create_user', 'update_time', 'temp', 'password_reset_token'], 'safe'],
           [['username', 'nombre', 'email'], 'string', 'max' => 45],
         ];
     }
@@ -61,6 +62,7 @@ class User extends ActiveRecord implements IdentityInterface
           'username' => 'Usuario',
           'nombre' => 'Nombre de usuario',
           'password_hash' => 'Contraseña',
+          'password_reset_token' => 'Nueva contraseña',
           'email' => 'Correo Electrónico',
           'status' => 'Estado',
           'create_time' => 'Fecha Creación',

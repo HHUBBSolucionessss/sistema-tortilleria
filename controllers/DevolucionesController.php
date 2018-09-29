@@ -89,7 +89,7 @@ class DevolucionesController extends Controller
        $id_current_user = Yii::$app->user->identity->id;
          $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-         if($privilegio[0]['apertura_caja'] == 1){
+         if($privilegio[0]['crear_devolucion'] == 1){
            $modelVenta = new Devoluciones;
            $registroSistema= new RegistroSistema();
            $caja = new Caja();
@@ -200,7 +200,7 @@ class DevolucionesController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['eliminar_cliente'] == 1){
+      if($privilegio[0]['eliminar_devolucion'] == 1){
         $registroSistema= new RegistroSistema();
 
         $model->eliminado = 1;

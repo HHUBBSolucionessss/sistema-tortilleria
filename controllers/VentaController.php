@@ -195,7 +195,7 @@ class VentaController extends Controller
         $caja->descripcion="Pago a la venta con folio ".$id;
         $caja->efectivo=$pagoVenta->ingreso;
         $caja->tipo_movimiento=0;
-        $caja->tipo_pago=1;
+        $caja->tipo_pago=2;
         $caja->create_user=Yii::$app->user->identity->id;
         $caja->create_time=date('Y-m-d H:i:s');
 
@@ -265,7 +265,7 @@ class VentaController extends Controller
 
       //CAJA
       $caja->id_sucursal=Yii::$app->user->identity->id_sucursal;
-      $caja->descripcion="Pago a la venta con folio ".$id;
+      $caja->descripcion="Ingreso de venta con folio ".$id;
       $caja->efectivo=$pagoVenta->ingreso;
       $caja->tipo_movimiento=0;
       $caja->tipo_pago=0;

@@ -33,6 +33,7 @@ $this->title = 'Tortillería Los Cuates';
       if($privilegio[0]['ver_venta'] == 1)
       echo Html::a('Venta', ['/venta/index'], ['class'=>'btn']);
 
+      if($privilegio[0]['ver_devoluciones'] == 1)
       echo Html::a('Devoluciones', ['/devoluciones/index'], ['class'=>'btn']);
 
       if($privilegio[0]['ver_productos'] == 1)

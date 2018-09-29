@@ -7,12 +7,12 @@ class FormRegister extends model{
     public $username;
     public $email;
     public $password;
-    public $password_repeat;
+    public $password_hash;
 
     public function rules()
     {
         return [
-            [['username', 'email', 'password', 'password_repeat'], 'required', 'message' => 'Campo requerido'],
+            [['username', 'email', 'password', 'password_hash'], 'required', 'message' => 'Campo requerido'],
             ['username', 'match', 'pattern' => "/^.{3,50}$/", 'message' => 'Mínimo 3 y máximo 50 caracteres'],
             ['username', 'match', 'pattern' => "/^[0-9a-z]+$/i", 'message' => 'Sólo se aceptan letras y números'],
             ['username', 'username_existe'],
@@ -20,7 +20,7 @@ class FormRegister extends model{
             ['email', 'email', 'message' => 'Formato no válido'],
             ['email', 'email_existe'],
             ['password', 'match', 'pattern' => "/^.{8,16}$/", 'message' => 'Mínimo 6 y máximo 16 caracteres'],
-            ['password_repeat', 'compare', 'compareAttribute' => 'password', 'message' => 'Las contraseñas no coinciden'],
+            ['password_hash', 'compare', 'compareAttribute' => 'password', 'message' => 'Las contraseñas no coinciden'],
         ];
     }
 

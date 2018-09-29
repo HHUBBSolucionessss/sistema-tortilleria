@@ -77,6 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
             if($privilegio[0]['definir_privilegios'] == 1)
             echo Html::a(Yii::t('app', 'Definir privilegios'), ['../web/privilegio/update', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
           </p>
+          <p>
+            <?php
+            if($privilegio[0]['modificar_usuario'] == 1)
+            echo Html::a(Yii::t('app', 'Cambiar contraseña'), ['resetpass', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+          </p>
 
           <?php
             Modal::begin([

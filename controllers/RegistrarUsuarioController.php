@@ -15,8 +15,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use app\models\SignupForm;
-
-
+use yii\web\Session;
+use app\models\FormRecoverPass;
+use app\models\FormResetPass;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -43,8 +44,6 @@ class RegistrarUsuarioController extends Controller
 		];
 
 	}
-
-
 
 	/**
      * Lists all User models.
@@ -153,6 +152,7 @@ class RegistrarUsuarioController extends Controller
 						$id = $user_created->id;
 						$user_created->temp = $temporal;
 						$user_created->create_user=$id_current_user;
+						$user_created->password_reset_token = $user_created->password_hash;
 						$privilegio->id_usuario = $id;
 						$privilegio->movimientos_caja=1;
 						$privilegio->apertura_caja=1;
@@ -212,6 +212,43 @@ class RegistrarUsuarioController extends Controller
       }
 	 	}
 
+		public function actionResetpass($id)
+		{
+			$model = $this->findModel($id);
+			$user = new User();
+			$searchModel = new UsuarioSearch();
+			$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+			$id_current_user = Yii::$app->user->identity->id;
+      $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
+
+			if($privilegio[0]['modificar_usuario'] == 1){
+
+			if ($searchModel->load(Yii::$app->request->post()))
+			{
+
+				$model->password_hash = $searchModel->password_reset_token;
+
+				$model->password_hash = Yii::$app->security->generatePasswordHash($model->password_hash);
+
+				if($model->save()){
+
+					return $this->redirect(['view', 'id'=>$model->id]);
+
+						}
+					}
+				else{
+					return $this->render('resetpass', [
+					'model' => $model,
+					'user' => $user,
+					'searchModel' => $searchModel,
+					'dataProvider' => $dataProvider,
+					]);
+				}
+			}
+			else{
+				return $this->redirect(['index']);
+			}
+		}
 
 
 	/**

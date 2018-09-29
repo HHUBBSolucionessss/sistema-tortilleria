@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
   <?php
     Modal::begin([
-      'header' => '<h4 style="color:#337AB7";>Crear cliente</h4>',
+      'header' => '<h4 style="color:#337AB7";>Crear trabajador</h4>',
       'id' => 'modal',
       'size' => 'modal-lg',
     ]);

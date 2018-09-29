@@ -103,6 +103,7 @@ class PrivilegioSearch extends Privilegio
             'ver_clientes' => $this->ver_clientes,
             'ver_venta' => $this->ver_venta,
             'ver_productos' => $this->ver_productos,
+            'ver_devoluciones' => $this->ver_devoluciones,
             'ver_sucursales' => $this->ver_sucursales,
             'ver_trabajadores' => $this->ver_trabajadores,
             'ver_reportes' => $this->ver_reportes,

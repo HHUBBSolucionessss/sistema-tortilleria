@@ -48,7 +48,7 @@ class Trabajador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sucursal_id'], 'required'],
+            [['sucursal_id', 'sueldo', 'nombre'], 'required'],
             [['sucursal_id', 'cp', 'nomina', 'eliminado', 'create_user', 'update_user', 'delete_user'], 'integer'],
             [['sueldo'], 'number'],
             [['create_time', 'update_time', 'delete_time'], 'safe'],
