@@ -86,6 +86,8 @@ class PrivilegioSearch extends Privilegio
             'crear_sucursal' => $this->crear_sucursal,
             'modificar_sucursal' => $this->modificar_sucursal,
             'eliminar_sucursal' => $this->eliminar_sucursal,
+            'crear_devolucion' => $this->crear_devolucion,
+            'eliminar_devolucion' => $this->eliminar_devolucion,
             'crear_trabajador' => $this->crear_trabajador,
             'modificar_trabajador' => $this->modificar_trabajador,
             'eliminar_trabajador' => $this->eliminar_trabajador,

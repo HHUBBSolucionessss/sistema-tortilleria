@@ -73,7 +73,10 @@ class UsuarioSearch extends User
             ->andFilterWhere(['like', 'create_time', $this->create_time])
             ->andFilterWhere(['like', 'create_user', $this->create_user]);
 
-        $query->andFilterWhere(['eliminado' => 0 ]);
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+        $query->andFilterWhere(['eliminado' => 0 ])
+        ->andFilterWhere(['id_sucursal' => $id_sucursal]);
 
         return $dataProvider;
     }

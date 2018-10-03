@@ -63,24 +63,12 @@ class RegistroSistemaSearch extends RegistroSistema
             'id_sucursal' => $this->id_sucursal,
             'create_time' => $this->create_time,
         ]);
-
-        $query->andFilterWhere(['like', 'descripcion', $this->descripcion]);
-
-        $id = Yii::$app->user->identity->id_sucursal;
-        $sucursal = Yii::$app->db->createCommand('SELECT id_sucursal FROM producto WHERE id_sucursal = '.$id)->queryAll();
-
-        if($sucursal != NULL){
-            $query->andFilterWhere(['id_sucursal' => $sucursal[0]['id_sucursal']]);
-
+        
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+        
+        $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
+            ->andFilterWhere(['id_sucursal' => $id_sucursal]);
+            
             return $dataProvider;
-        }
-        else{
-
-            $sucursal = 0;
-
-            $query->andFilterWhere(['id_sucursal' => $sucursal]);
-
-            return $dataProvider;
-        }
-    }
+}
 }

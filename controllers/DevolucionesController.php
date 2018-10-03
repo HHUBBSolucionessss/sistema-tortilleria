@@ -66,7 +66,7 @@ class DevolucionesController extends Controller
       if ($model->load(Yii::$app->request->post())) {
 
       $model = $this->findModel($id);
-      Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
+      Yii::$app->session->setFlash('kv-detail-warning', 'No se puede modificar una devolución');
       return $this->render('view', [
           'model' => $model,
           'privilegio'=>$privilegio,
@@ -200,22 +200,12 @@ class DevolucionesController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if($privilegio[0]['eliminar_devolucion'] == 1){
-        $registroSistema= new RegistroSistema();
-
-        $model->eliminado = 1;
-        $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha eliminado la devolución ". $model->id;
-        $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
-
-        if($model->save() && $registroSistema->save()){
-          Yii::$app->session->setFlash('kv-detail-success', 'La devolución se ha eliminado correctamente');
-          return $this->redirect(['index']);
-        }
-      }
-      else{
-        Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
-        return $this->redirect(['view', 'id'=>$model->id]);
-      }
+      $model = $this->findModel($id);
+      Yii::$app->session->setFlash('kv-detail-warning', 'No se puede eliminar una devolución.');
+      return $this->render('view', [
+          'model' => $model,
+          'privilegio'=>$privilegio,
+      ]);
     }
 
     /**

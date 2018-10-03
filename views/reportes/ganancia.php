@@ -41,6 +41,7 @@ use demogorgorn\ajax\AjaxSubmitButton;
           <p>Gastos Caja: $<?=$gastos['gastoCaja']?></p>
           <p>Pago Nominas: $<?=$gastos['pagoNominas']?></p>
           <p>Gastos Banco: $<?=$gastos['gastoBanco']?></p>
+          <p>Gastos Bóveda: $<?=$gastos['gastoBoveda']?></p>
           <p>Gastos Gas LP: $<?=$gastos['gastoGas']?></p>
           <p>Gasto Compras: $<?=$gastos['gastoCompras']?></p>
 
