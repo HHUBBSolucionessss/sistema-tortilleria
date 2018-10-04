@@ -108,6 +108,7 @@ class CuentaController extends Controller
 
            $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha creado la cuenta ". $model->nombre;
            $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
+           $model->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
            if($model->save() && $registroSistema->save())
            {

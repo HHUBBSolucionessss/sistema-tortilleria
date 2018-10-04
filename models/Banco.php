@@ -17,6 +17,8 @@ use Yii;
  */
 class Banco extends \yii\db\ActiveRecord
 {
+  public $id_sucursal;
+
     /**
      * {@inheritdoc}
      */
@@ -48,7 +50,7 @@ class Banco extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_sucursal' => 'Sucursal',
             'id_cuenta' => 'Cuenta',
-            'deposito' => 'Efectivo',
+            'deposito' => 'Total',
             'descripcion' => 'Descripción',
             'tipo_movimiento' => 'Tipo Movimiento',
             'create_user' => 'Registró',

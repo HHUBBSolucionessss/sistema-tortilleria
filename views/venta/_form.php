@@ -133,9 +133,8 @@ $this->registerJs($js);
     <div class="row">
         <div class="col-md-4">
           <?= $form->field($modelVenta, 'id_cliente')->widget(Select2::classname(), [
-             'data' => ArrayHelper::map(Cliente::find()->where(['eliminado' => 0 ])->all(), 'id', 'nombre'),
+             'data' => ArrayHelper::map(Cliente::find()->where(['sucursal_id' => $id_current_sucursal])->all(), 'id', 'nombre'),
              'value'=>1,
-             'options' => ['placeholder' => 'Selecciona un cliente ...', 'select'=>'0'],
              'pluginOptions' => [
                  'allowClear' => true
              ],

@@ -94,6 +94,7 @@ class NominaController extends Controller
     public function actionCreate()
     {
       $id_current_user = Yii::$app->user->identity->id;
+      $id_current_sucursal = Yii::$app->user->identity->id_sucursal;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
       if($privilegio[0]['crear_nomina'] == 1)
@@ -101,6 +102,8 @@ class NominaController extends Controller
         $model = new Nomina();
         $caja = new Caja();
         $registroSistema = new RegistroSistema();
+
+        $model->totalCaja = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM caja WHERE id_sucursal ='. $id_current_sucursal)->queryAll();
 
         if ($model->load(Yii::$app->request->post()))
         {
@@ -136,7 +139,7 @@ class NominaController extends Controller
       }
 
       return $this->render('create', [
-          'model' => $model,
+          'model' => $model
       ]);
     }
 

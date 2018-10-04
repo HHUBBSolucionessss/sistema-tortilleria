@@ -49,12 +49,14 @@ class VentaController extends Controller
 
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
       $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+      $noPagadas = $searchModel->noPagadas(Yii::$app->request->queryParams);
       $estado_caja = new EstadoCaja();
 
       $estado_caja = Yii::$app->db->createCommand('SELECT estado_caja FROM estado_caja WHERE id_sucursal = '.$id_sucursal)->queryAll();
 
       return $this->render('index', [
           'searchModel' => $searchModel,
+          'noPagadas' => $noPagadas,
           'dataProvider' => $dataProvider,
           'estado_caja' => $estado_caja,
           'privilegio'=>$privilegio,
@@ -97,6 +99,7 @@ class VentaController extends Controller
     public function actionCreate()
     {
       $id_current_user = Yii::$app->user->identity->id;
+      $id_current_sucursal = Yii::$app->user->identity->id_sucursal;
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
         if($privilegio[0]['apertura_caja'] == 1){
@@ -150,11 +153,17 @@ class VentaController extends Controller
 
                           if($modelVenta->a_pagos == 0){
                             $registroSistema->save();
-                            return $this->redirect(['efectivo', 'id' => $modelVenta->id]);
+                            return $this->redirect(['view',
+                            'id' => $modelVenta->id,
+                            'id_current_sucursal'=>$id_current_sucursal
+                          ]);
                           }
                           else{
                             $registroSistema->save();
-                            return $this->redirect(['view', 'id' => $modelVenta->id]);
+                            return $this->redirect(['view',
+                            'id' => $modelVenta->id,
+                            'id_current_sucursal'=>$id_current_sucursal
+                          ]);
                           }
                       }
                   } catch (Exception $e) {
@@ -169,6 +178,7 @@ class VentaController extends Controller
 
         return $this->render('_form', [
             'modelVenta' => $modelVenta,
+            'id_current_sucursal'=>$id_current_sucursal,
             'ventaProducto' => (empty($ventaProducto)) ? [new VentaDetallada] : $ventaProductos
         ]);
     }

@@ -65,7 +65,7 @@ class Venta extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Folio',
             'id_cliente' => 'Cliente',
             'id_vendedor' => 'Vendedor',
             'subtotal' => 'Subtotal',

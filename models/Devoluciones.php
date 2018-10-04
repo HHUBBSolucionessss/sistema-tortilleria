@@ -83,5 +83,13 @@ class Devoluciones extends \yii\db\ActiveRecord
 
       return $model->nombre;
     }
+    public function obtenerCuenta($id)
+    {
+      $model = Cuenta::find()
+      ->where(['id'=>$id])
+      ->one();
+
+      return $model->nombre;
+    }
 
 }

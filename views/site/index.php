@@ -51,6 +51,9 @@ $this->title = 'Tortillería Los Cuates';
       if($privilegio[0]['ver_nominas'] == 1)
       echo Html::a('Nóminas', ['/nomina/index'], ['class'=>'btn']);
 
+      if($privilegio[0]['ver_compra'] == 1)
+      echo Html::a('Compras', ['/compra/index'], ['class'=>'btn']);
+
       if($privilegio[0]['ver_costales'] == 1)
       echo Html::a('Costales', ['/costales/index'], ['class'=>'btn']);
 

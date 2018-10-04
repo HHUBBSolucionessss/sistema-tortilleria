@@ -169,6 +169,7 @@ class CajaController extends Controller
                  $costales->costales_fin = "0";
                  $costales->id_caja_ini = $last_model;
                  $costales->id_caja_fin = 0;
+                 $costales->create_time = date('Y-m-d H:i:s');
 
                  if($costales->save())
                  {
@@ -273,9 +274,11 @@ class CajaController extends Controller
 
     public function actionInfo(){
 
-      $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja')->queryAll();
-      $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\')')->queryAll();
-      $costales = Yii::$app->db->createCommand('SELECT costales_ini, costales_fin FROM costales WHERE id=(SELECT MAX(id) FROM costales)')->queryAll();
+      $sucursal = Yii::$app->user->identity->id_sucursal;
+
+      $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja WHERE id_sucursal ='. $sucursal)->queryAll();
+      $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\') AND id_sucursal ='. $sucursal)->queryAll();
+      $costales = Yii::$app->db->createCommand('SELECT costales_ini, costales_fin FROM costales WHERE id=(SELECT MAX(id) FROM costales) AND id_sucursal ='. $sucursal)->queryAll();
 
       $searchModel = new CajaSearch();
       $dataProvider = $searchModel->buscarMovimientosCierre(Yii::$app->request->queryParams);

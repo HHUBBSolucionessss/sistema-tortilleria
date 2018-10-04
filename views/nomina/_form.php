@@ -12,6 +12,9 @@ use yii\helpers\Url;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+<b>Total en caja: </b><?php echo $model->totalCaja[0]['efectivo'];?>
+<br></br>
+
 <div class="nomina-form">
 
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -29,12 +32,27 @@ use yii\helpers\Url;
     calcularTotal();
   }
 
+  function totalCaja(){
+    var enviar = document.getElementById('_submit');
+
+    if($("#_total").val() < <?php echo $model->totalCaja[0]['efectivo']; ?> || $("#_ingreso").val() > <?php echo $model->totalCaja[0]['efectivo']; ?>)
+    {
+      enviar.disabled = false;
+    }
+    else{
+      alert("El total sobrepasa el efectivo disponible en caja.");
+      enviar.disabled = true;
+    }
+  }
+
   function calcularTotal()
   {
     var total=0;
-    total=parseFloat($("#_sueldo").val())  + parseFloat($("#_bono").val()) - parseFloat($("#_descuento").val())
+
+    total=parseFloat($("#_sueldo").val())  + parseFloat($("#_bono").val()) - parseFloat($("#_descuento").val());
 
       $("#_total").val(total.toFixed(2));
+      totalCaja();
   }
 
   $(document).on('click', '#_btnSueldo', function()
@@ -59,8 +77,6 @@ use yii\helpers\Url;
   });
 
 </script>
-
-
 
     <?php
       $form = ActiveForm::begin();
@@ -96,7 +112,7 @@ use yii\helpers\Url;
     <?= $form->field($model, 'bonos')->textInput(['id'=>'_bono', 'value' => '0.00','maxlength' => true, 'onchange' => 'calcularTotal();']) ?>
   </div>
   <div class="col-md-3">
-    <?= $form->field($model, 'total')->textInput(['readOnly'=>true,'id'=>'_total']) ?>
+    <?= $form->field($model, 'total')->textInput(['id' => '_total', 'readOnly'=>true]) ?>
   </div>
 </div>
 
@@ -106,7 +122,7 @@ use yii\helpers\Url;
     <?= $form->field($model, 'notas')->textArea(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Guardar', ['id' => '_submit', 'class' => 'btn btn-success']) ?>
     </div>
   </div>
 

@@ -74,12 +74,15 @@ class BancoController extends Controller
     public function actionCreate()
     {
       $id_current_user = Yii::$app->user->identity->id;
+      $id_sucursal = Yii::$app->user->identity->id_sucursal;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
       if($privilegio[0]['movimientos_deposito'] == 1){
 
         $model = new Banco();
         $registroSistema= new RegistroSistema();
+        $model->id_sucursal = Yii::$app->user->identity->id_sucursal;
+
         if ($model->load(Yii::$app->request->post()))
         {
           $totalBanco = Yii::$app->db->createCommand('SELECT Sum(deposito) FROM banco AS Banco')->queryAll();
@@ -101,7 +104,6 @@ class BancoController extends Controller
             if($model->save() && $registroSistema->save())
             {
                   $searchModel = new BancoSearch();
-                  $id_sucursal = Yii::$app->user->identity->id_sucursal;
                   $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
                   return $this->redirect(['index', [
                       'searchModel' => $searchModel,

@@ -18,7 +18,7 @@ class CuentaSearch extends Cuenta
     public function rules()
     {
         return [
-            [['id', 'num_cuenta', 'clabe'], 'integer'],
+            [['id', 'num_cuenta', 'clabe', 'id_sucursal'], 'integer'],
             [['nombre'], 'safe'],
         ];
     }
@@ -60,6 +60,7 @@ class CuentaSearch extends Cuenta
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'id_sucursal' => $this->id_sucursal,
             'num_cuenta' => $this->num_cuenta,
             'clabe' => $this->clabe,
             'eliminado' => $this->eliminado,
@@ -67,7 +68,10 @@ class CuentaSearch extends Cuenta
 
         $query->andFilterWhere(['like', 'nombre', $this->nombre]);
 
-        $query->andFilterWhere(['eliminado' => 0 ]);
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+        $query->andFilterWhere(['eliminado' => 0 ])
+              ->andFilterWhere(['id_sucursal' => $id_sucursal]);
 
         return $dataProvider;
     }

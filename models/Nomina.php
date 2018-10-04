@@ -23,6 +23,7 @@ use Yii;
 class Nomina extends \yii\db\ActiveRecord
 {
   public $manual;
+  public $totalCaja;
     /**
      * {@inheritdoc}
      */

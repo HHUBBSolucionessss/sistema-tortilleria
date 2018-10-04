@@ -20,10 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
               $gridColumns = [
                   ['class' => 'kartik\grid\SerialColumn'],
                   [
-                      'attribute' => 'id_caja_ini',
-                      'vAlign'=>'middle',
-                      'headerOptions'=>['class'=>'kv-sticky-column'],
-                      'contentOptions'=>['class'=>'kv-sticky-column'],
+                    'attribute' => 'id_caja_ini',
+                    'vAlign'=>'middle',
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
                   ],
                   [
                     'attribute'=>'costales_ini',
@@ -32,13 +32,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                   ],
                   [
-                      'attribute' => 'id_caja_fin',
-                      'vAlign'=>'middle',
-                      'headerOptions'=>['class'=>'kv-sticky-column'],
-                      'contentOptions'=>['class'=>'kv-sticky-column'],
+                    'attribute' => 'id_caja_fin',
+                    'vAlign'=>'middle',
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
                   ],
                   [
                     'attribute'=>'costales_fin',
+                    'vAlign'=>'middle',
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
+                  ],
+                  [
+                    'attribute'=>'create_time',
                     'vAlign'=>'middle',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],

@@ -46,7 +46,7 @@ class Caja extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'id' => 'Folio',
             'inicio' => 'Abrió con: $',
             'abrir_con' => 'Abrir con: $',
             'total_efectivo' => 'Total: $',

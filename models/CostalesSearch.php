@@ -19,7 +19,8 @@ class CostalesSearch extends Costales
     {
         return [
             [['id_sucursal', 'costales_ini', 'costales_fin', 'id_caja_ini', 'id_caja_fin'], 'integer'],
-            [['id_sucursal'], 'required']
+            [['id_sucursal'], 'required'],
+            [['create_time'], 'safe']
         ];
     }
 
@@ -57,18 +58,19 @@ class CostalesSearch extends Costales
             return $dataProvider;
         }
 
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'id_sucursal' => $this->id_sucursal,
+            'id_sucursal' => $id_sucursal,
             'costales_ini' => $this->costales_ini,
             'costales_fin' => $this->costales_fin,
             'id_caja_ini' => $this->id_caja_ini,
             'id_caja_fin' => $this->id_caja_fin,
-        ]);
-
-        $id_sucursal = Yii::$app->user->identity->id_sucursal;
-        $query->andFilterWhere(['id_sucursal' => $id_sucursal]);
+            'create_time' => $this->create_time,
+        ])
+        ->andFilterWhere(['id_sucursal' => $id_sucursal]);
 
         return $dataProvider;
     }

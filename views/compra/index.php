@@ -4,53 +4,48 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use kartik\grid\GridView;
 use app\models\User;
+
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
 use app\models\EstadoCaja;
+
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\CajaSearch */
+/* @var $searchModel app\models\BancoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Caja';
+$this->title = 'Compra Gas LP';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="caja-index">
+<div class="compra-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <p><b>Total de litros: </b><?php echo $totales[0]['litros']?></p>
+      <p><b>Total:</b> $<?php echo $totales[0]['total']?></p>
     <p>
         <?php
-        if(!$estado_caja[0]['estado_caja'] && $privilegio[0]['apertura_caja'] == 1)
-        echo Html::button('Apertura Caja', ['value'=>Url::to('../caja/apertura'), 'class' => 'btn btn-success', 'id' => '_modalButtonApertura'])?>
-          <p>Total en caja</p>
-          <br>
-            <p>Efectivo: $ <?=$totalCaja[0]['Sum(efectivo)']?></p>
-          <br>
-    </p>
-    <p>
-        <?php if($estado_caja[0]['estado_caja'] && $privilegio[0]['movimientos_caja'] == 1)
-        echo Html::button('Movimientos de caja', ['value'=>Url::to('../caja/create'), 'class' => 'btn btn-info', 'id' => 'modalButton']) ?>
-    </p>
-    <p>
-        <?php if($estado_caja[0]['estado_caja'] && $privilegio[0]['cierre_caja'] == 1)
-        echo Html::button('Cierre de caja', ['value'=>Url::to('../caja/cierre'), 'class' => 'btn btn-danger', 'id' => '_modalButtonCierre']) ?>
+        if($privilegio[0]['crear_compra'] == 1)
+         echo Html::button('Registrar pedido', ['value'=>Url::to('../compra/create'), 'class' => 'btn btn-success', 'id' => '_modalButtonApertura'])?>
+
+      <?php
+      if($privilegio[0]['crear_compra'] == 1 && $totales[0]['total'] != 0)
+        echo Html::button('Pagar adeudo', ['value'=>Url::to('../compra/pagocompra'), 'class' => 'btn btn-warning', 'id' => 'modalButton']);?>
     </p>
 
     <?php
       Modal::begin([
-        'header' => '<h4 style="color:#337AB7";>Movimientos de Caja</h4>',
+        'header' => '<h4 style="color:#337AB7";>Pagar adeudo</h4>',
         'id' => 'modal',
-        'size' => 'modal-lg',
+        'size' => 'modal-md',
       ]);
-
       echo "<div id='modalContent'></div>";
-
       Modal::end();
     ?>
+
     <?php
       Modal::begin([
-        'header' => '<h4 style="color:#337AB7";>Apertura de caja</h4>',
+        'header' => '<h4 style="color:#337AB7";>Compra Gas LP</h4>',
         'id' => '_modalApertura',
         'size' => 'modal-md',
       ]);
@@ -59,22 +54,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
       Modal::end();
     ?>
-    <?php
-      Modal::begin([
-        'header' => '<h4 style="color:#337AB7";>Cierre de caja</h4>',
-        'id' => '_modalCierre',
-        'size' => 'modal-md',
-      ]);
-
-      echo "<div id='_cierraCaja'></div>";
-
-      Modal::end();
-    ?>
 
 <?php Pjax::begin(); ?>
         <?php
             $gridColumns = [
-                ['class' => 'kartik\grid\SerialColumn'],
                 [
                     'attribute' => 'id',
                     'vAlign'=>'middle',
@@ -82,59 +65,33 @@ $this->params['breadcrumbs'][] = $this->title;
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],
                 [
-                    'attribute' => 'descripcion',
+                    'attribute' => 'nombre_proveedor',
                     'vAlign'=>'middle',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],
                 [
-                    'attribute' => 'efectivo',
+                    'attribute' => 'total_litros',
                     'vAlign'=>'middle',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],
                 [
-                  'attribute'=>'tipo_movimiento',
-                  'vAlign'=>'middle',
-                  'value'=>function ($model, $key, $index) {
-                      return $model->obtenerTipoMovimiento($model->tipo_movimiento);
-                    },
-                    'filterType'=>GridView::FILTER_SELECT2,
-                    'filter'=> ['0' => 'Entrada', '1' => 'Salida'],
-                    'filterWidgetOptions'=>[
-                        'pluginOptions'=>['allowClear'=>true],
-                    ],
-                    'filterInputOptions'=>['placeholder'=>'Tipo Movimiento...'],
-                    'format'=>'raw'
-                ],
-                [
-                  'attribute'=>'tipo_pago',
-                  'vAlign'=>'middle',
-                  'value'=>function ($model, $key, $index) {
-                      return $model->obtenerTipoPago($model->tipo_pago);
-                    },
-                    'filterType'=>GridView::FILTER_SELECT2,
-                    'filter'=> ['0' => 'Entrada', '1' => 'Salida'],
-                    'filterWidgetOptions'=>[
-                        'pluginOptions'=>['allowClear'=>true],
-                    ],
-                    'filterInputOptions'=>['placeholder'=>'Tipo Pago...'],
-                    'format'=>'raw'
-                ],
-                [
-                    'attribute' => 'create_time',
+                    'attribute' => 'precio_litro',
                     'vAlign'=>'middle',
                     'headerOptions'=>['class'=>'kv-sticky-column'],
                     'contentOptions'=>['class'=>'kv-sticky-column'],
                 ],
                 [
-                    'attribute'=>'create_user',
+                    'attribute' => 'total',
                     'vAlign'=>'middle',
-                    'value'=>function ($model, $key, $index) {
-                        $usuario= new User();
-                        return $usuario->obtenerNombre($model->create_user);
-                    },
-                    'format'=>'raw'
+                    'headerOptions'=>['class'=>'kv-sticky-column'],
+                    'contentOptions'=>['class'=>'kv-sticky-column'],
+                ],
+                [
+                    'class' => 'kartik\grid\ActionColumn',
+                    'template'=>'{view}{delete}',
+                    'vAlign'=>'middle',
                 ],
             ];
 
@@ -185,4 +142,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ?>
     <?php Pjax::end(); ?>
+
 </div>

@@ -28,7 +28,7 @@ class Cuenta extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nombre', 'num_cuenta', 'clabe'], 'required'],
+            [['nombre', 'num_cuenta', 'clabe', 'id_sucursal'], 'required'],
             [['num_cuenta', 'clabe'], 'integer'],
             [['nombre'], 'string', 'max' => 45],
         ];
@@ -41,6 +41,7 @@ class Cuenta extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'id_sucursal' => 'Sucursal',
             'nombre' => 'Nombre',
             'num_cuenta' => 'Núm. Cuenta',
             'clabe' => 'CLABE',

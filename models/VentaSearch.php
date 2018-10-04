@@ -40,47 +40,98 @@ class VentaSearch extends Venta
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
-        $query = Venta::find();
+     public function search($params)
+     {
+         $query = Venta::find();
 
-        // add conditions that should always apply here
+         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+         $dataProvider = new ActiveDataProvider([
+             'query' => $query,
+         ]);
 
-        $this->load($params);
+         $this->load($params);
 
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
+         if (!$this->validate()) {
+             // uncomment the following line if you do not want to return any records when validation fails
+             // $query->where('0=1');
+             return $dataProvider;
+         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'id_cliente' => $this->id_cliente,
-            'id_sucursal' => $this->id_sucursal,
-            'id_vendedor' => $this->id_vendedor,
-            'cancelada' => $this->cancelada,
-            'subtotal' => $this->subtotal,
-            'descuento' => $this->descuento,
-            'total' => $this->total,
-            'saldo' => $this->saldo,
-            'a_pagos' => $this->a_pagos,
-            'create_user' => $this->create_user,
-            'create_time' => $this->create_time,
-            'update_user' => $this->update_user,
-            'update_time' => $this->update_time,
-            'cancel_user' => $this->cancel_user,
-            'cancel_time' => $this->cancel_time,
-        ]);
+         // grid filtering conditions
+         $query->andFilterWhere([
+             'id' => $this->id,
+             'id_cliente' => $this->id_cliente,
+             'id_sucursal' => $this->id_sucursal,
+             'id_vendedor' => $this->id_vendedor,
+             'cancelada' => $this->cancelada,
+             'subtotal' => $this->subtotal,
+             'descuento' => $this->descuento,
+             'total' => $this->total,
+             'saldo' => $this->saldo,
+             'a_pagos' => $this->a_pagos,
+             'create_user' => $this->create_user,
+             'create_time' => $this->create_time,
+             'update_user' => $this->update_user,
+             'update_time' => $this->update_time,
+             'cancel_user' => $this->cancel_user,
+             'cancel_time' => $this->cancel_time,
+         ]);
 
-        $query->andFilterWhere(['cancelada' => 0 ]);
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
 
-        return $dataProvider;
-    }
+         $query->andFilterWhere(['cancelada' => 0 ])
+         ->andFilterWhere(['saldo' => 0])
+         ->andFilterWhere(['id_sucursal' => $id_sucursal]);
+
+         return $dataProvider;
+     }
+
+     public function noPagadas($params)
+     {
+         $query = Venta::find();
+
+         // add conditions that should always apply here
+
+         $noPagadas = new ActiveDataProvider([
+             'query' => $query,
+         ]);
+
+         $this->load($params);
+
+         if (!$this->validate()) {
+             // uncomment the following line if you do not want to return any records when validation fails
+             // $query->where('0=1');
+             return $noPagadas;
+         }
+
+         // grid filtering conditions
+         $query->andFilterWhere([
+             'id' => $this->id,
+             'id_cliente' => $this->id_cliente,
+             'id_sucursal' => $this->id_sucursal,
+             'id_vendedor' => $this->id_vendedor,
+             'cancelada' => $this->cancelada,
+             'subtotal' => $this->subtotal,
+             'descuento' => $this->descuento,
+             'total' => $this->total,
+             'saldo' => $this->saldo,
+             'a_pagos' => $this->a_pagos,
+             'create_user' => $this->create_user,
+             'create_time' => $this->create_time,
+             'update_user' => $this->update_user,
+             'update_time' => $this->update_time,
+             'cancel_user' => $this->cancel_user,
+             'cancel_time' => $this->cancel_time,
+         ]);
+
+         $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+         $query->andFilterWhere(['cancelada' => 0 ])
+            ->andFilterWhere(['<>', 'saldo', 0])
+            ->andFilterWhere(['id_sucursal' => $id_sucursal]);
+
+         return $noPagadas;
+     }
 
 }

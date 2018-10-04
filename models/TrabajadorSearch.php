@@ -83,7 +83,10 @@ class TrabajadorSearch extends Trabajador
             ->andFilterWhere(['like', 'ciudad', $this->ciudad])
             ->andFilterWhere(['like', 'estado', $this->estado]);
 
-        $query->andFilterWhere(['eliminado' => 0 ]);
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+        $query->andFilterWhere(['eliminado' => 0 ])
+              ->andFilterWhere(['sucursal_id' => $id_sucursal]);
 
         return $dataProvider;
     }

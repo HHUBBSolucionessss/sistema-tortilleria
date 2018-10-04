@@ -16,7 +16,7 @@ $this->title = 'Tortillería Los Cuates';
       <?php $form = ActiveForm::begin(); ?>
 
       <?= $form->field($modelSucursal, 'id')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(Sucursal::find()->all(), 'id', 'nombre'),
+                'data' => ArrayHelper::map(Sucursal::find()->where(['eliminado' => 0])->all(), 'id', 'nombre'),
                 'value'=>1,
                 'pluginOptions' => [
                     'allowClear' => true

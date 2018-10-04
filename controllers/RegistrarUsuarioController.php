@@ -84,6 +84,7 @@ class RegistrarUsuarioController extends Controller
 		if ($model->load(Yii::$app->request->post()))
 		{
 			$registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha actualizado datos del usuario ". $model->nombre;
+			$registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 			$id_current_user = Yii::$app->user->identity->id;
 			$privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 

@@ -71,8 +71,11 @@ class DevolucionesSearch extends Devoluciones
             'create_time' => $this->create_time,
         ]);
 
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
         $query->andFilterWhere(['like', 'notas', $this->notas]);
-        $query->andFilterWhere(['eliminado' => 0 ]);
+        $query->andFilterWhere(['eliminado' => 0 ])
+              ->andFilterWhere(['id_sucursal' => $id_sucursal]);
 
         return $dataProvider;
     }

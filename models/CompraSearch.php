@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Nomina;
+use app\models\Compra;
 
 /**
- * NominaSearch represents the model behind the search form of `app\models\Nomina`.
+ * CompraSearch represents the model behind the search form of `app\models\Compra`.
  */
-class NominaSearch extends Nomina
+class CompraSearch extends Compra
 {
     /**
      * {@inheritdoc}
@@ -18,9 +18,9 @@ class NominaSearch extends Nomina
     public function rules()
     {
         return [
-            [['id', 'id_sucursal', 'id_trabajador', 'dias_trabajados', 'eliminado', 'create_user'], 'integer'],
-            [['sueldo_base', 'descuentos', 'sueldo', 'bonos','total'], 'number'],
-            [['notas', 'create_time'], 'safe'],
+            [['id', 'id_sucursal', 'id_cuenta', 'a_pagos', 'total_litros', 'create_user', 'estado'], 'integer'],
+            [['limite_credito', 'nombre_proveedor', 'create_time'], 'safe'],
+            [['precio_litro', 'total'], 'number'],
         ];
     }
 
@@ -42,7 +42,7 @@ class NominaSearch extends Nomina
      */
     public function search($params)
     {
-        $query = Nomina::find();
+        $query = Compra::find();
 
         // add conditions that should always apply here
 
@@ -62,24 +62,21 @@ class NominaSearch extends Nomina
         $query->andFilterWhere([
             'id' => $this->id,
             'id_sucursal' => $this->id_sucursal,
-            'id_trabajador' => $this->id_trabajador,
-            'sueldo_base' => $this->sueldo_base,
-            'descuentos' => $this->descuentos,
-            'sueldo' => $this->sueldo,
-            'bonos' => $this->bonos,
-            'dias_trabajados' => $this->dias_trabajados,
+            'id_cuenta' => $this->id_cuenta,
+            'a_pagos' => $this->a_pagos,
+            'total_litros' => $this->total_litros,
+            'precio_litro' => $this->precio_litro,
             'total' => $this->total,
-            'eliminado' => $this->eliminado,
+            'estado' => $this->estado,
             'create_user' => $this->create_user,
             'create_time' => $this->create_time,
         ]);
 
-        $query->andFilterWhere(['like', 'notas', $this->notas]);
-
         $id_sucursal = Yii::$app->user->identity->id_sucursal;
 
-        $query->andFilterWhere(['eliminado' => 0 ])
-              ->andFilterWhere(['id_sucursal' => $id_sucursal]);
+        $query->andFilterWhere(['like', 'limite_credito', $this->limite_credito])
+            ->andFilterWhere(['like', 'nombre_proveedor', $this->nombre_proveedor])
+            ->andFilterWhere(['id_sucursal' => $id_sucursal]);
 
         return $dataProvider;
     }

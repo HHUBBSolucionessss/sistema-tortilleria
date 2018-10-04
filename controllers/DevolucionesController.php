@@ -87,6 +87,7 @@ class DevolucionesController extends Controller
      public function actionCreate()
      {
        $id_current_user = Yii::$app->user->identity->id;
+       $id_current_sucursal = Yii::$app->user->identity->id_sucursal;
          $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
          if($privilegio[0]['crear_devolucion'] == 1){
@@ -149,7 +150,10 @@ class DevolucionesController extends Controller
 
                            if($registroSistema->save() && $caja->save())
 
-                           return $this->redirect(['view', 'id' => $modelVenta->id]);
+                           return $this->redirect(['view',
+                           'id' => $modelVenta->id,
+                           'id_current_sucursal'=>$id_current_sucursal
+                         ]);
                        }
                    } catch (Exception $e) {
                        $transaction->rollBack();
@@ -163,6 +167,7 @@ class DevolucionesController extends Controller
 
          return $this->render('_form', [
              'modelVenta' => $modelVenta,
+             'id_current_sucursal'=>$id_current_sucursal,
              'ventaProducto' => (empty($ventaProducto)) ? [new DevolucionDetallada] : $ventaProductos
          ]);
      }

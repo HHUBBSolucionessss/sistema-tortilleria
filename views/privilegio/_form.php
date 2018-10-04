@@ -12,6 +12,13 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+  <p>Banco y Bóveda
+
+    <?= $form->field($model, 'movimientos_deposito')->checkbox(array('label'=>'Movimientos depósito')); ?>
+
+    <?= $form->field($model, 'movimientos_boveda')->checkbox(array('label'=>'Movimientos Bóveda')); ?>
+
+  </p>
   <p> Caja
 
     <?= $form->field($model, 'movimientos_caja')->checkbox(array('label'=>'Movimientos de caja')); ?>
@@ -39,6 +46,24 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'eliminar_producto')->checkbox(array('label'=>'Eliminar producto')); ?>
 
   </p>
+  <p> Clientes
+
+    <?= $form->field($model, 'crear_cuenta')->checkbox(array('label'=>'Crear cuenta')); ?>
+
+    <?= $form->field($model, 'modificar_cuenta')->checkbox(array('label'=>'Modificar cuenta')); ?>
+
+    <?= $form->field($model, 'eliminar_cuenta')->checkbox(array('label'=>'Eliminar cuenta')); ?>
+
+  </p>
+  <p> Compras
+
+    <?= $form->field($model, 'crear_compra')->checkbox(array('label'=>'Crear compras')); ?>
+
+    <?= $form->field($model, 'modificar_compra')->checkbox(array('label'=>'Modificar compras')); ?>
+
+    <?= $form->field($model, 'eliminar_compra')->checkbox(array('label'=>'Eliminar compras')); ?>
+
+  </p>
   <p> Ventas
 
     <?= $form->field($model, 'crear_venta')->checkbox(array('label'=>'Crear venta')); ?>
@@ -46,6 +71,13 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'pago_venta')->checkbox(array('label'=>'Pago venta')); ?>
 
     <?= $form->field($model, 'cancelar_venta')->checkbox(array('label'=>'Cancelar venta')); ?>
+
+  </p>
+  <p> Devoluciones
+
+    <?= $form->field($model, 'crear_devolucion')->checkbox(array('label'=>'Crear devolución')); ?>
+
+    <?= $form->field($model, 'eliminar_devolucion')->checkbox(array('label'=>'Eliminar devolución')); ?>
 
   </p>
   <p> Nóminas
@@ -88,7 +120,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'ver_banco')->checkbox(array('label'=>'Banco')); ?>
 
-    <?= $form->field($model, 'ver_boveda')->checkbox(array('label'=>'Bóvda')); ?>
+    <?= $form->field($model, 'ver_boveda')->checkbox(array('label'=>'Bóveda')); ?>
 
     <?= $form->field($model, 'ver_caja')->checkbox(array('label'=>'Caja')); ?>
 
@@ -99,6 +131,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'ver_venta')->checkbox(array('label'=>'Venta')); ?>
 
     <?= $form->field($model, 'ver_productos')->checkbox(array('label'=>'Productos')); ?>
+
+    <?= $form->field($model, 'ver_compra')->checkbox(array('label'=>'Compras')); ?>
 
     <?= $form->field($model, 'ver_devoluciones')->checkbox(array('label'=>'Devoluciones')); ?>
 

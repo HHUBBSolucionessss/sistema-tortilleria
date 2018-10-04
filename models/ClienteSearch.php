@@ -80,7 +80,10 @@ class ClienteSearch extends Cliente
             ->andFilterWhere(['like', 'cp', $this->cp])
             ->andFilterWhere(['like', 'telefono1', $this->telefono1]);
 
-        $query->andFilterWhere(['eliminado' => 0 ]);
+        $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+        $query->andFilterWhere(['eliminado' => 0 ])
+        ->andFilterWhere(['sucursal_id' => $id_sucursal]);
 
         return $dataProvider;
     }
