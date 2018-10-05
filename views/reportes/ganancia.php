@@ -11,6 +11,7 @@ use demogorgorn\ajax\AjaxSubmitButton;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>
+
 <div class="reporte-ganancia">
 
 <?php echo '<h1> Reporte del día '. $fecha_inicio. ' al día '.$fecha_fin.'</h1>' ?>
@@ -29,10 +30,9 @@ use demogorgorn\ajax\AjaxSubmitButton;
           <h2><p>Costal y Utilidad </p></h2>
 
           <p>Precio Costal: $<?=$costal['precioCostal']?></p>
-          <p>Precio Kilo Tortilla: $<?=$costal['precioTortilla']?></p>
           <p>GasLP x Costal: $<?=$costal['precioCostalLP']?></p>
           <p>Utilidad: $<?=$costal['utilidad']?></p>
-          <p>Porcentaje de Utilidad <?=$costal['porcentajeUtilidad']?>%</p>
+          <p>Porcentaje de Utilidad <?=-$costal['porcentajeUtilidad']?>%</p>
 
         </div>
         <div class="col-md-6">

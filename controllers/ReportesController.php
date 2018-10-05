@@ -52,17 +52,19 @@ class ReportesController extends Controller
       	if (Yii::$app->request->post())
 		{
             $caja = new Caja();
+            $caja2 = new Caja();
             $venta= new Venta();
             $boveda= new Boveda();
             $banco= new Banco();
+            $banco2= new Banco();
             $nomina= new Nomina();
             $extras= new Caja();
 
             $precioCostal=$precioTortilla=$utilidad=$porcentajeUtilidad=$precioCostalLP=0;
             $ingresoCaja=$ventas=$ingresoBoveda=$ingresoBanco=$ingresoExtra=0;
             $gastoCaja=$pagoNominas=$gastoBanco=$gastoBoveda=$gastoGas=$gastoCompras=0;
-            $fecha_inicio = Yii::$app->request->post('fecha_inicio');
-            $fecha_fin = Yii::$app->request->post('fecha_fin');
+            $fecha_inicio = Yii::$app->request->post('fecha_inicio'). ' 00:00:00';
+            $fecha_fin = Yii::$app->request->post('fecha_fin'). ' 23:59:59';
             $id_sucursal = Yii::$app->user->identity->id_sucursal;
 
             $venta = Venta::find()
@@ -70,9 +72,10 @@ class ReportesController extends Controller
             ->where(['id_sucursal' => $id_sucursal])
             ->sum('total');
 
-            $caja = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM `caja` WHERE NOT (descripcion LIKE "Apertura de caja" OR descripcion LIKE "Cierre de caja") AND (tipo_movimiento = 0) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin)')
+            $caja = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM `caja` WHERE NOT (descripcion LIKE "Apertura de caja" OR descripcion LIKE "Cierre de caja") AND (tipo_movimiento = 0) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin) AND (id_sucursal = :id_sucursal)')
             ->bindValue(':fecha_inicio', $fecha_inicio)
-                ->bindValue(':fecha_fin', $fecha_fin)
+            ->bindValue(':fecha_fin', $fecha_fin)
+            ->bindValue(':id_sucursal', $id_sucursal)
             ->queryAll();
 
             $boveda = Boveda::find()
@@ -83,12 +86,14 @@ class ReportesController extends Controller
             $banco = Banco::find()
             ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
             ->where(['tipo_movimiento' => 0])
+            ->where(['id_sucursal' => $id_sucursal])
             ->sum('deposito');
 
             $extras = Caja::find()
             ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
             ->where(['tipo_movimiento' => 0])
             ->where(['tipo_pago' => 2])
+            ->where(['id_sucursal' => $id_sucursal])
             ->sum('efectivo');
 
             $ingresos=[
@@ -99,35 +104,40 @@ class ReportesController extends Controller
                 'ingresoExtra'=>$extras
             ];
 
-            $caja = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM `caja` WHERE NOT (descripcion LIKE "Apertura de caja" OR descripcion LIKE "Cierre de caja") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin) ')
+            $caja2 = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM `caja` WHERE NOT (descripcion LIKE "Apertura de caja" OR descripcion LIKE "Cierre de caja") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin) AND (id_sucursal = :id_sucursal) ')
             ->bindValue(':fecha_inicio', $fecha_inicio)
 		        ->bindValue(':fecha_fin', $fecha_fin)
+            ->bindValue(':id_sucursal', $id_sucursal)
             ->queryAll();
 
             $nomina = Nomina::find()
             ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
+            ->where(['id_sucursal' => $id_sucursal])
             ->sum('total');
 
-            $banco = Banco::find()
+            $banco2 = Banco::find()
             ->where(['between', 'create_time', $fecha_inicio, $fecha_fin])
+            ->where(['id_sucursal' => $id_sucursal])
             ->where(['tipo_movimiento' => 1])
             ->sum('deposito');
 
-            $gas = Yii::$app->db->createCommand('SELECT SUM(deposito) AS gas FROM `banco` WHERE (descripcion LIKE "COMPRA GAS LP") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin)')
+            $gas = Yii::$app->db->createCommand('SELECT SUM(deposito) AS gas FROM `banco` WHERE (descripcion LIKE "COMPRA GAS LP") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin) AND (id_sucursal = :id_sucursal)')
             ->bindValue(':fecha_inicio', $fecha_inicio)
-                ->bindValue(':fecha_fin', $fecha_fin)
+            ->bindValue(':id_sucursal', $id_sucursal)
+            ->bindValue(':fecha_fin', $fecha_fin)
             ->queryAll();
 
-            $compras = Yii::$app->db->createCommand('SELECT SUM(deposito) AS compras FROM `banco` WHERE (descripcion LIKE "COMPRA MATERIAL") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin)')
+            $compras = Yii::$app->db->createCommand('SELECT SUM(deposito) AS compras FROM `banco` WHERE (descripcion LIKE "COMPRA MATERIAL") AND (tipo_movimiento = 1) AND (create_time BETWEEN :fecha_inicio AND :fecha_fin) AND (id_sucursal = :id_sucursal)')
             ->bindValue(':fecha_inicio', $fecha_inicio)
-                ->bindValue(':fecha_fin', $fecha_fin)
+            ->bindValue(':id_sucursal', $id_sucursal)
+            ->bindValue(':fecha_fin', $fecha_fin)
 
             ->queryAll();
 
             $gastos=[
-                'gastoCaja'=>-$caja[0]['efectivo'],
+                'gastoCaja'=>-$caja2[0]['efectivo'],
                 'pagoNominas'=>$nomina,
-                'gastoBanco'=>-$banco,
+                'gastoBanco'=>-$banco2,
                 'gastoBoveda'=>$gastoBoveda,
                 'gastoGas'=>-$gas[0]['gas'],
                 'gastoCompras'=>-$compras[0]['compras']
@@ -151,16 +161,20 @@ class ReportesController extends Controller
 
             $porUtilidad = ($utilidadTotal / $ingresosTotal) * 100;
 
-            $precost = Yii::$app->db->createCommand('SELECT SUM(precio_dia) AS precio FROM costales WHERE id_sucursal ='. $id_sucursal)
-            
+            $precost = Yii::$app->db->createCommand('SELECT SUM(precio_dia) AS precio FROM costales WHERE (create_time BETWEEN :fecha_inicio AND :fecha_fin) AND (id_sucursal = :id_sucursal)')
+            ->bindValue(':fecha_inicio', $fecha_inicio)
+		        ->bindValue(':fecha_fin', $fecha_fin)
+            ->bindValue(':id_sucursal', $id_sucursal)
             ->queryAll();
+
+            $precioLPCostal = $gas[0]['gas'] /  $precost[0]['precio'];
 
             $costal=[
                 'precioCostal'=>$precost[0]['precio'],
                 'precioTortilla'=>$precioTortilla,
                 'utilidad'=>$utilidadTotal,
                 'porcentajeUtilidad'=>$porUtilidad,
-                'precioCostalLP'=>$precioCostalLP
+                'precioCostalLP'=>-$precioLPCostal
             ];
 
 
