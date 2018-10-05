@@ -153,7 +153,7 @@ class VentaController extends Controller
 
                           if($modelVenta->a_pagos == 0){
                             $registroSistema->save();
-                            return $this->redirect(['view',
+                            return $this->redirect(['efectivo',
                             'id' => $modelVenta->id,
                             'id_current_sucursal'=>$id_current_sucursal
                           ]);

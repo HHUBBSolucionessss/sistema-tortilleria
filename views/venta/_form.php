@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Cliente;
 use app\models\Producto;
 use app\models\Trabajador;
+use kartik\touchspin\TouchSpin;
 use yii\web\JsExpression;
 use yii\helpers\Url;
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -14,7 +15,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 /* @var $this yii\web\View */
 /* @var $model app\models\Venta */
 /* @var $form yii\widgets\ActiveForm */
-$this->title = 'Nueva venta '. $modelVenta->id;
+$this->title = 'Ventas y devoluciones';
 
 $js ='
     jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item)
@@ -128,6 +129,10 @@ $this->registerJs($js);
             </div>
             <?php DynamicFormWidget::end(); ?>
     </div>
+    <div class="col-md-12">
+      <?= $form->field($modelVenta, 'notas')->textArea(['maxlength' => true]) ?>
+    </div>
+    <i style="color:#CB4335";>* Si deseas agregar una devolución sólo selecciona el producto con una cantidad negativa</i>
   </div>
 
     <div class="row">

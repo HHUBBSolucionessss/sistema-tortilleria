@@ -5,6 +5,7 @@ use Yii;
 use app\models\Reservacion;
 use app\models\Caja;
 use app\models\Costales;
+use app\models\Venta;
 use app\models\Banco;
 use app\models\Boveda;
 use app\models\EstadoCaja;
@@ -278,7 +279,36 @@ class CajaController extends Controller
 
       $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja WHERE id_sucursal ='. $sucursal)->queryAll();
       $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\') AND id_sucursal ='. $sucursal)->queryAll();
-      $costales = Yii::$app->db->createCommand('SELECT costales_ini, costales_fin FROM costales WHERE id=(SELECT MAX(id) FROM costales) AND id_sucursal ='. $sucursal)->queryAll();
+      $costales = Yii::$app->db->createCommand('SELECT id, costales_ini, costales_fin FROM costales WHERE id=(SELECT MAX(id) FROM costales) AND id_sucursal ='. $sucursal)->queryAll();
+
+      $venta = Venta::find()
+      ->sum('total');
+
+      $extras = Caja::find()
+      ->where(['tipo_movimiento' => 0])
+      ->where(['tipo_pago' => 2])
+      ->sum('efectivo');
+
+      $caja = Yii::$app->db->createCommand('SELECT SUM(efectivo) AS efectivo FROM `caja` WHERE NOT (descripcion LIKE "Apertura de caja" OR descripcion LIKE "Cierre de caja") AND (tipo_movimiento = 1)')
+      ->queryAll();
+
+      if($extras == null){
+          $extras = 0;
+      }
+
+      $costal = $costales[0]['costales_ini'] - $costales[0]['costales_fin'];
+
+      $cos = new Costales();
+      $cos = Costales::find()
+      ->where(['id' => $costales[0]['id']])
+      ->one();
+
+      $precioCostal = ($venta - $extras) / $costal;
+
+      $cos->precio_dia = $precioCostal;
+      $cos->usados_dia = $costal;
+
+      $cos->save();
 
       $searchModel = new CajaSearch();
       $dataProvider = $searchModel->buscarMovimientosCierre(Yii::$app->request->queryParams);
@@ -287,6 +317,7 @@ class CajaController extends Controller
           'totalesRetirados'=>$totalesRetirado,
           'totalCaja'=>$totalCaja,
           'costales'=>$costales,
+          'precioCostal'=>$precioCostal,
       ]);
 
       $pdf = new Pdf([

@@ -20,7 +20,7 @@ class VentaSearch extends Venta
         return [
             [['id', 'id_cliente', 'id_sucursal', 'id_vendedor', 'cancelada', 'a_pagos', 'create_user', 'update_user', 'cancel_user'], 'integer'],
             [['subtotal', 'descuento', 'total', 'saldo'], 'number'],
-            [['create_time', 'update_time', 'cancel_time'], 'safe'],
+            [['create_time', 'update_time', 'cancel_time', 'notas'], 'safe'],
         ];
     }
 
@@ -70,6 +70,7 @@ class VentaSearch extends Venta
              'total' => $this->total,
              'saldo' => $this->saldo,
              'a_pagos' => $this->a_pagos,
+             'notas' => $this->notas,
              'create_user' => $this->create_user,
              'create_time' => $this->create_time,
              'update_user' => $this->update_user,
@@ -116,6 +117,7 @@ class VentaSearch extends Venta
              'descuento' => $this->descuento,
              'total' => $this->total,
              'saldo' => $this->saldo,
+             'notas' => $this->notas,
              'a_pagos' => $this->a_pagos,
              'create_user' => $this->create_user,
              'create_time' => $this->create_time,

@@ -55,7 +55,7 @@ class Venta extends \yii\db\ActiveRecord
             [['id_cliente', 'id_sucursal'], 'required'],
             [['id_cliente', 'id_sucursal', 'id_vendedor', 'cancelada', 'a_pagos', 'create_user', 'update_user', 'cancel_user'], 'integer'],
             [['subtotal', 'descuento', 'total', 'saldo'], 'number'],
-            [['create_time', 'update_time', 'cancel_time'], 'safe'],
+            [['create_time', 'update_time', 'cancel_time', 'notas'], 'safe'],
         ];
     }
 
@@ -73,6 +73,7 @@ class Venta extends \yii\db\ActiveRecord
             'total' => 'Total',
             'saldo' => 'Saldo',
             'a_pagos' => 'A crédito',
+            'notas' => 'Notas',
             'create_user' => 'Registró',
             'create_time' => 'Creado',
             'update_user' => 'Actualizó',

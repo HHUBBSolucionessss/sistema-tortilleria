@@ -80,7 +80,7 @@ public function search($params)
 
     $dataProvider = new ActiveDataProvider([
         'query' => $query,
-        'pagination' => [ 'pageSize' => 'all' ],
+        'pagination' => [ 'pageSize' => '4' ],
     ]);
 
     $this->load($params);

@@ -83,6 +83,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value'=>$model->obtenerTipoPago($model->a_pagos),
                     'displayOnly'=>true,
                 ],
+                [
+                    'attribute'=>'notas',
+                    'format'=>'raw',
+                    'displayOnly'=>true,
+                ],
                   [
                       'attribute'=>'create_user',
                       'format'=>'raw',

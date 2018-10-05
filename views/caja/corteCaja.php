@@ -25,10 +25,9 @@ $this->title = 'Corte de caja';
       <p>Efectivo Retirado: $ <?php echo -($totalesRetirados[0]['efectivo'])?></p>
       <p>Efectivo en Caja: $ <?=$totalCaja[0]['Sum(efectivo)']?></p>
     <br>
-      <b>Costales Bodega: </b><?=$costales[0]['costales_ini']?> <b> Costales Usados: </b><?=$costales[0]['costales_fin']?>
+      <b>Costales Bodega: </b><?=$costales[0]['costales_ini']?> <b> Costales Usados: </b><?=$costales[0]['costales_ini']-$costales[0]['costales_fin']?>
+      <p><b>Precio X Costal: $</b><?=$precioCostal?></p>
 
-
-    <br>
     <br>
     <?php ActiveForm::end(); ?>
 

@@ -48,6 +48,8 @@ class Costales extends \yii\db\ActiveRecord
             'costales_fin' => 'Cost. Fin',
             'id_caja_ini' => 'Folio Apertura Caja',
             'id_caja_fin' => 'Folio Cierre Caja',
+            'usados_dia' => 'Usados',
+            'precio_dia' => 'Precio X Costal',
             'create_time' => 'Creado',
         ];
     }
