@@ -69,7 +69,7 @@ class Venta extends \yii\db\ActiveRecord
             'id_cliente' => 'Cliente',
             'id_vendedor' => 'Vendedor',
             'subtotal' => 'Subtotal',
-            'descuento' => 'Descuento',
+            'descuento' => 'Gastos',
             'total' => 'Total',
             'saldo' => 'Saldo',
             'a_pagos' => 'A crédito',

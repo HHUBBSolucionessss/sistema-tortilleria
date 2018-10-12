@@ -104,6 +104,7 @@ class BancoController extends Controller
             if($model->save() && $registroSistema->save())
             {
                   $searchModel = new BancoSearch();
+                  $id_sucursal = Yii::$app->user->identity->id_sucursal;
                   $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
                   return $this->redirect(['index', [
                       'searchModel' => $searchModel,

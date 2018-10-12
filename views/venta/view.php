@@ -86,7 +86,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute'=>'notas',
                     'format'=>'raw',
-                    'displayOnly'=>true,
                 ],
                   [
                       'attribute'=>'create_user',

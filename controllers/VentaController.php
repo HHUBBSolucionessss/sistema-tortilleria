@@ -75,10 +75,8 @@ class VentaController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
 
-      if ($model->load(Yii::$app->request->post())) {
+      if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-      $model = $this->findModel($id);
-      Yii::$app->session->setFlash('kv-detail-warning', 'No tienes los permisos para realizar esta acción');
       return $this->render('view', [
           'model' => $model,
           'privilegio'=>$privilegio,
@@ -151,19 +149,51 @@ class VentaController extends Controller
                           $registroSistema->descripcion = Yii::$app->user->identity->nombre ." ha realizado la venta con folio ".$modelVenta->id;
                           $registroSistema->id_sucursal = Yii::$app->user->identity->id_sucursal;
 
-                          if($modelVenta->a_pagos == 0){
-                            $registroSistema->save();
-                            return $this->redirect(['efectivo',
-                            'id' => $modelVenta->id,
-                            'id_current_sucursal'=>$id_current_sucursal
-                          ]);
+                          if($modelVenta->descuento == 0){
+                            if($modelVenta->a_pagos == 0){
+                              $registroSistema->save();
+                              return $this->redirect(['efectivo',
+                              'id' => $modelVenta->id,
+                              'id_current_sucursal'=>$id_current_sucursal
+                            ]);
+                            }
+                            else{
+                              $registroSistema->save();
+                              return $this->redirect(['view',
+                              'id' => $modelVenta->id,
+                              'id_current_sucursal'=>$id_current_sucursal
+                            ]);
+                            }
                           }
                           else{
-                            $registroSistema->save();
-                            return $this->redirect(['view',
-                            'id' => $modelVenta->id,
-                            'id_current_sucursal'=>$id_current_sucursal
-                          ]);
+
+                            $descuentoCaja = new Caja();
+
+                            //CAJA
+                            $descuentoCaja->id_sucursal=Yii::$app->user->identity->id_sucursal;
+                            $descuentoCaja->descripcion="Gastos de la venta ".$modelVenta->id;
+                            $descuentoCaja->efectivo=-$modelVenta->descuento;
+                            $descuentoCaja->tipo_movimiento=1;
+                            $descuentoCaja->tipo_pago=0;
+                            $descuentoCaja->create_user=Yii::$app->user->identity->id;
+                            $descuentoCaja->create_time=date('Y-m-d H:i:s');
+
+                            $descuentoCaja->save();
+
+                            if($modelVenta->a_pagos == 0){
+                              $registroSistema->save();
+                              return $this->redirect(['efectivo',
+                              'id' => $modelVenta->id,
+                              'id_current_sucursal'=>$id_current_sucursal
+                            ]);
+                            }
+                            else{
+                              $registroSistema->save();
+                              return $this->redirect(['view',
+                              'id' => $modelVenta->id,
+                              'id_current_sucursal'=>$id_current_sucursal
+                            ]);
+                            }
                           }
                       }
                   } catch (Exception $e) {
