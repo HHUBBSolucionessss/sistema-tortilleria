@@ -278,14 +278,19 @@ class CajaController extends Controller
       $sucursal = Yii::$app->user->identity->id_sucursal;
 
       $totalCaja = Yii::$app->db->createCommand('SELECT Sum(efectivo) FROM caja AS Caja WHERE id_sucursal ='. $sucursal)->queryAll();
-      $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion=\'Cierre de caja\') AND id_sucursal ='. $sucursal)->queryAll();
+      $totalesRetirado = Yii::$app->db->createCommand('SELECT * FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion = "Cierre de caja") AND id_sucursal ='. $sucursal)->queryAll();
       $costales = Yii::$app->db->createCommand('SELECT id, costales_ini, costales_fin FROM costales WHERE id=(SELECT MAX(id) FROM costales) AND id_sucursal ='. $sucursal)->queryAll();
 
-      $venta = Venta::find()
-      ->sum('total');
+      $apertura = Yii::$app->db->createCommand('SELECT create_time FROM caja WHERE id=(SELECT MAX(id) FROM caja WHERE descripcion = "Apertura de caja") AND id_sucursal ='. $sucursal)->queryAll();
+      $hoy = date('Y-m-d H:i:s');
+
+      $venta = Yii::$app->db->createCommand('SELECT SUM(subtotal) AS subtotal FROM venta WHERE (create_time BETWEEN :fecha_inicio AND :fecha_fin) AND (id_sucursal = :id_sucursal)')
+      ->bindValue(':fecha_inicio', $apertura[0]['create_time'])
+      ->bindValue(':fecha_fin', $hoy)
+      ->bindValue(':id_sucursal', $sucursal)
+      ->queryAll();
 
       $extras = Caja::find()
-      ->where(['tipo_movimiento' => 0])
       ->where(['tipo_pago' => 2])
       ->sum('efectivo');
 
@@ -303,7 +308,7 @@ class CajaController extends Controller
       ->where(['id' => $costales[0]['id']])
       ->one();
 
-      $precioCostal = ($venta - $extras) / $costal;
+      $precioCostal = $venta[0]['subtotal'] / $costal;
 
       $cos->precio_dia = $precioCostal;
       $cos->usados_dia = $costal;

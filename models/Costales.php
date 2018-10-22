@@ -31,8 +31,9 @@ class Costales extends \yii\db\ActiveRecord
     {
         return [
             [['id_sucursal', 'costales_ini', 'costales_fin', 'id_caja_ini', 'id_caja_fin'], 'required'],
-            [['id_sucursal', 'costales_ini', 'costales_fin'], 'integer'],
+            [['id_sucursal'], 'integer'],
             [['create_time'], 'safe'],
+            [['costales_ini', 'costales_fin'], 'number'],
         ];
     }
 

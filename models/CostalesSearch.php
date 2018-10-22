@@ -18,8 +18,9 @@ class CostalesSearch extends Costales
     public function rules()
     {
         return [
-            [['id_sucursal', 'costales_ini', 'costales_fin', 'id_caja_ini', 'id_caja_fin'], 'integer'],
+            [['id_sucursal','id_caja_ini', 'id_caja_fin'], 'integer'],
             [['id_sucursal'], 'required'],
+            [['costales_ini', 'costales_fin'], 'number'],
             [['create_time'], 'safe']
         ];
     }

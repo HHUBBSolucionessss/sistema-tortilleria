@@ -189,6 +189,14 @@ class VentaController extends Controller
                             }
                             else{
                               $registroSistema->save();
+                              $ven = new Venta();
+                              $ven = Venta::find()
+                              ->where(['id' => $modelVenta->id])
+                              ->one();
+
+                              $ven->saldo = $ven->subtotal;
+
+                              $ven->save();
                               return $this->redirect(['view',
                               'id' => $modelVenta->id,
                               'id_current_sucursal'=>$id_current_sucursal
@@ -223,7 +231,7 @@ class VentaController extends Controller
         $id_current_user = Yii::$app->user->identity->id;
         $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
         $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
-        $totales = Yii::$app->db->createCommand('SELECT total,saldo FROM venta WHERE id = '.$id)->queryAll();
+        $totales = Yii::$app->db->createCommand('SELECT total, subtotal, saldo FROM venta WHERE id = '.$id)->queryAll();
 
     if($privilegio[0]['pago_venta'] == 1)
     {
@@ -296,7 +304,7 @@ class VentaController extends Controller
       $id_current_user = Yii::$app->user->identity->id;
       $privilegio = Yii::$app->db->createCommand('SELECT * FROM privilegio WHERE id_usuario = '.$id_current_user)->queryAll();
       $estado_caja = Yii::$app->db->createCommand('SELECT * FROM estado_caja WHERE id = 1')->queryAll();
-      $totales = Yii::$app->db->createCommand('SELECT total,saldo FROM venta WHERE id = '.$id)->queryAll();
+      $totales = Yii::$app->db->createCommand('SELECT total, subtotal,saldo, descuento FROM venta WHERE id = '.$id)->queryAll();
 
   if($privilegio[0]['pago_venta'] == 1)
   {
@@ -318,11 +326,11 @@ class VentaController extends Controller
       ->where(['id' => $id])
       ->one();
 
-      $nuevoSaldo = $venta->saldo - $pagoVenta->ingreso;
+      $nuevoSaldo = $pagoVenta->ingreso;
 
       if($nuevoSaldo >= 0){
 
-          $venta->saldo = $nuevoSaldo;
+          $venta->saldo = 0;
 
           //Registro de sistema
           $registroSistema->descripcion=Yii::$app->user->identity->nombre." ha realizado un pago a la venta ". $id ." por un monto de $".$pagoVenta->ingreso;
@@ -330,6 +338,7 @@ class VentaController extends Controller
 
           //Pago venta
           $pagoVenta->id_venta = $id;
+          //$pagoVenta->total = $totales[0]['subtotal'] - $totales[0]['descuento'];
           $pagoVenta->create_user=Yii::$app->user->identity->id;
           $pagoVenta->create_time=date('Y-m-d H:i:s');
 

@@ -58,6 +58,10 @@ class VentaSearch extends Venta
              return $dataProvider;
          }
 
+         $caja = Yii::$app->db->createCommand('SELECT MAX(id) AS id FROM caja WHERE descripcion = "Apertura de caja"')->queryAll();
+         $time = Yii::$app->db->createCommand('SELECT create_time FROM caja WHERE id = '. $caja[0]['id'])->queryAll();
+         $hoy = date('Y-m-d H:i:s');
+
          // grid filtering conditions
          $query->andFilterWhere([
              'id' => $this->id,
@@ -77,7 +81,9 @@ class VentaSearch extends Venta
              'update_time' => $this->update_time,
              'cancel_user' => $this->cancel_user,
              'cancel_time' => $this->cancel_time,
-         ]);
+         ])
+         ->where(['between', 'create_time', $time[0]['create_time'], $hoy])
+         ->orderBy(['(id)' => SORT_DESC]);
 
         $id_sucursal = Yii::$app->user->identity->id_sucursal;
 
@@ -106,6 +112,10 @@ class VentaSearch extends Venta
              return $noPagadas;
          }
 
+         $caja = Yii::$app->db->createCommand('SELECT MAX(id) AS id FROM caja WHERE descripcion = "Apertura de caja"')->queryAll();
+         $time = Yii::$app->db->createCommand('SELECT create_time FROM caja WHERE id = '. $caja[0]['id'])->queryAll();
+         $hoy = date('Y-m-d H:i:s');
+
          // grid filtering conditions
          $query->andFilterWhere([
              'id' => $this->id,
@@ -125,7 +135,9 @@ class VentaSearch extends Venta
              'update_time' => $this->update_time,
              'cancel_user' => $this->cancel_user,
              'cancel_time' => $this->cancel_time,
-         ]);
+         ])
+         ->where(['between', 'create_time', $time[0]['create_time'], $hoy])
+         ->orderBy(['(id)' => SORT_DESC]);
 
          $id_sucursal = Yii::$app->user->identity->id_sucursal;
 

@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 
 <div class="pago-venta-form">
     <?php
-        echo "Total: $".$totales[0]['total'];
+        echo "Total: $".$totales[0]['subtotal'];
         echo "<br>Restan: $".$totales[0]['saldo'];
         echo "<br>";
     ?>

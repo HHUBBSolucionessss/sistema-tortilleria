@@ -19,9 +19,9 @@ $this->title = 'Pago Venta';
 
       var enviar = document.getElementById('_submit');
 
-      if($("#_ingreso").val() < <?php echo $totales[0]['total']; ?> || $("#_ingreso").val() > <?php echo $totales[0]['total']; ?>)
+      if($("#_ingreso").val() < <?php echo $totales[0]['subtotal']; ?> || $("#_ingreso").val() > <?php echo $totales[0]['subtotal']; ?>)
       {
-        alert("La cantidad debe ser igual al total");
+        alert("La cantidad debe ser igual al subtotal");
         enviar.disabled = true;
       }
       else{
@@ -32,7 +32,7 @@ $this->title = 'Pago Venta';
 
 <div class="pago-venta-form">
   <div class="col-sm-4">
-    <h2><?php echo "Total: $".$totales[0]['total'];?></h2>
+    <h2><?php echo "Sub Total: $".$totales[0]['subtotal'];?></h2>
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->field($pagoVenta, 'ingreso')->textInput(['id' => '_ingreso', 'maxlength' => true, 'onchange'=>"pagoVenta()"]) ?>
 

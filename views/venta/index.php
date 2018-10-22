@@ -63,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'headerOptions'=>['class'=>'kv-sticky-column'],
                         'contentOptions'=>['class'=>'kv-sticky-column'],
                     ],
+                    'create_time',
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template'=>'{view}{delete}',
@@ -150,6 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'headerOptions'=>['class'=>'kv-sticky-column'],
                         'contentOptions'=>['class'=>'kv-sticky-column'],
                     ],
+                    'create_time',
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template'=>'{view}{delete}',
