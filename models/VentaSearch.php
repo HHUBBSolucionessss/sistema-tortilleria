@@ -136,7 +136,6 @@ class VentaSearch extends Venta
              'cancel_user' => $this->cancel_user,
              'cancel_time' => $this->cancel_time,
          ])
-         ->where(['between', 'create_time', $time[0]['create_time'], $hoy])
          ->orderBy(['(id)' => SORT_DESC]);
 
          $id_sucursal = Yii::$app->user->identity->id_sucursal;
