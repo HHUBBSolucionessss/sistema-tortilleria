@@ -72,44 +72,84 @@ public function buscarMovimientosCierre($params)
  *
  * @return ActiveDataProvider
  */
-public function search($params)
-{
-    $query = Caja::find();
+ public function search($params)
+ {
+     $query = Caja::find();
 
-    // add conditions that should always apply here
+     // add conditions that should always apply here
 
-    $dataProvider = new ActiveDataProvider([
-        'query' => $query,
-        'pagination' => [ 'pageSize' => 'all' ],
-    ]);
+     $dataProvider = new ActiveDataProvider([
+         'query' => $query,
+         'pagination' => [ 'pageSize' => 'all' ],
+     ]);
 
-    $this->load($params);
+     $this->load($params);
 
-    if (!$this->validate()) {
-        // uncomment the following line if you do not want to return any records when validation fails
-        // $query->where('0=1');
-        return $dataProvider;
-    }
+     if (!$this->validate()) {
+         // uncomment the following line if you do not want to return any records when validation fails
+         // $query->where('0=1');
+         return $dataProvider;
+     }
 
-    // grid filtering conditions
-    $query->andFilterWhere([
-        'id' => $this->id,
-        'id_sucursal' => $this->id_sucursal,
-        'descripcion2' => $this->descripcion2,
-        'efectivo' => $this->efectivo,
-        'tipo_movimiento' => $this->tipo_movimiento,
-        'tipo_pago' => $this->tipo_pago,
-        'create_time' => $this->create_time,
-        'create_user' => $this->create_user,
-    ]);
+     // grid filtering conditions
+     $query->andFilterWhere([
+         'id' => $this->id,
+         'id_sucursal' => $this->id_sucursal,
+         'descripcion2' => $this->descripcion2,
+         'efectivo' => $this->efectivo,
+         'tipo_movimiento' => $this->tipo_movimiento,
+         'tipo_pago' => $this->tipo_pago,
+         'create_time' => $this->create_time,
+         'create_user' => $this->create_user,
+     ]);
 
-    $id_sucursal = Yii::$app->user->identity->id_sucursal;
+     $id_sucursal = Yii::$app->user->identity->id_sucursal;
 
-    $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
-          ->andFilterWhere(['id_sucursal' => $id_sucursal]);
+     $query->andFilterWhere(['like', 'descripcion', $this->descripcion])
+           ->andFilterWhere(['id_sucursal' => $id_sucursal]);
 
 
-    return $dataProvider;
-}
+     return $dataProvider;
+ }
+
+ public function cortes($params)
+ {
+     $query = Caja::find();
+
+     // add conditions that should always apply here
+
+     $dataProvider = new ActiveDataProvider([
+         'query' => $query,
+         'pagination' => [ 'pageSize' => 'all' ],
+     ]);
+
+     $this->load($params);
+
+     if (!$this->validate()) {
+         // uncomment the following line if you do not want to return any records when validation fails
+         // $query->where('0=1');
+         return $dataProvider;
+     }
+
+     // grid filtering conditions
+     $query->andFilterWhere([
+         'id' => $this->id,
+         'id_sucursal' => $this->id_sucursal,
+         'descripcion2' => $this->descripcion2,
+         'efectivo' => $this->efectivo,
+         'tipo_movimiento' => $this->tipo_movimiento,
+         'tipo_pago' => $this->tipo_pago,
+         'create_time' => $this->create_time,
+         'create_user' => $this->create_user,
+     ]);
+
+     $id_sucursal = Yii::$app->user->identity->id_sucursal;
+
+     $query->andFilterWhere(['like', 'descripcion', "Cierre de caja"])
+           ->andFilterWhere(['id_sucursal' => $id_sucursal]);
+
+
+     return $dataProvider;
+ }
 
 }
