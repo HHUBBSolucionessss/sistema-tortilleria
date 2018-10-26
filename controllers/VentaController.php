@@ -133,9 +133,10 @@ class VentaController extends Controller
                   {
                       if ($flag = $modelVenta->save(false))
                       {
-                          foreach ($ventaProductos as $ventaProducto)
+                          foreach ($ventaProducto as $ventaProducto)
                           {
                               $ventaProducto->id_venta = $modelVenta->id;
+                              $ventaProducto->id_sucursal=Yii::$app->user->identity->id_sucursal;
                               if (! ($flag = $ventaProducto->save(false)))
                               {
                                   $transaction->rollBack();
